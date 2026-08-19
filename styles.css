@@ -666,6 +666,31 @@ tbody tr:hover { background: #FCE8EC; }
 .aside-box ul { margin: 0; padding-left: 1.1rem; }
 .aside-box li { margin-bottom: 0.5rem; font-size: 0.95rem; }
 
+/* --- Live Google Calendar embed --- */
+/* Keeps the calendar iframe responsive. The iframe itself has no fixed
+   height in the HTML — the height comes from here. */
+.cal-embed {
+  position: relative;
+  width: 100%;
+  height: 640px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--white);
+}
+.cal-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+@media (max-width: 620px) {
+  /* Google's calendar is cramped on phones, so give it a taller box
+     and point people at the full-page version instead. */
+  .cal-embed { height: 520px; }
+}
+
 /* --------------------------------------------------------------------------
    7. GALLERY GRID
    -------------------------------------------------------------------------- */

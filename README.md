@@ -14,6 +14,7 @@ thing at a time, and refresh the page in your browser to see the result.
 2. [What each file does](#2-what-each-file-does)
 3. [The golden rules](#3-the-golden-rules)
 4. [How to update the schedule](#4-how-to-update-the-schedule)
+4b. [The live club calendar](#4b-the-live-club-calendar)
 5. [How to update events](#5-how-to-update-events)
 6. [How to update gallery photos](#6-how-to-update-gallery-photos)
 7. [How to update contact info](#7-how-to-update-contact-info)
@@ -137,6 +138,31 @@ just has three columns instead of five.
 
 Don't forget to also update the semester name at the top (`Fall 20XX Semester`) and the note
 under the table.
+
+---
+
+## 4b. The live club calendar
+
+The Schedule page has a **live Google Calendar embed** below the practice table. It reads
+directly from the club's Google Calendar, so **you never have to edit the website when
+practice times change** — just update the Google Calendar and the site follows within
+minutes.
+
+That makes the calendar the easiest thing on this whole site to keep current. Whoever runs
+the calendar is already keeping the website up to date without knowing it.
+
+**The hand-written table above it still matters**, because it shows the regular weekly
+pattern at a glance and works even if Google is blocked or slow. Update it once a semester;
+let the embed handle week-to-week changes.
+
+**To point the embed at a different calendar** (e.g. if the club makes a new one):
+in Google Calendar go to Settings → your calendar → *Integrate calendar* → copy the
+**Embed code**, and replace the `src="..."` URL inside `<div class="cal-embed">` on
+`schedule.html`.
+
+**Important:** the calendar must be set to **public** for visitors to see it. In Google
+Calendar: Settings → your calendar → *Access permissions* → tick **Make available to public**.
+If people report an empty or "not found" calendar, that setting is almost always why.
 
 ---
 
@@ -381,6 +407,7 @@ In the footer of all seven pages: `&copy; 2026 CMU Wushu Club`. Update it each y
 For the officer taking over the website. Work through this at the start of the year:
 
 - [ ] Update the **practice schedule** in `schedule.html` for the new semester
+- [ ] Confirm the **Google Calendar is still public** so the live embed works
 - [ ] Update the **semester calendar** dates on the same page
 - [ ] Update the **officer list** on `about.html`
 - [ ] Remove **past events** from `events.html` and add the new year's events
