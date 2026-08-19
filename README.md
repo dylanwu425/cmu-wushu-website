@@ -16,6 +16,7 @@ thing at a time, and refresh the page in your browser to see the result.
 4. [How to update the schedule](#4-how-to-update-the-schedule)
 4b. [The live club calendar](#4b-the-live-club-calendar)
 5. [How to update events](#5-how-to-update-events)
+5b. [The Events page updates itself](#5b-the-events-page-updates-itself)
 6. [How to update gallery photos](#6-how-to-update-gallery-photos)
 7. [How to update contact info](#7-how-to-update-contact-info)
 7b. [How to update the booking page](#7b-how-to-update-the-booking-page)
@@ -62,6 +63,9 @@ cmu-wushu-website/
 ├── events.html     ← Upcoming performances and competitions
 ├── gallery.html    ← Photo grid
 ├── booking.html    ← "Book a Performance" — for outside event organizers
+├── event-notes.json ← optional blurbs for calendar events (see section 5b)
+├── scripts/        ← the calendar sync script — you shouldn't need to touch it
+├── .github/        ← the robot that runs it daily
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
 ├── script.js       ← Only runs the mobile hamburger menu. You won't need to touch it.
@@ -216,6 +220,68 @@ worry about layout.
 
 **When an event has passed:** either delete it, or move it into the "Past events" table lower
 down on the same page (that table works like the schedule table in section 4).
+
+---
+
+## 5b. The Events page updates itself
+
+**You should not hand-edit the event cards or the past-events table.** A robot does it.
+
+Once a day, a GitHub Action reads the club's Google Calendar, rebuilds the upcoming-event
+cards and the past-events archive, and saves the result. If nothing on the calendar changed,
+it does nothing.
+
+**So: to add, change, or cancel an event, just edit the Google Calendar.** The website
+catches up within a day.
+
+### To make it update right now instead of waiting
+
+1. Go to the repository on GitHub
+2. Click the **Actions** tab
+3. Click **Update events from calendar** on the left
+4. Click **Run workflow** → **Run workflow**
+
+It takes about 30 seconds.
+
+### Adding a description to an event
+
+Calendar entries only carry a title, time, and place, so cards normally show just that.
+To add a sentence or two under an event's name, edit **`event-notes.json`** and add a line
+matching the event title exactly as it appears in Google Calendar:
+
+```json
+{
+  "Club Fair": "Find our table at the activities fair. Come say hi!"
+}
+```
+
+Mind the commas: every line needs a comma at the end except the last one.
+
+> **Why not just use the calendar's own description box?** Because those descriptions hold
+> call times, Google Meet links, and phone PINs. Publishing them would leak your meeting
+> links to the whole internet, so the script ignores that field on purpose.
+
+### What the robot ignores
+
+Rehearsals, dress rehearsals, stage blocking, board meetings, elections, rides, and regular
+practices are all filtered out — they're internal, and practices already appear in the live
+calendar on the Schedule page. To change what's filtered, edit `SKIP` in
+`scripts/update_events.py`.
+
+### The parts you edit by hand
+
+The area between `<!-- AUTO:UPCOMING:START -->` and `<!-- AUTO:UPCOMING:END -->` (and the
+same for `AUTO:PAST`) is overwritten every run. **Everything outside those markers is yours**
+and is never touched.
+
+### If it stops working
+
+- **GitHub disables scheduled jobs after ~60 days of no activity in a repo.** If the club
+  goes quiet over the summer, you may get an email saying the schedule was disabled. Go to
+  the Actions tab and click the button to re-enable it. The manual **Run workflow** button
+  always works regardless.
+- **The calendar must stay public.** If it's switched to private, the script gets nothing.
+- Check the **Actions** tab for a red X — clicking the failed run shows exactly what broke.
 
 ---
 
@@ -410,7 +476,7 @@ For the officer taking over the website. Work through this at the start of the y
 - [ ] Confirm the **Google Calendar is still public** so the live embed works
 - [ ] Update the **semester calendar** dates on the same page
 - [ ] Update the **officer list** on `about.html`
-- [ ] Remove **past events** from `events.html` and add the new year's events
+- [ ] Add the year's events to the **Google Calendar** (the site follows automatically)
 - [ ] Add **new photos** to `gallery.html`, remove ones that feel stale
 - [ ] Check the **email and Instagram** links still work (click them!)
 - [ ] Update the **dues amount** on `contact.html` (search for `$00`)
