@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — CMU Wushu Club</title>
+  <meta name="description" content="Photos from CMU Wushu Club practices, performances, and competitions.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ===== SHARED HEADER — keep this identical on every page ===== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="nav__brand" href="index.html">
+          <span class="nav__logo" aria-hidden="true">武</span>
+          <span>CMU Wushu Club</span>
+        </a>
+
+        <button class="nav__toggle" type="button"
+                aria-label="Toggle navigation menu"
+                aria-expanded="false"
+                aria-controls="nav-links">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav__links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html" class="is-active" aria-current="page">Gallery</a></li>
+          <li><a href="contact.html" class="nav__join">Join Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- ===== END SHARED HEADER ===== -->
+
+  <main id="main">
+
+    <section class="page-hero">
+      <div class="container">
+        <h1>Gallery</h1>
+        <p>Placeholder subtitle — moments from practice, the stage, and the competition floor.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PHOTO GRID
+         TO UPDATE: each <figure class="gallery__item"> is one photo.
+           1. Put your photo file in the images/ folder.
+           2. Change src="..." to images/your-photo.jpg
+           3. Change the alt="..." text to describe the photo.
+           4. Change the <figcaption> to your own caption.
+         The photos below use picsum.photos placeholders, which only
+         load while you are online. See README.md.
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Photos</span>
+          <h2>Recent highlights</h2>
+          <hr class="accent-rule">
+          <p>Placeholder images below — swap these for real club photos.</p>
+        </div>
+
+        <div class="gallery">
+
+          <!-- GALLERY ITEM START — copy this block to add a photo -->
+          <figure class="gallery__item gallery__item--wide">
+            <img src="https://picsum.photos/id/1011/1200/450"
+                 alt="Placeholder photo — replace with a club group shot"
+                 loading="lazy" width="1200" height="450">
+            <figcaption>Placeholder caption — group photo after a showcase</figcaption>
+          </figure>
+          <!-- GALLERY ITEM END -->
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1005/600/450"
+                 alt="Placeholder photo — replace with a practice photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — Monday basics practice</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1015/600/450"
+                 alt="Placeholder photo — replace with a weapons form photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — staff form demonstration</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1025/600/450"
+                 alt="Placeholder photo — replace with a competition photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — collegiate tournament</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1035/600/450"
+                 alt="Placeholder photo — replace with a performance photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — cultural night performance</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1043/600/450"
+                 alt="Placeholder photo — replace with a beginner workshop photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — beginner workshop</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1050/600/450"
+                 alt="Placeholder photo — replace with a stretching or warm-up photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — warm-ups and conditioning</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1062/600/450"
+                 alt="Placeholder photo — replace with a broadsword form photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — broadsword routine</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1074/600/450"
+                 alt="Placeholder photo — replace with a team travel photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — travel day to competition</figcaption>
+          </figure>
+
+          <!-- This tile uses a solid color instead of an image — an easy
+               placeholder if you have no photo ready yet. -->
+          <figure class="gallery__item" style="background: #C41230;">
+            <figcaption>Placeholder tile — no photo yet</figcaption>
+          </figure>
+
+          <figure class="gallery__item" style="background: #111111;">
+            <figcaption>Placeholder tile — no photo yet</figcaption>
+          </figure>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Photo submission note -->
+    <section class="section section--gray">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Contribute</span>
+          <h2>Have photos to share?</h2>
+          <hr class="accent-rule">
+          <p>
+            Placeholder text. If you took photos at a practice, performance, or competition,
+            send them to an officer and we'll add them here. Please make sure everyone
+            pictured is comfortable being posted publicly.
+          </p>
+        </div>
+        <a class="btn btn--outline" href="contact.html">Send us photos</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== SHARED FOOTER — keep this identical on every page ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <h3>CMU Wushu Club</h3>
+          <p>
+            Placeholder. A student organization at Carnegie Mellon University practicing
+            wushu and Chinese martial arts. All skill levels welcome.
+          </p>
+        </div>
+
+        <div>
+          <h3>Pages</h3>
+          <ul class="footer__list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact / Join</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Connect</h3>
+          <ul class="footer__list">
+            <li><a href="mailto:wushu@andrew.cmu.edu">wushu@andrew.cmu.edu</a></li>
+            <li><a href="https://www.instagram.com/" target="_blank" rel="noopener">@cmuwushu on Instagram</a></li>
+            <li><a href="contact.html">Join the mailing list</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>&copy; 2026 CMU Wushu Club. Placeholder content — update before publishing.</span>
+        <span>Carnegie Mellon University &middot; Pittsburgh, PA</span>
+      </div>
+    </div>
+  </footer>
+  <!-- ===== END SHARED FOOTER ===== -->
+
+  <script src="script.js"></script>
+</body>
+</html>

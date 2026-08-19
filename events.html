@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events — CMU Wushu Club</title>
+  <meta name="description" content="Upcoming performances, competitions, and social events for the CMU Wushu Club.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ===== SHARED HEADER — keep this identical on every page ===== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="nav__brand" href="index.html">
+          <span class="nav__logo" aria-hidden="true">武</span>
+          <span>CMU Wushu Club</span>
+        </a>
+
+        <button class="nav__toggle" type="button"
+                aria-label="Toggle navigation menu"
+                aria-expanded="false"
+                aria-controls="nav-links">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav__links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="events.html" class="is-active" aria-current="page">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html" class="nav__join">Join Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- ===== END SHARED HEADER ===== -->
+
+  <main id="main">
+
+    <section class="page-hero">
+      <div class="container">
+        <h1>Events</h1>
+        <p>Placeholder subtitle — performances, competitions, and everything in between.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         UPCOMING EVENTS
+         TO UPDATE: each <article class="event-card"> below is one
+         event. Copy a whole block to add an event, delete one to
+         remove it. Change the tag class to set the label color:
+           tag--performance  (red)
+           tag--competition  (black)
+           tag--social       (gray)
+         See README.md for step-by-step instructions.
+         ============================================================ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Coming Up</span>
+          <h2>Upcoming events</h2>
+          <hr class="accent-rule">
+          <p>Placeholder note. Dates and locations are tentative until announced on our mailing list.</p>
+        </div>
+
+        <div class="grid">
+
+          <!-- EVENT CARD START -->
+          <article class="event-card">
+            <div class="event-card__body">
+              <span class="tag tag--performance">Performance</span>
+              <p class="event-card__date">Month 00, 20XX</p>
+              <h3>Placeholder Cultural Showcase</h3>
+              <p>
+                Placeholder description. A campus-wide cultural night where we perform a
+                group barehand form and a short weapons demonstration.
+              </p>
+              <p class="event-card__meta">
+                <span><strong>Where:</strong> Placeholder Hall, CMU</span>
+                <span><strong>Time:</strong> 0:00 PM</span>
+                <span><strong>Cost:</strong> Free admission</span>
+              </p>
+            </div>
+          </article>
+          <!-- EVENT CARD END -->
+
+          <article class="event-card">
+            <div class="event-card__body">
+              <span class="tag tag--competition">Competition</span>
+              <p class="event-card__date">Month 00, 20XX</p>
+              <h3>Placeholder Collegiate Wushu Tournament</h3>
+              <p>
+                Placeholder description. An annual intercollegiate competition where our
+                members compete in barehand and weapons events across skill divisions.
+              </p>
+              <p class="event-card__meta">
+                <span><strong>Where:</strong> Placeholder University</span>
+                <span><strong>Time:</strong> All day</span>
+                <span><strong>Cost:</strong> Registration fee — ask an officer</span>
+              </p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-card__body">
+              <span class="tag tag--performance">Performance</span>
+              <p class="event-card__date">Month 00, 20XX</p>
+              <h3>Placeholder Lunar New Year Demo</h3>
+              <p>
+                Placeholder description. A festive performance celebrating the Lunar New
+                Year, featuring lion dance collaborators and a full club routine.
+              </p>
+              <p class="event-card__meta">
+                <span><strong>Where:</strong> Placeholder Student Center</span>
+                <span><strong>Time:</strong> 0:00 PM</span>
+                <span><strong>Cost:</strong> Free admission</span>
+              </p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-card__body">
+              <span class="tag tag--social">Workshop</span>
+              <p class="event-card__date">Month 00, 20XX</p>
+              <h3>Placeholder Beginner Workshop</h3>
+              <p>
+                Placeholder description. A two-hour introductory session covering stances,
+                basic kicks, and one short form. Open to anyone curious about wushu.
+              </p>
+              <p class="event-card__meta">
+                <span><strong>Where:</strong> Placeholder Gym, Room 000</span>
+                <span><strong>Time:</strong> 0:00 – 0:00 PM</span>
+                <span><strong>Cost:</strong> Free</span>
+              </p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-card__body">
+              <span class="tag tag--social">Social</span>
+              <p class="event-card__date">Month 00, 20XX</p>
+              <h3>Placeholder Club Dinner</h3>
+              <p>
+                Placeholder description. An end-of-semester dinner to celebrate the term,
+                welcome new members, and thank graduating seniors.
+              </p>
+              <p class="event-card__meta">
+                <span><strong>Where:</strong> Placeholder Restaurant, Pittsburgh</span>
+                <span><strong>Time:</strong> 0:00 PM</span>
+                <span><strong>Cost:</strong> Placeholder — partially subsidized</span>
+              </p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-card__body">
+              <span class="tag tag--competition">Competition</span>
+              <p class="event-card__date">Month 00, 20XX</p>
+              <h3>Placeholder Regional Championships</h3>
+              <p>
+                Placeholder description. A larger regional tournament drawing teams from
+                across the area. Spectators are welcome to come cheer us on.
+              </p>
+              <p class="event-card__meta">
+                <span><strong>Where:</strong> Placeholder Convention Center</span>
+                <span><strong>Time:</strong> All weekend</span>
+                <span><strong>Cost:</strong> Placeholder spectator fee</span>
+              </p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Past events -->
+    <section class="section section--gray">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Looking Back</span>
+          <h2>Past events</h2>
+          <hr class="accent-rule">
+          <p>Placeholder note. Move events here once they've happened, or delete this section.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <caption>Placeholder archive of past club events.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Event</th>
+                <th scope="col">Type</th>
+                <th scope="col">Result / Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Month 20XX</th>
+                <td>Placeholder Spring Showcase</td>
+                <td>Performance</td>
+                <td>Placeholder note</td>
+              </tr>
+              <tr>
+                <th scope="row">Month 20XX</th>
+                <td>Placeholder Collegiates</td>
+                <td>Competition</td>
+                <td>Placeholder result</td>
+              </tr>
+              <tr>
+                <th scope="row">Month 20XX</th>
+                <td>Placeholder Activities Fair</td>
+                <td>Outreach</td>
+                <td>Placeholder note</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="container">
+        <h2>Want to perform with us?</h2>
+        <p>Placeholder text. Members of every level get a spot in our showcases — come train and find out.</p>
+        <a class="btn btn--ghost" href="contact.html">Join Us</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== SHARED FOOTER — keep this identical on every page ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <h3>CMU Wushu Club</h3>
+          <p>
+            Placeholder. A student organization at Carnegie Mellon University practicing
+            wushu and Chinese martial arts. All skill levels welcome.
+          </p>
+        </div>
+
+        <div>
+          <h3>Pages</h3>
+          <ul class="footer__list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact / Join</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Connect</h3>
+          <ul class="footer__list">
+            <li><a href="mailto:wushu@andrew.cmu.edu">wushu@andrew.cmu.edu</a></li>
+            <li><a href="https://www.instagram.com/" target="_blank" rel="noopener">@cmuwushu on Instagram</a></li>
+            <li><a href="contact.html">Join the mailing list</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>&copy; 2026 CMU Wushu Club. Placeholder content — update before publishing.</span>
+        <span>Carnegie Mellon University &middot; Pittsburgh, PA</span>
+      </div>
+    </div>
+  </footer>
+  <!-- ===== END SHARED FOOTER ===== -->
+
+  <script src="script.js"></script>
+</body>
+</html>

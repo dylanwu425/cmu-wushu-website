@@ -1,0 +1,400 @@
+# CMU Wushu Club Website
+
+This is the club's website. It is built with plain HTML and CSS — **no frameworks, no build
+step, no installing anything.** If you can edit a text file, you can update this site.
+
+This guide is written for club officers who are not programmers. Take your time, change one
+thing at a time, and refresh the page in your browser to see the result.
+
+---
+
+## Table of contents
+
+1. [How to open and preview the site](#1-how-to-open-and-preview-the-site)
+2. [What each file does](#2-what-each-file-does)
+3. [The golden rules](#3-the-golden-rules)
+4. [How to update the schedule](#4-how-to-update-the-schedule)
+5. [How to update events](#5-how-to-update-events)
+6. [How to update gallery photos](#6-how-to-update-gallery-photos)
+7. [How to update contact info](#7-how-to-update-contact-info)
+8. [How to change colors and text everywhere](#8-how-to-change-colors-and-text-everywhere)
+9. [The yearly handoff checklist](#9-the-yearly-handoff-checklist)
+10. [If something breaks](#10-if-something-breaks)
+
+---
+
+## 1. How to open and preview the site
+
+**The quick way:** double-click `index.html`. It opens in your web browser. That's it —
+everything works except photos loading from the internet may be slightly slower.
+
+**The better way (recommended):** run a tiny local web server. This matches how the site
+behaves once it's actually published online.
+
+On a Mac, open the **Terminal** app, then type these two commands:
+
+```bash
+cd "path/to/cmu-wushu-website"
+python3 -m http.server 8000
+```
+
+Then open your browser to **http://localhost:8000**
+
+To stop the server, click back on Terminal and press `Control` + `C`.
+
+> **Tip:** to get the folder path, drag the website folder onto the Terminal window after
+> typing `cd ` (with a space) — the path fills in automatically.
+
+**To edit files:** use a free code editor like [VS Code](https://code.visualstudio.com/).
+Do *not* use Microsoft Word — it adds invisible formatting that breaks web pages.
+
+---
+
+## 2. What each file does
+
+```
+cmu-wushu-website/
+├── index.html      ← Home page (hero, intro, "Join Us" button)
+├── about.html      ← About page (what wushu is, club history, officers)
+├── schedule.html   ← Practice times table + semester dates
+├── events.html     ← Upcoming performances and competitions
+├── gallery.html    ← Photo grid
+├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
+├── styles.css      ← ALL the visual styling for every page
+├── script.js       ← Only runs the mobile hamburger menu. You won't need to touch it.
+├── images/         ← Put club photos in here
+└── README.md       ← This file
+```
+
+**In short:**
+- Want to change **words**? Edit the `.html` file for that page.
+- Want to change **colors or spacing**? Edit `styles.css`.
+- `script.js` you can ignore entirely.
+
+---
+
+## 3. The golden rules
+
+Read these once before you edit anything. They prevent 95% of mistakes.
+
+1. **Make a copy first.** Before a big edit, duplicate the folder. If you break something,
+   you can go back.
+
+2. **Tags come in pairs.** `<h3>Some text</h3>` — the second one has a `/`. If you delete an
+   opening tag, delete its closing tag too, and vice versa.
+
+3. **Only edit text between the `>` and `<`.**
+   ```html
+   <h3>Change this part only</h3>
+   ```
+
+4. **Copy whole blocks, don't write new ones.** To add a new event or photo, copy an existing
+   one from the very first line to the very last, paste it below, then change the words.
+
+5. **Anything between `<!--` and `-->` is a note to you, not shown on the site.** These
+   comments mark exactly where to make changes on each page.
+
+6. **The header and footer are repeated on all 6 pages.** If you change the navigation menu
+   or footer, you must make the same change in **all six `.html` files**. Look for the
+   `<!-- ===== SHARED HEADER ===== -->` and `<!-- ===== SHARED FOOTER ===== -->` markers.
+
+7. **Search for the word "Placeholder"** across the site to find everything that still needs
+   real content. In VS Code, press `Shift` + `Command` + `F` to search all files at once.
+
+---
+
+## 4. How to update the schedule
+
+Open **`schedule.html`**. Look for the comment that says `WEEKLY SCHEDULE TABLE`.
+
+Each practice is one `<tr>` block ("tr" = table row):
+
+```html
+<tr>
+  <th scope="row">Monday</th>
+  <td>7:00 – 9:00 PM</td>
+  <td>Placeholder Gym, Room 000</td>
+  <td>Basics &amp; conditioning</td>
+  <td>All levels</td>
+</tr>
+```
+
+The five cells match the five column headers: **Day, Time, Location, Focus, Level.**
+
+**To change a practice:** replace the text inside each cell.
+
+**To add a practice:** copy an entire `<tr>` … `</tr>` block, paste it below, edit the text.
+
+**To remove a practice:** delete the whole block from `<tr>` down to `</tr>`.
+
+> ⚠️ **Careful with the `&` symbol.** In HTML you must write it as `&amp;`.
+> So "Forms & Weapons" is typed `Forms &amp; Weapons`. Everything else types normally.
+
+The **semester calendar** table further down that same page works exactly the same way — it
+just has three columns instead of five.
+
+Don't forget to also update the semester name at the top (`Fall 20XX Semester`) and the note
+under the table.
+
+---
+
+## 5. How to update events
+
+Open **`events.html`**. Look for the comment that says `UPCOMING EVENTS`.
+
+Each event is one card, marked by `<!-- EVENT CARD START -->` and `<!-- EVENT CARD END -->`:
+
+```html
+<article class="event-card">
+  <div class="event-card__body">
+    <span class="tag tag--performance">Performance</span>
+    <p class="event-card__date">Month 00, 20XX</p>
+    <h3>Placeholder Cultural Showcase</h3>
+    <p>
+      Placeholder description.
+    </p>
+    <p class="event-card__meta">
+      <span><strong>Where:</strong> Placeholder Hall, CMU</span>
+      <span><strong>Time:</strong> 0:00 PM</span>
+      <span><strong>Cost:</strong> Free admission</span>
+    </p>
+  </div>
+</article>
+```
+
+**What to change:**
+
+| Line | What it is |
+|---|---|
+| `<span class="tag ...">` | The colored label at the top |
+| `<p class="event-card__date">` | The date shown in red |
+| `<h3>` | The event name |
+| The plain `<p>` | The description |
+| The three `<span>`s | Where, when, and cost |
+
+**The label colors** are set by the class name — pick one:
+
+- `tag tag--performance` → red label
+- `tag tag--competition` → black label
+- `tag tag--social` → gray label
+
+Change **both** the class name and the visible word inside, so they match.
+
+**To add an event:** copy from `<article class="event-card">` to its `</article>`, paste,
+edit. The cards automatically rearrange themselves to fit the screen — you don't need to
+worry about layout.
+
+**To remove an event:** delete the whole `<article>` … `</article>` block.
+
+**When an event has passed:** either delete it, or move it into the "Past events" table lower
+down on the same page (that table works like the schedule table in section 4).
+
+---
+
+## 6. How to update gallery photos
+
+Open **`gallery.html`**. Look for the comment that says `PHOTO GRID`.
+
+Each photo is one `<figure>` block:
+
+```html
+<figure class="gallery__item">
+  <img src="https://picsum.photos/id/1005/600/450"
+       alt="Placeholder photo — replace with a practice photo"
+       loading="lazy" width="600" height="450">
+  <figcaption>Placeholder caption — Monday basics practice</figcaption>
+</figure>
+```
+
+### Step by step
+
+1. **Add your photo file** to the `images/` folder. Use a simple lowercase name with dashes:
+   `spring-showcase-2026.jpg` — no spaces, no apostrophes.
+
+2. **Change the `src`** to point at your file:
+   ```html
+   src="images/spring-showcase-2026.jpg"
+   ```
+
+3. **Change the `alt` text** to describe what's in the photo. This is what blind visitors
+   hear and what shows if the image fails to load. Example:
+   `alt="Club members performing a group form at the spring showcase"`
+
+4. **Change the `<figcaption>`** — the caption that slides up when you hover over the photo.
+
+5. **Update `width` and `height`** to your photo's real pixel size if you know it. Not
+   required, but it stops the page from jumping around while loading.
+
+### Good to know
+
+- **The current photos are placeholders** from picsum.photos, a free random-image service.
+  They only appear while you're connected to the internet. Replace them with real photos.
+
+- **Resize photos before adding them.** Aim for about **1200 pixels wide**. A photo straight
+  off a phone can be 5 MB and will make the page painfully slow. Use Preview on a Mac
+  (Tools → Adjust Size) or any free online image resizer.
+
+- **Make one photo wide** by adding `gallery__item--wide` to the class:
+  ```html
+  <figure class="gallery__item gallery__item--wide">
+  ```
+  This makes it span two columns. Good for group shots. Use it sparingly — one or two per page.
+
+- **No photo ready?** Use a solid color tile instead — copy this block:
+  ```html
+  <figure class="gallery__item" style="background: #C41230;">
+    <figcaption>Coming soon</figcaption>
+  </figure>
+  ```
+
+- **Get permission.** Before posting a photo, make sure everyone in it is okay with being on
+  a public website.
+
+---
+
+## 7. How to update contact info
+
+The email address and Instagram handle appear in **two places**, and you need to change both:
+
+**A. On `contact.html`** — in the contact cards near the top of the page.
+
+**B. In the footer of ALL SIX pages** — look for `<!-- ===== SHARED FOOTER ===== -->`.
+
+### The email address
+
+It appears twice in each spot — once as visible text, once inside the link:
+
+```html
+<a href="mailto:wushu@andrew.cmu.edu">wushu@andrew.cmu.edu</a>
+     ^^^^^^ the link ^^^^^^          ^^^^ what people see ^^^^
+```
+
+Change **both** or the link will send mail to the wrong place.
+
+> **Fastest way:** in VS Code, press `Shift` + `Command` + `H` (Replace in Files), search for
+> `wushu@andrew.cmu.edu`, and replace with your real address. It fixes every page at once.
+
+### The Instagram link
+
+```html
+<a href="https://www.instagram.com/" target="_blank" rel="noopener">@cmuwushu</a>
+```
+
+Change the `href` to your real profile URL (e.g. `https://www.instagram.com/cmuwushu/`) and
+the visible `@cmuwushu` to your real handle. Leave `target="_blank" rel="noopener"` alone —
+that opens the link in a new tab safely.
+
+### The mailing list
+
+The mailing list section on `contact.html` currently tells people to email you. If you set up
+a Google Form or a real mailing list, replace that paragraph and point the button at your link:
+
+```html
+<a class="btn btn--primary" href="https://your-signup-link-here">Sign up</a>
+```
+
+### The FAQ
+
+Also on `contact.html`. Each question is a `<details>` block — copy one to add a question,
+delete one to remove it. They expand and collapse automatically with no JavaScript needed.
+
+---
+
+## 8. How to change colors and text everywhere
+
+### Colors
+
+Open **`styles.css`**. The very top of the file has a section called `1. VARIABLES`:
+
+```css
+:root {
+  --cardinal: #C41230;        /* CMU cardinal red — primary brand color */
+  --cardinal-dark: #8E0D22;   /* darker red, used for hover states */
+  --black: #111111;
+  ...
+}
+```
+
+Change a color here and it updates **everywhere on the site at once** — buttons, headings,
+the nav bar, everything. You almost never need to hunt through the rest of the file.
+
+`#C41230` is CMU's official cardinal red. Please keep it unless you have a good reason.
+
+### The tagline on the home page
+
+Open `index.html`, find the comment `TAGLINE PLACEHOLDER`, and change the sentence below it.
+
+### Page titles (what shows in the browser tab)
+
+Near the top of every page:
+
+```html
+<title>Schedule — CMU Wushu Club</title>
+```
+
+### The copyright year
+
+In the footer of all six pages: `&copy; 2026 CMU Wushu Club`. Update it each year.
+
+---
+
+## 9. The yearly handoff checklist
+
+For the officer taking over the website. Work through this at the start of the year:
+
+- [ ] Update the **practice schedule** in `schedule.html` for the new semester
+- [ ] Update the **semester calendar** dates on the same page
+- [ ] Update the **officer list** on `about.html`
+- [ ] Remove **past events** from `events.html` and add the new year's events
+- [ ] Add **new photos** to `gallery.html`, remove ones that feel stale
+- [ ] Check the **email and Instagram** links still work (click them!)
+- [ ] Update the **dues amount** on `contact.html` (search for `$00`)
+- [ ] Update the **stats** on `index.html` (member count, founding year)
+- [ ] Update the **copyright year** in the footer of all six pages
+- [ ] Search for **"Placeholder"** and **"20XX"** and **"Room 000"** across all files — replace
+      everything you find
+- [ ] View every page **on your phone** to make sure it still looks right
+- [ ] Pass this README on to next year's officer
+
+---
+
+## 10. If something breaks
+
+**The page looks completely unstyled — plain text on white.**
+`styles.css` was renamed, moved, or deleted. It must sit in the same folder as the HTML files
+and be named exactly `styles.css` (all lowercase).
+
+**A photo shows a broken-image icon.**
+The `src` path is wrong. Check that the file name matches *exactly*, including capital letters
+and the `.jpg` / `.png` ending, and that the file really is inside the `images/` folder.
+
+**The hamburger menu doesn't open on mobile.**
+`script.js` is missing or moved. It must be in the same folder as the HTML files.
+
+**The layout is scrambled after I edited something.**
+You probably deleted a closing tag (`</div>`, `</article>`, or `</tr>`). Undo your changes with
+`Command` + `Z` and try again more carefully — copy whole blocks rather than typing new ones.
+
+**Something odd happens only on my phone.**
+Try a hard refresh; browsers cache old versions of pages. On most phones, pull down to refresh
+or close and reopen the tab.
+
+**Still stuck?**
+Restore from your backup copy. This is why rule #1 says to make one. If the site is on GitHub,
+you can also revert to an earlier version through the site's history.
+
+---
+
+## Publishing the site online
+
+When you're ready to put the site on the internet, the two easiest free options are:
+
+- **GitHub Pages** — create a free GitHub account, upload this folder to a repository, then
+  turn on Pages in the repository settings. You'll get a free URL.
+- **Netlify Drop** — go to [app.netlify.com/drop](https://app.netlify.com/drop) and drag the
+  whole folder onto the page. It publishes in seconds, no account needed to start.
+
+You can also ask CMU Computing Services about hosting it under a `cmu.edu` address.
+
+Because the site is plain HTML with no build step, **whatever you see when you open
+`index.html` on your computer is exactly what visitors will see online.**
