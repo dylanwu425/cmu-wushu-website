@@ -385,16 +385,58 @@ you can also revert to an earlier version through the site's history.
 
 ---
 
-## Publishing the site online
+## The site is live — how to update it
 
-When you're ready to put the site on the internet, the two easiest free options are:
+**Live URL:** https://dylanwu425.github.io/cmu-wushu-website/
 
-- **GitHub Pages** — create a free GitHub account, upload this folder to a repository, then
-  turn on Pages in the repository settings. You'll get a free URL.
-- **Netlify Drop** — go to [app.netlify.com/drop](https://app.netlify.com/drop) and drag the
-  whole folder onto the page. It publishes in seconds, no account needed to start.
+**Repository:** https://github.com/dylanwu425/cmu-wushu-website
 
-You can also ask CMU Computing Services about hosting it under a `cmu.edu` address.
+The site is published with **GitHub Pages**. It rebuilds automatically from the `main`
+branch: whenever a change is saved to GitHub, the live site updates about a minute later.
 
-Because the site is plain HTML with no build step, **whatever you see when you open
-`index.html` on your computer is exactly what visitors will see online.**
+### Updating the live site (the easy way — no commands)
+
+If you'd rather not use the Terminal, you can edit everything in the GitHub website:
+
+1. Go to https://github.com/dylanwu425/cmu-wushu-website
+2. Click the file you want to change (e.g. `schedule.html`)
+3. Click the **pencil icon** (✏️) in the top right
+4. Make your edits
+5. Scroll down, type a short note like "Updated spring practice times", click **Commit changes**
+6. Wait about a minute, then refresh the live site
+
+To **add photos** this way: open the `images` folder on GitHub, click **Add file → Upload
+files**, drag your photos in, and commit. Then edit `gallery.html` to point at them (see
+section 6).
+
+### Updating the live site (the Terminal way)
+
+If you have the folder on your computer:
+
+```bash
+cd "path/to/cmu-wushu-website"
+git add -A
+git commit -m "Update practice schedule for spring"
+git push
+```
+
+### Checking that it worked
+
+Go to the repository's **Actions** tab on GitHub. A green checkmark means the site rebuilt
+successfully. If you don't see your change, wait a minute and refresh with `Shift` + reload
+to bypass your browser's cache.
+
+### Handing the site to next year's officer
+
+The repository is owned by the account **dylanwu425**. To give someone else the ability to
+edit it, go to the repository's **Settings → Collaborators → Add people** and enter their
+GitHub username. To transfer ownership entirely, use **Settings → General → Transfer
+ownership** — consider moving it to a club-owned GitHub account so it doesn't stay tied to
+one student after they graduate.
+
+### A note about Dropbox
+
+This folder currently lives inside Dropbox. That works, but Dropbox and Git can occasionally
+fight over the hidden `.git` folder while syncing. If you ever see strange Git errors,
+move the folder somewhere outside Dropbox — GitHub is already your backup, so you don't need
+Dropbox to keep the files safe.
