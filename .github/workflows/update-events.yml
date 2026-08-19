@@ -1,0 +1,48 @@
+# Keeps the Events page in sync with the club's Google Calendar.
+#
+# Runs once a day, and can also be run on demand:
+#   GitHub → Actions tab → "Update events from calendar" → "Run workflow"
+#
+# It only commits when the generated HTML actually changes, so the repo
+# history stays clean.
+name: Update events from calendar
+
+on:
+  schedule:
+    # 09:17 UTC ≈ 5:17am Eastern. Odd minute on purpose — GitHub queues
+    # jobs scheduled on the hour, so they run late.
+    - cron: "17 9 * * *"
+  workflow_dispatch:        # the manual "Run workflow" button
+
+# Only this workflow gets write access, and only to repo contents.
+permissions:
+  contents: write
+
+# If a run is already going, let it finish rather than racing it.
+concurrency:
+  group: update-events
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+
+      - name: Regenerate the Events page from the calendar
+        run: python3 scripts/update_events.py
+
+      - name: Commit and push if anything changed
+        run: |
+          if [ -n "$(git status --porcelain events.html)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add events.html
+            git commit -m "Update events from the club calendar [skip ci]"
+            git push
+            echo "### Events page updated from the calendar" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No calendar changes — nothing to commit."
+            echo "### No calendar changes today" >> "$GITHUB_STEP_SUMMARY"
+          fi

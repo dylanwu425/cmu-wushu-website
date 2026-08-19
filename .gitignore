@@ -9,3 +9,7 @@
 # Editor
 .vscode/settings.json
 *.swp
+
+# Python
+__pycache__/
+*.pyc

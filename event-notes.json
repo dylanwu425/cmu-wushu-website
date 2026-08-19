@@ -1,0 +1,6 @@
+{
+  "_comment": "Optional blurbs for events, matched by the event title in Google Calendar. Add a line here and it shows up as the description on the Events page. Events with no entry simply show date, time, and location. Calendar descriptions are deliberately never published, because they contain call times and Meet links.",
+
+  "PC ORIENTATION WUSHU": "A wushu demonstration and intro session for incoming students during Orientation. Come watch, or jump in and try a few basics with us.",
+  "Club Fair": "Find our table at the activities fair. Meet the officers, ask questions, and sign up for the mailing list to get practice times."
+}
