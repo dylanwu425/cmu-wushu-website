@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Events — CMU Wushu Club</title>
-  <meta name="description" content="Upcoming performances, competitions, and social events for the CMU Wushu Club.">
+  <title>Events &amp; Gallery — CMU Wushu Club</title>
+  <meta name="description" content="Upcoming performances and events, plus photos from the CMU Wushu Club.">
+  <link rel="icon" type="image/png" href="images/wushu-logo.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,7 +17,7 @@
     <div class="container">
       <nav class="nav" aria-label="Main navigation">
         <a class="nav__brand" href="index.html">
-          <span class="nav__logo" aria-hidden="true">武</span>
+          <img class="nav__logo" src="images/wushu-logo.png" alt="" width="38" height="38">
           <span>CMU Wushu Club</span>
         </a>
 
@@ -31,8 +32,7 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="schedule.html">Schedule</a></li>
-          <li><a href="events.html" class="is-active" aria-current="page">Events</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="events.html" class="is-active" aria-current="page">Events &amp; Photos</a></li>
           <li><a href="booking.html">Book Us</a></li>
           <li><a href="contact.html" class="nav__join">Join Us</a></li>
         </ul>
@@ -45,8 +45,8 @@
 
     <section class="page-hero">
       <div class="container">
-        <h1>Events</h1>
-        <p>Placeholder subtitle — performances, competitions, and everything in between.</p>
+        <h1>Events &amp; Gallery</h1>
+        <p>What&rsquo;s coming up, and photos from where we&rsquo;ve been.</p>
       </div>
     </section>
 
@@ -90,8 +90,124 @@
       </div>
     </section>
 
-    <!-- Past events -->
+    <!-- ============================================================
+         PHOTO GRID
+         TO UPDATE: each <figure class="gallery__item"> is one photo.
+           1. Put your photo file in the images/ folder.
+           2. Change src="..." to images/your-photo.jpg
+           3. Change the alt="..." text to describe the photo.
+           4. Change the <figcaption> to your own caption.
+         The photos below use picsum.photos placeholders, which only
+         load while you are online. See README.md.
+         ============================================================ -->
+    <section class="section" id="gallery">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Photos</span>
+          <h2>Photo gallery</h2>
+          <hr class="accent-rule">
+          <p>Placeholder images below — swap these for real club photos.</p>
+        </div>
+
+        <div class="gallery">
+
+          <!-- GALLERY ITEM START — copy this block to add a photo -->
+          <figure class="gallery__item gallery__item--wide">
+            <img src="https://picsum.photos/id/1011/1200/450"
+                 alt="Placeholder photo — replace with a club group shot"
+                 loading="lazy" width="1200" height="450">
+            <figcaption>Placeholder caption — group photo after a showcase</figcaption>
+          </figure>
+          <!-- GALLERY ITEM END -->
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1005/600/450"
+                 alt="Placeholder photo — replace with a practice photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — Monday basics practice</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1015/600/450"
+                 alt="Placeholder photo — replace with a weapons form photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — staff form demonstration</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1025/600/450"
+                 alt="Placeholder photo — replace with a performance photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — campus performance</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1035/600/450"
+                 alt="Placeholder photo — replace with a performance photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — cultural night performance</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1043/600/450"
+                 alt="Placeholder photo — replace with a beginner workshop photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — beginner workshop</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1050/600/450"
+                 alt="Placeholder photo — replace with a stretching or warm-up photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — warm-ups and conditioning</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1062/600/450"
+                 alt="Placeholder photo — replace with a broadsword form photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — broadsword routine</figcaption>
+          </figure>
+
+          <figure class="gallery__item">
+            <img src="https://picsum.photos/id/1074/600/450"
+                 alt="Placeholder photo — replace with a team travel photo"
+                 loading="lazy" width="600" height="450">
+            <figcaption>Placeholder caption — travel day to competition</figcaption>
+          </figure>
+
+          <!-- This tile uses a solid color instead of an image — an easy
+               placeholder if you have no photo ready yet. -->
+          <figure class="gallery__item" style="background: #C41230;">
+            <figcaption>Placeholder tile — no photo yet</figcaption>
+          </figure>
+
+          <figure class="gallery__item" style="background: #111111;">
+            <figcaption>Placeholder tile — no photo yet</figcaption>
+          </figure>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Photo submission note -->
     <section class="section section--gray">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Contribute</span>
+          <h2>Have photos to share?</h2>
+          <hr class="accent-rule">
+          <p>
+            Placeholder text. If you took photos at a practice, performance, or competition,
+            send them to an officer and we'll add them here. Please make sure everyone
+            pictured is comfortable being posted publicly.
+          </p>
+        </div>
+        <a class="btn btn--outline" href="contact.html">Send us photos</a>
+      </div>
+    </section>
+    <!-- Past events -->
+    <section class="section">
       <div class="container">
         <div class="section-header">
           <span class="eyebrow">Looking Back</span>
@@ -298,8 +414,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="schedule.html">Schedule</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="events.html">Events &amp; Photos</a></li>
             <li><a href="booking.html">Book a Performance</a></li>
             <li><a href="contact.html">Contact / Join</a></li>
           </ul>

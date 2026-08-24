@@ -60,8 +60,7 @@ cmu-wushu-website/
 ├── index.html      ← Home page (hero, intro, "Join Us" button)
 ├── about.html      ← About page (what wushu is, club history, officers)
 ├── schedule.html   ← Practice times table + semester dates
-├── events.html     ← Upcoming performances and competitions
-├── gallery.html    ← Photo grid
+├── events.html     ← Upcoming events, PHOTO GALLERY, and past-events archive
 ├── booking.html    ← "Book a Performance" — for outside event organizers
 ├── event-notes.json ← optional blurbs for calendar events (see section 5b)
 ├── scripts/        ← the calendar sync script — you shouldn't need to touch it
@@ -69,12 +68,13 @@ cmu-wushu-website/
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
 ├── script.js       ← Only runs the mobile hamburger menu. You won't need to touch it.
-├── images/         ← Put club photos in here
+├── images/         ← Club photos and the logo (wushu-logo.png)
 └── README.md       ← This file
 ```
 
 **In short:**
 - Want to change **words**? Edit the `.html` file for that page.
+- Events and photos are now on **one page** (`events.html`).
 - Want to change **colors or spacing**? Edit `styles.css`.
 - `script.js` you can ignore entirely.
 
@@ -102,7 +102,7 @@ Read these once before you edit anything. They prevent 95% of mistakes.
    comments mark exactly where to make changes on each page.
 
 6. **The header and footer are repeated on all 6 pages.** If you change the navigation menu
-   or footer, you must make the same change in **all seven `.html` files**. Look for the
+   or footer, you must make the same change in **all six `.html` files**. Look for the
    `<!-- ===== SHARED HEADER ===== -->` and `<!-- ===== SHARED FOOTER ===== -->` markers.
 
 7. **Search for the word "Placeholder"** across the site to find everything that still needs
@@ -287,7 +287,12 @@ and is never touched.
 
 ## 6. How to update gallery photos
 
-Open **`gallery.html`**. Look for the comment that says `PHOTO GRID`.
+The gallery now lives **inside `events.html`** (there is no separate gallery page any more).
+Open **`events.html`** and look for the comment that says `PHOTO GRID`.
+
+> ⚠️ **Important:** `events.html` is partly written by a robot. The event cards and the
+> past-events table sit between `AUTO:` markers and get overwritten daily. **The photo grid is
+> outside those markers, so your photos are safe** — just never move the grid in between them.
 
 Each photo is one `<figure>` block:
 
@@ -352,7 +357,7 @@ The email address and Instagram handle appear in **two places**, and you need to
 
 **A. On `contact.html`** — in the contact cards near the top of the page.
 
-**B. In the footer of ALL SEVEN pages** — look for `<!-- ===== SHARED FOOTER ===== -->`.
+**B. In the footer of ALL SIX pages** — look for `<!-- ===== SHARED FOOTER ===== -->`.
 
 ### The email address
 
@@ -464,7 +469,7 @@ Near the top of every page:
 
 ### The copyright year
 
-In the footer of all seven pages: `&copy; 2026 CMU Wushu Club`. Update it each year.
+In the footer of all six pages: `&copy; 2026 CMU Wushu Club`. Update it each year.
 
 ---
 
@@ -477,12 +482,12 @@ For the officer taking over the website. Work through this at the start of the y
 - [ ] Update the **semester calendar** dates on the same page
 - [ ] Update the **officer list** on `about.html`
 - [ ] Add the year's events to the **Google Calendar** (the site follows automatically)
-- [ ] Add **new photos** to `gallery.html`, remove ones that feel stale
+- [ ] Add **new photos** to the gallery section of `events.html`
 - [ ] Check the **email and Instagram** links still work (click them!)
 - [ ] Update the **dues amount** on `contact.html` (search for `$00`)
 - [ ] Check the **space requirements and lead times** on `booking.html` are still accurate
 - [ ] Update the **stats** on `index.html` (member count, founding year)
-- [ ] Update the **copyright year** in the footer of all seven pages
+- [ ] Update the **copyright year** in the footer of all six pages
 - [ ] Search for **"Placeholder"** and **"20XX"** and **"Room 000"** across all files — replace
       everything you find
 - [ ] View every page **on your phone** to make sure it still looks right

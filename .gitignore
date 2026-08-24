@@ -13,3 +13,14 @@
 # Python
 __pycache__/
 *.pyc
+
+# Member photos pulled from Google Drive but NOT yet cleared for publishing.
+# These are deliberately withheld until consent is confirmed. Remove these
+# lines once the club is happy for them to be public.
+images/straightsword-form.jpg
+images/group-salute.jpg
+images/stage-sword-silk.jpg
+images/fan-form-stage.jpg
+images/trio-stage.jpg
+images/solo-stage-tassel.jpg
+images/midautumn-finale.jpg
