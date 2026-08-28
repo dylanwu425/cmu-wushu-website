@@ -543,6 +543,9 @@ tbody tr:hover { background: #FCE8EC; }
   display: block;
 }
 
+/* Slightly larger inside the square card icons. */
+.card__icon .brand-icon { width: 24px; height: 24px; }
+
 .brand-icon--stroke {
   fill: none;
   stroke: currentColor;

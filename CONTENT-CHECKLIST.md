@@ -1,192 +1,217 @@
-# Content Checklist — round 2
+# Remaining placeholder text
 
-Everything you filled in last time is **live on the site**. This file now lists only
-what's still outstanding.
+Everything below is still showing as placeholder text on the live site. **34 placeholder
+strings across 6 pages.** Edit this file with your answers and send it back — I'll wire it in.
 
-Visible placeholders: **164 → 63**
-
-Same conventions: fill in the blank, **SKIP** to delete it, **TBD** if undecided,
-**KEEP** to leave my wording as-is.
+Write **SKIP** to delete something, **KEEP** to leave my wording as-is, **TBD** if undecided.
 
 ---
 
-## ⛔ BLOCKER — the one thing holding the most back
+## 1. GLOBAL — appears in the footer of all 6 pages
+
+This one string shows on every single page, so it's the highest-value fix.
 
 ```
+Current: "Placeholder — add a club email address"
+
 Club email address:  ______________________________
+
+  ...or write SKIP to delete the line entirely. Discord is already listed right
+  above it, so dropping it is a perfectly reasonable choice.
 ```
 
-You wrote *"for performances main point of contact is performance director"* — but no actual
-address. I did **not** publish the `wushu@andrew.cmu.edu` I'd invented as a placeholder, because
-mail to a wrong address either bounces or reaches a stranger. Right now the site says
-"Placeholder — add a club email address" in the footer of all 7 pages.
-
-Also needed for the booking page, where I've put your names but no addresses:
+Also in the footer of all 6 pages:
 
 ```
-Preston Steimel (Coach) email:               ______________________
-Alvin Wang (Performance Director) email:     ______________________
-Are you OK publishing personal emails publicly, or do you want a shared club address?  ______
-```
+Current: "Placeholder. A student organization at Carnegie Mellon University
+          practicing wushu and Chinese martial arts. All skill levels welcome."
 
-> Publishing individual student emails on a public page means scrapers will find them.
-> A single shared club alias is the safer option if you can get one.
-
----
-
-## ❓ DECISION — you raised this, I didn't act on it
-
-You wrote *"Can combine part 5 and 6 into an events gallery page"* above Part 5.
-
-I left Events and Gallery as **separate pages** because that's a structural change and
-"can" read like a suggestion rather than an instruction. Worth knowing before you decide:
-the Events page is **auto-generated** from your Google Calendar, so merging means the
-script has to write into the merged page too. Doable, just not a rename.
-
-```
-Merge Events + Gallery into one page?   yes / no:  ______
+Replace, or KEEP:  ______________________________________________
 ```
 
 ---
 
-## PART 2 — Home page
+## 2. HOME  (`index.html`) — 3 blocks
 
 ```
-Intro paragraph under "Train with us this semester" (2–3 sentences):
-______________________________________________________________
-______________________________________________________________
+A) Intro paragraph, under the heading "Train with us this semester" (2–3 sentences).
+   Current: "Placeholder introduction — add 2–3 sentences here. The CMU Wushu Club is a
+             student organization dedicated to practicing and performing wushu, the modern
+             form of Chinese martial arts. We train together weekly and perform on campus."
 
-"Forms & Weapons" card — you left this blank. Current text reads:
-  "Members learn barehand routines as well as traditional weapons such as
-   staff, broadsword, straightsword, and spear."
-  KEEP  /  rewrite: ______________________________
+   ____________________________________________________________________
+   ____________________________________________________________________
+
+
+B) "Forms & Weapons" card text.
+   Current: "Placeholder text. Members learn barehand routines as well as traditional
+             weapons such as staff, broadsword, straightsword, and spear."
+
+   KEEP  /  ___________________________________________________________
+
+
+C) "Planning an event?" band, lower down the page.
+   Current: "Placeholder text. We perform at cultural showcases, campus celebrations, and
+             community festivals across Pittsburgh. Tell us your date, venue, and how long
+             you'd like us on stage, and we'll take it from there."
+
+   KEEP  /  ___________________________________________________________
 ```
-
-*Done:* tagline, "All Levels Welcome" card, "Perform" card (competition wording removed
-everywhere), stats row deleted, free/no-dues messaging.
 
 ---
 
-## PART 3 — About page
+## 3. ABOUT  (`about.html`) — 18, the biggest chunk
+
+### Club history — 3 paragraphs. This is the one I genuinely cannot guess.
 
 ```
-CLUB HISTORY — still the biggest gap. Three short answers is all I need:
-  When and why was the club founded?
-  ____________________________________________________________
-  Notable performances or milestones over the years?
-  ____________________________________________________________
-  What is the club focused on today?
-  ____________________________________________________________
+A) When and why was the club founded?
+   Current: "Placeholder text. The CMU Wushu Club was founded in 20XX by a small group of
+             students who wanted a place on campus to keep training after high school."
 
-VALUES — 4 cards: "Community" / "Growth" / "Performance" / "Culture"
-  You left this blank.   KEEP  /  swap for: ______________________
+   Founded in (year): ________
+   ____________________________________________________________________
 
-OFFICERS — I have all 7 names and roles. Still missing per person:
-  Nicholas Chung    (President)                    Year: ____  Major: ____  Bio: ____
-  Dylan Wu          (Vice President)               Year: ____  Major: ____  Bio: ____
-  Alvin Wang        (Performance Director)         Year: ____  Major: ____  Bio: ____
-  Addison Cho       (Finance Officer)              Year: ____  Major: ____  Bio: ____
-  Emily Stapleford  (Marketing / Social Media)     Year: ____  Major: ____  Bio: ____
-  Ariadna Rodriguez (Graphic Design)               Year: ____  Major: ____  Bio: ____
-  Preston Steimel   (Coach)                        Year: ____  Major: ____  Bio: ____
 
-  Bios can be one line each, and personality is welcome — it does real recruiting work.
+B) Notable performances or milestones over the years?
+   Current: "Placeholder text. Over the years, members have performed at university cultural
+             showcases, hosted beginner workshops, and traveled to collegiate wushu
+             competitions..."
+   NOTE: mentions competitions — you said not to say "compete", so this needs rewording anyway.
 
-OFFICER PHOTOS — you said yes. Send me the files (or drop them in images/) named like
-  nicholas-chung.jpg. I'll wire up the layout once I have them.
-  Should the Coach be shown separately from student officers?  ______
+   ____________________________________________________________________
+
+
+C) What is the club focused on today?
+   Current: "Placeholder text. Today the club welcomes students of every background and
+             experience level — from national-level competitors to people who have never
+             thrown a kick before."
+
+   ____________________________________________________________________
 ```
 
-*Done:* wushu explainer condensed to two short paragraphs, "at a glance" sidebar removed,
-all 7 officer cards created.
+### The four "values" cards
+
+```
+D) Community  — "Placeholder text about the club's culture, friendships, and support for new members."
+   KEEP  /  ____________________________________________________
+
+E) Growth     — "Placeholder text about steady progress, personal goals, and learning at your own pace."
+   KEEP  /  ____________________________________________________
+
+F) Performance — "Placeholder text about sharing wushu with the wider campus through showcases and demos."
+   KEEP  /  ____________________________________________________
+
+G) Culture    — "Placeholder text about the history and cultural roots behind the movements we practice."
+   KEEP  /  ____________________________________________________
+
+   (Or write SKIP ALL to delete the whole values section.)
+```
+
+### Officer bios — 8 cards, all still say "Placeholder bio — add year, major, and a sentence or two."
+
+I have everyone's name and role already. Just fill in the rest:
+
+```
+Nicholas Chung    (President)              Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+
+Dylan Wu          (Vice President)         Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+
+Jonathan Wang     (Secretary)              Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+
+Alvin Wang        (Performance Director)   Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+
+Preston Steimel   (Performance Director)   Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+
+Addison Cho       (Finance Officer)        Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+
+Emily Stapleford  (Marketing / Social)     Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+
+Ariadna Rodriguez (Graphic Design)         Year: ____  Major: ____________
+  Bio: ______________________________________________________________
+```
+
+You also said **yes** to officer photos earlier. Still want those? If so, drop headshots
+into a folder and I'll wire them in.  Officer photos: yes / no: ______
 
 ---
 
-## PART 4 — Schedule page
+## 4. SCHEDULE  (`schedule.html`) — 2 blocks
 
 ```
-"What to expect" — 3 paragraphs on a typical practice. You left this blank.
-  Current text describes: warm-up and stretching → basics (stances, kicks, footwork)
-  → form work split by experience level.
-  KEEP  /  rewrite: ______________________________
+A) "What to expect" — paragraph 1.
+   Current: "Placeholder text. A typical practice opens with a warm-up and stretching, moves
+             into basics — stances, kicks, and footwork — and finishes with form work broken
+             out by experience level."
 
-Anything else to bring that I missed?  ______________________
+   KEEP  /  ___________________________________________________________
+
+
+B) "What to expect" — paragraph 2.
+   Current: "Placeholder text. Beginners are never left on their own. Officers and returning
+             members lead a separate group through fundamentals so you can learn at a
+             comfortable pace."
+
+   KEEP  /  ___________________________________________________________
 ```
-
-*Done:* both hard-coded tables removed (the live calendar is now the single source),
-"what to bring" corrected — barefoot or socks, no ID needed, water fountain available,
-club supplies practice weapons.
 
 ---
 
-## PART 6 — Gallery  ← now the largest remaining chunk (25 placeholders)
-
-This is the biggest visual gap. The page currently shows stock photos of landscapes and dogs.
+## 5. EVENTS & GALLERY  (`events.html`) — 1 block
 
 ```
-Send me photos (or drop them in the images/ folder). For each:
-  Filename: ______________
-  Caption:  ______________________
-  Alt text (what's happening, for screen readers): ______________________
+Closing call-to-action, under "Want to perform with us?"
+Current: "Placeholder text. Members of every level get a spot in our showcases — come train
+          and find out."
 
-Which photo should be the big wide one at the top?  ______________
-
-Photo permission wording OK as-is?  ______
+KEEP  /  ______________________________________________________________
 ```
-
-> If nothing else gets done, **do this one.** Real photos of your own club will change how
-> the site feels more than any other item on this list.
 
 ---
 
-## PART 7 — Book a Performance
+## 6. BOOK A PERFORMANCE  (`booking.html`) — footer only
+
+The main content is done — both Performance Directors and their emails are live. The only
+placeholder left on this page is the shared footer email from section 1.
+
+Still worth answering, though these are **not** currently placeholder text on the page —
+they're just missing, and organizers ask them first:
 
 ```
-Emails for Preston and Alvin — see the blocker at the top.
-
-COST POLICY (organizers ask this first):
-  Free for CMU student orgs?      ______
-  Fee for off-campus events?      ______
-  Travel reimbursement expected?  ______
-
-How many performers do you typically bring?  ______
-
-SPACE / SOUND — you said skip the detailed requirements, and I removed those tables.
-But organizers do need *something*. Minimum viable version:
-  Rough floor space you need:  ______
-  Do you need a speaker provided?  ______
-
-You confirmed "group showcase" and "no workshops". I kept three offer cards:
-Barehand Forms, Weapons Demonstrations, Group Showcases.
-  Is that right, or do you only want Group Showcases?  ______
+Cost for CMU student orgs?         ______________________
+Cost for off-campus events?        ______________________
+How many performers do you bring?  ______________________
+Rough floor space you need?        ______________________
+Do you need a speaker provided?    ______________________
 ```
-
-*Done:* space-requirement and lead-time tables removed, workshops card deleted, replaced
-with a direct "email the Coach and Performance Director" section.
 
 ---
 
-## PART 8 — Contact / Join
+## 7. CONTACT / JOIN  (`contact.html`) — footer only
 
-```
-Anything to add to the FAQ?  ______________________
-```
-
-*Done:* Discord is now the primary contact, mailing list removed site-wide, join steps cut
-to two (show up → join Discord), all 6 FAQ answers are yours.
+This page is otherwise complete. Discord, Instagram, the join steps and the booking link are
+all real.
 
 ---
 
-## Nothing needed from you here
+## Quick wins, in order
 
-- **Events page** — fully automatic from your Google Calendar
-- **Practice times** — the live calendar embed handles it
-- **Instagram, Discord** — live everywhere
+1. **The club email** (or SKIP it) — one string, shows on all 6 pages
+2. **Club history**, three short answers — the last thing that reads like a template
+3. **Officer bios** — 8 short lines
+4. Everything marked KEEP is already sensible; you can leave those indefinitely
 
 ---
 
-## If you only do three things
+## Not placeholder text, but still outstanding
 
-1. **A club email address** (unblocks the footer on all 7 pages + booking)
-2. **Real gallery photos** (25 placeholders, biggest visual win)
-3. **Club history** — three sentences (the last thing that reads as a template)
+- **`IMG_9522.MP4`** from the Penguins game — the site can't host video. Put it on the club
+  YouTube channel and I'll embed it.
+- **Photos for other events** — four events have galleries now; any others you want adding?
