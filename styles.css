@@ -778,17 +778,6 @@ tbody tr:hover { background: #FCE8EC; }
   object-fit: cover;
   display: block;
 }
-.carousel__slide figcaption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 2rem 1rem 0.9rem;
-  color: var(--white);
-  font-size: 0.92rem;
-  font-weight: 600;
-  background: linear-gradient(to top, rgba(17, 17, 17, 0.88), transparent);
-}
 
 /* Arrow buttons — only shown once JavaScript has set them up. */
 .carousel__btn {

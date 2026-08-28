@@ -357,12 +357,14 @@ slide inside its `<div class="carousel__track">`:
 <figure class="carousel__slide">
   <img src="images/ds-2026/web/your-photo.jpg"
        alt="Describe what is happening in the photo" loading="lazy">
-  <figcaption>Your caption</figcaption>
 </figure>
 ```
 
-Copy an existing slide and change the three parts: the filename, the `alt`, and the caption.
-**Always fill in the `alt` text** — it's what blind visitors hear.
+Copy an existing slide and change two things: the filename and the `alt` text.
+
+**Always fill in the `alt` text.** It is *not* shown on the page — it's what blind visitors
+hear read aloud, and what appears if the image fails to load. It also helps the site show up
+in search results.
 
 ### Adding a new event slideshow
 
