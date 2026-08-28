@@ -1,0 +1,22 @@
+{
+  "_comment": "Events that are NOT on the Google Calendar but should still appear on the site. The daily robot merges these in, so they survive every regeneration. Add an entry here rather than editing events.html by hand — anything typed between the AUTO: markers gets overwritten. Dates must be YYYY-MM-DD. 'time' is optional. 'type' shows as the label: Performance, Competition, Workshop, Social, Outreach, or Club.",
+
+  "events": [
+    {
+      "title": "Oops!… It's DS Again — Dancers Symposium",
+      "date": "2026-04-24",
+      "time": "",
+      "type": "Performance",
+      "location": "Dancers Symposium",
+      "note": "Two-night showcase, Friday 24 and Saturday 25 April."
+    },
+    {
+      "title": "Penguins Game Performance",
+      "date": "2026-04-26",
+      "time": "",
+      "type": "Performance",
+      "location": "PPG Paints Arena",
+      "note": ""
+    }
+  ]
+}

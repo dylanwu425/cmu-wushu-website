@@ -737,6 +737,61 @@ tbody tr:hover { background: #FCE8EC; }
   opacity: 1;
 }
 
+/* --- Blank placeholder tile ---
+   A tile with no photo yet. Delete the <figure> or replace its contents
+   with an <img> once you have a real picture. */
+.gallery__item--empty {
+  display: grid;
+  place-items: center;
+  background: var(--gray-100);
+  border: 2px dashed var(--gray-300);
+  color: var(--gray-600);
+  text-align: center;
+  padding: 1rem;
+}
+.gallery__item--empty span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.gallery__item--empty::before {
+  content: "+";
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--cardinal);
+  margin-bottom: 0.35rem;
+}
+
+/* --- One gallery group per event --- */
+.gallery-group { margin-bottom: 3rem; }
+.gallery-group:last-child { margin-bottom: 0; }
+.gallery-group__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  padding-bottom: 0.6rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid var(--gray-300);
+}
+.gallery-group__head h3 { margin: 0; font-size: 1.15rem; }
+.gallery-group__meta {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cardinal);
+}
+.gallery-group__where {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-left: auto;
+}
+@media (max-width: 620px) {
+  .gallery-group__where { margin-left: 0; width: 100%; }
+}
+
 /* Make one tile span two columns for visual rhythm. Add class="gallery__item--wide". */
 .gallery__item--wide { grid-column: span 2; aspect-ratio: 8 / 3; }
 

@@ -17,6 +17,7 @@ thing at a time, and refresh the page in your browser to see the result.
 4b. [The live club calendar](#4b-the-live-club-calendar)
 5. [How to update events](#5-how-to-update-events)
 5b. [The Events page updates itself](#5b-the-events-page-updates-itself)
+5c. [Events that aren't on the Google Calendar](#5c-events-that-arent-on-the-google-calendar)
 6. [How to update gallery photos](#6-how-to-update-gallery-photos)
 7. [How to update contact info](#7-how-to-update-contact-info)
 7b. [How to update the booking page](#7b-how-to-update-the-booking-page)
@@ -68,7 +69,8 @@ cmu-wushu-website/
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
 ├── script.js       ← Only runs the mobile hamburger menu. You won't need to touch it.
-├── images/         ← Club photos and the logo (wushu-logo.png)
+├── images/         ← Logo, plus one folder of photos per event
+├── event-extras.json ← events not on the Google Calendar (see 5c)
 └── README.md       ← This file
 ```
 
@@ -285,69 +287,97 @@ and is never touched.
 
 ---
 
-## 6. How to update gallery photos
+## 5c. Events that aren't on the Google Calendar
 
-The gallery now lives **inside `events.html`** (there is no separate gallery page any more).
-Open **`events.html`** and look for the comment that says `PHOTO GRID`.
+Some events never make it onto the club calendar. Typing them straight into `events.html`
+**will not work** — the daily robot overwrites everything between the `AUTO:` markers.
 
-> ⚠️ **Important:** `events.html` is partly written by a robot. The event cards and the
-> past-events table sit between `AUTO:` markers and get overwritten daily. **The photo grid is
-> outside those markers, so your photos are safe** — just never move the grid in between them.
+Instead, add them to **`event-extras.json`**. The robot merges those in every run, so they
+survive forever:
 
-Each photo is one `<figure>` block:
-
-```html
-<figure class="gallery__item">
-  <img src="https://picsum.photos/id/1005/600/450"
-       alt="Placeholder photo — replace with a practice photo"
-       loading="lazy" width="600" height="450">
-  <figcaption>Placeholder caption — Monday basics practice</figcaption>
-</figure>
+```json
+{
+  "events": [
+    {
+      "title": "Penguins Game Performance",
+      "date": "2026-04-26",
+      "type": "Performance",
+      "location": "PPG Paints Arena",
+      "note": "An optional sentence shown under the event name."
+    }
+  ]
+}
 ```
 
-### Step by step
+- `date` must be `YYYY-MM-DD`.
+- `type` sets the coloured label: Performance, Competition, Workshop, Social, Outreach, Club.
+- `note` is optional.
+- Mind the commas — every entry needs one after it except the last.
 
-1. **Add your photo file** to the `images/` folder. Use a simple lowercase name with dashes:
-   `spring-showcase-2026.jpg` — no spaces, no apostrophes.
+Two events already live there: the **Dancers Symposium** show and the **Penguins game**.
 
-2. **Change the `src`** to point at your file:
+---
+
+## 6. How to update gallery photos
+
+The gallery lives **inside `events.html`** and is organised **one group per event**. Each event
+has its own folder under `images/`:
+
+```
+images/
+├── ds-2026/                    ← Oops!… It's DS Again (24–25 Apr 2026)
+├── penguins-2026/              ← Penguins game (26 Apr 2026)
+├── mid-autumn-2025/            ← Chinese Dept Mid-Autumn Festival
+└── oca-natural-history-2025/   ← OCA Natural History Museum
+```
+
+Every folder has its own `README.txt` repeating these steps.
+
+### Adding a photo
+
+1. **Drop the image file** into that event's folder, e.g. `images/ds-2026/01-group-form.jpg`.
+   Use lowercase names with dashes and no spaces.
+
+2. **Open `events.html`** and find the group heading for that event.
+
+3. **Replace one blank tile.** The blanks look like this:
+
    ```html
-   src="images/spring-showcase-2026.jpg"
+   <figure class="gallery__item gallery__item--empty">
+     <span>Add photo</span>
+   </figure>
    ```
 
-3. **Change the `alt` text** to describe what's in the photo. This is what blind visitors
-   hear and what shows if the image fails to load. Example:
-   `alt="Club members performing a group form at the spring showcase"`
+   Swap it for:
 
-4. **Change the `<figcaption>`** — the caption that slides up when you hover over the photo.
+   ```html
+   <figure class="gallery__item">
+     <img src="images/ds-2026/01-group-form.jpg"
+          alt="Describe what is happening in the photo" loading="lazy">
+     <figcaption>Your caption</figcaption>
+   </figure>
+   ```
 
-5. **Update `width` and `height`** to your photo's real pixel size if you know it. Not
-   required, but it stops the page from jumping around while loading.
+4. **Always fill in the `alt` text.** It's what blind visitors hear and what shows if the
+   image fails to load.
+
+Leftover blank tiles are fine to delete, and you can copy an existing tile to add more.
+
+### Adding a whole new event group
+
+Copy a `<div class="gallery-group">` block, change the heading, date, and venue, then create
+a matching folder under `images/`.
+
+> ⚠️ **The photo gallery sits OUTSIDE the `AUTO:` markers, so the daily robot can never
+> overwrite your photos.** Just don't move the gallery in between those markers.
 
 ### Good to know
 
-- **The current photos are placeholders** from picsum.photos, a free random-image service.
-  They only appear while you're connected to the internet. Replace them with real photos.
-
-- **Resize photos before adding them.** Aim for about **1200 pixels wide**. A photo straight
-  off a phone can be 5 MB and will make the page painfully slow. Use Preview on a Mac
-  (Tools → Adjust Size) or any free online image resizer.
-
-- **Make one photo wide** by adding `gallery__item--wide` to the class:
-  ```html
-  <figure class="gallery__item gallery__item--wide">
-  ```
-  This makes it span two columns. Good for group shots. Use it sparingly — one or two per page.
-
-- **No photo ready?** Use a solid color tile instead — copy this block:
-  ```html
-  <figure class="gallery__item" style="background: #C41230;">
-    <figcaption>Coming soon</figcaption>
-  </figure>
-  ```
-
-- **Get permission.** Before posting a photo, make sure everyone in it is okay with being on
-  a public website.
+- **Resize before uploading.** Aim for about **1600 pixels wide**. A photo straight off a
+  phone can be 5 MB and will make the page painfully slow.
+- **HEIC files will not work.** iPhone photos are often `.HEIC`, which browsers cannot
+  display. Export as JPEG first (on a Mac: open in Preview → File → Export → JPEG).
+- **Get permission** before posting a photo of identifiable people on a public website.
 
 ---
 

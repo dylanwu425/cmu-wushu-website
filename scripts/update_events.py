@@ -36,6 +36,7 @@ TZ = ZoneInfo("America/New_York")
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(HERE, "events.html")
 NOTES = os.path.join(HERE, "event-notes.json")
+EXTRAS = os.path.join(HERE, "event-extras.json")
 
 MAX_UPCOMING = 6      # cards shown under "Upcoming events"
 
@@ -137,7 +138,14 @@ def clock(dt):
     return f"{dt.hour % 12 or 12}:{dt.minute:02d} {'AM' if dt.hour < 12 else 'PM'}"
 
 
-def tag_for(title):
+def tag_for(title, override=None):
+    if override:
+        for rx, pair in TAGS:
+            if pair[1].lower() == override.lower():
+                return pair
+        if override.lower() == "performance":
+            return DEFAULT_TAG
+        return ("tag--social", override)
     for rx, pair in TAGS:
         if rx.search(title):
             return pair
@@ -159,10 +167,10 @@ def build_cards(events, notes):
           </article>""")
     out = []
     for e in events:
-        cls, label = tag_for(e["title"])
+        cls, label = tag_for(e["title"], e.get("type"))
         title = nice_title(e["title"])
         place = nice_place(e["location"])
-        note = notes.get(e["title"].strip()) or notes.get(title)
+        note = e.get("note") or notes.get(e["title"].strip()) or notes.get(title)
         out.append(f"""          <article class="event-card">
             <div class="event-card__body">
               <span class="tag {cls}">{label}</span>
@@ -173,7 +181,8 @@ def build_cards(events, notes):
         out.append('              <p class="event-card__meta">')
         out.append(f'                <span><strong>Where:</strong> '
                    f'{place or "See the club calendar"}</span>')
-        out.append(f'                <span><strong>Time:</strong> {clock(e["start"])}</span>')
+        if not e.get("extra"):
+            out.append(f'                <span><strong>Time:</strong> {clock(e["start"])}</span>')
         out.append("              </p>\n            </div>\n          </article>")
     return "\n".join(out)
 
@@ -181,7 +190,7 @@ def build_cards(events, notes):
 def build_rows(events):
     out = []
     for e in events:
-        _, label = tag_for(e["title"])
+        _, label = tag_for(e["title"], e.get("type"))
         place = nice_place(e["location"]) or "&mdash;"
         out.append(f"""              <tr>
                 <th scope="row">{e['start'].strftime('%b %-d, %Y')}</th>
@@ -202,6 +211,25 @@ def replace_region(html, name, body):
 
 
 # --- Main -------------------------------------------------------------------
+def load_extras():
+    """Events kept in event-extras.json because they are not on the calendar."""
+    if not os.path.exists(EXTRAS):
+        return []
+    with open(EXTRAS, encoding="utf-8") as f:
+        data = json.load(f)
+    out = []
+    for e in data.get("events", []):
+        try:
+            d = datetime.strptime(e["date"], "%Y-%m-%d").replace(tzinfo=TZ)
+        except (KeyError, ValueError):
+            print(f"  skipping malformed extra: {e.get('title', '?')}")
+            continue
+        out.append({"start": d, "title": e.get("title", "Untitled"),
+                    "location": e.get("location", ""), "recurring": False,
+                    "extra": True, "type": e.get("type"), "note": e.get("note", "")})
+    return out
+
+
 def main():
     dry = "--dry-run" in sys.argv
     notes = {}
@@ -210,9 +238,11 @@ def main():
             notes = json.load(f)
 
     events = parse_events(fetch_ics(ICS_URL))
+    extras = load_extras()
     today = datetime.now(TZ).date()
 
     singles = [e for e in events if not e["recurring"] and not SKIP.search(e["title"])]
+    singles += extras          # hand-maintained events merge in here
     upcoming = sorted([e for e in singles if e["start"].date() >= today],
                       key=lambda e: e["start"])[:MAX_UPCOMING]
     past = sorted([e for e in singles if e["start"].date() < today],
@@ -222,7 +252,8 @@ def main():
     new = replace_region(html, "UPCOMING", build_cards(upcoming, notes))
     new = replace_region(new, "PAST", build_rows(past))
 
-    print(f"{len(upcoming)} upcoming, {len(past)} past events")
+    print(f"{len(upcoming)} upcoming, {len(past)} past events "
+          f"({len(extras)} from event-extras.json)")
     if new == html:
         print("No change.")
         return 0

@@ -91,14 +91,22 @@
     </section>
 
     <!-- ============================================================
-         PHOTO GRID
-         TO UPDATE: each <figure class="gallery__item"> is one photo.
-           1. Put your photo file in the images/ folder.
-           2. Change src="..." to images/your-photo.jpg
-           3. Change the alt="..." text to describe the photo.
-           4. Change the <figcaption> to your own caption.
-         The photos below use picsum.photos placeholders, which only
-         load while you are online. See README.md.
+         PHOTO GALLERY — grouped by event.
+         Each event has its own folder under images/. To add a photo,
+         drop the file in that event's folder, then replace one of the
+         blank placeholder tiles below with:
+
+           <figure class="gallery__item">
+             <img src="images/<event-folder>/your-photo.jpg"
+                  alt="Describe what is happening" loading="lazy">
+             <figcaption>Your caption</figcaption>
+           </figure>
+
+         To add a whole new event, copy a <div class="gallery-group">
+         block and make a matching folder under images/.
+
+         NOTE: this section sits OUTSIDE the AUTO: markers, so the daily
+         calendar job will never overwrite your photos.
          ============================================================ -->
     <section class="section" id="gallery">
       <div class="container">
@@ -106,86 +114,106 @@
           <span class="eyebrow">Photos</span>
           <h2>Photo gallery</h2>
           <hr class="accent-rule">
-          <p>Placeholder images below — swap these for real club photos.</p>
+          <p>Photos by event. Blank tiles are waiting for pictures.</p>
         </div>
 
-        <div class="gallery">
+        <!-- ===== Oops!&hellip; It&rsquo;s DS Again — photos go in images/ds-2026/ ===== -->
+        <div class="gallery-group">
+          <div class="gallery-group__head">
+            <h3>Oops!&hellip; It&rsquo;s DS Again</h3>
+            <span class="gallery-group__meta">Dancers Symposium</span>
+            <span class="gallery-group__meta">Fri 24 &ndash; Sat 25 April 2026</span>
+            <span class="gallery-group__where">Two-night showcase</span>
+          </div>
+          <div class="gallery">
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+          </div>
+        </div>
 
-          <!-- GALLERY ITEM START — copy this block to add a photo -->
-          <figure class="gallery__item gallery__item--wide">
-            <img src="https://picsum.photos/id/1011/1200/450"
-                 alt="Placeholder photo — replace with a club group shot"
-                 loading="lazy" width="1200" height="450">
-            <figcaption>Placeholder caption — group photo after a showcase</figcaption>
-          </figure>
-          <!-- GALLERY ITEM END -->
+        <!-- ===== Penguins Game Performance — photos go in images/penguins-2026/ ===== -->
+        <div class="gallery-group">
+          <div class="gallery-group__head">
+            <h3>Penguins Game Performance</h3>
+            <span class="gallery-group__meta">Sun 26 April 2026</span>
+            <span class="gallery-group__where">PPG Paints Arena</span>
+          </div>
+          <div class="gallery">
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+          </div>
+        </div>
 
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1005/600/450"
-                 alt="Placeholder photo — replace with a practice photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — Monday basics practice</figcaption>
-          </figure>
+        <!-- ===== Chinese Department Mid-Autumn Festival — photos go in images/mid-autumn-2025/ ===== -->
+        <div class="gallery-group">
+          <div class="gallery-group__head">
+            <h3>Chinese Department Mid-Autumn Festival</h3>
+            <span class="gallery-group__meta">Wed 1 October 2025</span>
+            <span class="gallery-group__where">Cohon Center &mdash; Rangos</span>
+          </div>
+          <div class="gallery">
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+          </div>
+        </div>
 
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1015/600/450"
-                 alt="Placeholder photo — replace with a weapons form photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — staff form demonstration</figcaption>
-          </figure>
-
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1025/600/450"
-                 alt="Placeholder photo — replace with a performance photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — campus performance</figcaption>
-          </figure>
-
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1035/600/450"
-                 alt="Placeholder photo — replace with a performance photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — cultural night performance</figcaption>
-          </figure>
-
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1043/600/450"
-                 alt="Placeholder photo — replace with a beginner workshop photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — beginner workshop</figcaption>
-          </figure>
-
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1050/600/450"
-                 alt="Placeholder photo — replace with a stretching or warm-up photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — warm-ups and conditioning</figcaption>
-          </figure>
-
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1062/600/450"
-                 alt="Placeholder photo — replace with a broadsword form photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — broadsword routine</figcaption>
-          </figure>
-
-          <figure class="gallery__item">
-            <img src="https://picsum.photos/id/1074/600/450"
-                 alt="Placeholder photo — replace with a team travel photo"
-                 loading="lazy" width="600" height="450">
-            <figcaption>Placeholder caption — travel day to competition</figcaption>
-          </figure>
-
-          <!-- This tile uses a solid color instead of an image — an easy
-               placeholder if you have no photo ready yet. -->
-          <figure class="gallery__item" style="background: #C41230;">
-            <figcaption>Placeholder tile — no photo yet</figcaption>
-          </figure>
-
-          <figure class="gallery__item" style="background: #111111;">
-            <figcaption>Placeholder tile — no photo yet</figcaption>
-          </figure>
-
+        <!-- ===== OCA Natural History Museum Performance — photos go in images/oca-natural-history-2025/ ===== -->
+        <div class="gallery-group">
+          <div class="gallery-group__head">
+            <h3>OCA Natural History Museum Performance</h3>
+            <span class="gallery-group__meta">Sun 18 May 2025</span>
+            <span class="gallery-group__where">Carnegie Museum of Natural History</span>
+          </div>
+          <div class="gallery">
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+            <figure class="gallery__item gallery__item--empty">
+              <span>Add photo</span>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -198,9 +226,9 @@
           <h2>Have photos to share?</h2>
           <hr class="accent-rule">
           <p>
-            Placeholder text. If you took photos at a practice, performance, or competition,
-            send them to an officer and we'll add them here. Please make sure everyone
-            pictured is comfortable being posted publicly.
+            Took photos at a performance? Send them to an officer and we&rsquo;ll add them to
+            the right event above. Please make sure everyone pictured is comfortable being
+            posted on a public website.
           </p>
         </div>
         <a class="btn btn--outline" href="contact.html">Send us photos</a>
@@ -234,6 +262,18 @@
                 <td>PC Orientation Wushu</td>
                 <td>Outreach</td>
                 <td>Cohon Center &mdash; Activities Room</td>
+              </tr>
+              <tr>
+                <th scope="row">Apr 26, 2026</th>
+                <td>Penguins Game Performance</td>
+                <td>Performance</td>
+                <td>PPG Paints Arena</td>
+              </tr>
+              <tr>
+                <th scope="row">Apr 24, 2026</th>
+                <td>Oops!… It's DS Again — Dancers Symposium</td>
+                <td>Performance</td>
+                <td>Dancers Symposium</td>
               </tr>
               <tr>
                 <th scope="row">Apr 3, 2026</th>
