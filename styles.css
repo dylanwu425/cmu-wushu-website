@@ -534,6 +534,23 @@ tbody tr:hover { background: #FCE8EC; }
   border-radius: 50%;
   font-size: 1.5rem;
 }
+/* Brand marks (Discord, Instagram) drawn inline as SVG so there are no
+   external requests and they inherit the icon colour. */
+.brand-icon {
+  width: 26px;
+  height: 26px;
+  fill: currentColor;
+  display: block;
+}
+
+.brand-icon--stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .contact-card h3 { margin-bottom: 0.4rem; }
 .contact-card p { color: var(--gray-600); font-size: 0.95rem; }
 .contact-card a { font-weight: 600; word-break: break-word; }
