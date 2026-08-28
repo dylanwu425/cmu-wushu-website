@@ -41,3 +41,60 @@
     if (window.innerWidth > 820) closeMenu();
   });
 })();
+
+
+/* ==========================================================================
+   Event photo carousels
+   The track already scrolls and snaps on its own via CSS, so this only adds
+   the arrow buttons. If JavaScript fails, swiping and scrolling still work.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var carousels = document.querySelectorAll(".carousel");
+
+  Array.prototype.forEach.call(carousels, function (carousel) {
+    var track = carousel.querySelector(".carousel__track");
+    var prev = carousel.querySelector(".carousel__btn--prev");
+    var next = carousel.querySelector(".carousel__btn--next");
+    if (!track || !prev || !next) return;
+
+    // Nothing to page through if everything already fits on screen.
+    function overflows() {
+      return track.scrollWidth > track.clientWidth + 4;
+    }
+
+    function step() {
+      var slide = track.querySelector(".carousel__slide");
+      return slide ? slide.getBoundingClientRect().width + 16 : track.clientWidth * 0.8;
+    }
+
+    function refresh() {
+      if (!overflows()) {
+        carousel.classList.remove("is-ready");
+        return;
+      }
+      carousel.classList.add("is-ready");
+      // 2px of slack so the last slide reliably counts as "the end"
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+    }
+
+    prev.addEventListener("click", function () {
+      track.scrollBy({ left: -step(), behavior: "smooth" });
+    });
+    next.addEventListener("click", function () {
+      track.scrollBy({ left: step(), behavior: "smooth" });
+    });
+
+    track.addEventListener("scroll", refresh, { passive: true });
+    window.addEventListener("resize", refresh);
+    refresh();
+
+    // Images arriving late change scrollWidth, so re-check as they load.
+    Array.prototype.forEach.call(track.querySelectorAll("img"), function (img) {
+      if (!img.complete) img.addEventListener("load", refresh, { once: true });
+    });
+  });
+})();

@@ -18,7 +18,7 @@ thing at a time, and refresh the page in your browser to see the result.
 5. [How to update events](#5-how-to-update-events)
 5b. [The Events page updates itself](#5b-the-events-page-updates-itself)
 5c. [Events that aren't on the Google Calendar](#5c-events-that-arent-on-the-google-calendar)
-6. [How to update gallery photos](#6-how-to-update-gallery-photos)
+6. [How to add photos to an event](#6-how-to-add-photos-to-an-event)
 7. [How to update contact info](#7-how-to-update-contact-info)
 7b. [How to update the booking page](#7b-how-to-update-the-booking-page)
 8. [How to change colors and text everywhere](#8-how-to-change-colors-and-text-everywhere)
@@ -64,7 +64,7 @@ cmu-wushu-website/
 ├── events.html     ← Upcoming events, PHOTO GALLERY, and past-events archive
 ├── booking.html    ← "Book a Performance" — for outside event organizers
 ├── event-notes.json ← optional blurbs for calendar events (see section 5b)
-├── scripts/        ← the calendar sync script — you shouldn't need to touch it
+├── scripts/        ← calendar sync + the photo shrink script
 ├── .github/        ← the robot that runs it daily
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
@@ -318,10 +318,9 @@ Two events already live there: the **Dancers Symposium** show and the **Penguins
 
 ---
 
-## 6. How to update gallery photos
+## 6. How to add photos to an event
 
-The gallery lives **inside `events.html`** and is organised **one group per event**. Each event
-has its own folder under `images/`:
+Each event on the Events page has a **scrolling slideshow**, and each one has its own folder:
 
 ```
 images/
@@ -331,53 +330,53 @@ images/
 └── oca-natural-history-2025/   ← OCA Natural History Museum
 ```
 
-Every folder has its own `README.txt` repeating these steps.
+### The three steps
 
-### Adding a photo
+**1. Drop your photos into the event folder.** Straight off the camera is fine — they can be
+15 MB each, it doesn't matter.
 
-1. **Drop the image file** into that event's folder, e.g. `images/ds-2026/01-group-form.jpg`.
-   Use lowercase names with dashes and no spaces.
+**2. Run the shrink script.** In Terminal, from the website folder:
 
-2. **Open `events.html`** and find the group heading for that event.
+```bash
+python3 scripts/optimize_images.py
+```
 
-3. **Replace one blank tile.** The blanks look like this:
+It makes small web-ready copies in `images/<event>/web/`, and it:
 
-   ```html
-   <figure class="gallery__item gallery__item--empty">
-     <span>Add photo</span>
-   </figure>
-   ```
+- resizes everything to 1600 pixels wide (last run: **168 MB → 4.4 MB**)
+- converts iPhone **`.HEIC`** files to `.jpg`, which browsers can actually display
+- rotates sideways photos upright using the camera's orientation tag
+- skips videos — those belong on YouTube
 
-   Swap it for:
+Your originals are never modified, and they're never uploaded to the website.
 
-   ```html
-   <figure class="gallery__item">
-     <img src="images/ds-2026/01-group-form.jpg"
-          alt="Describe what is happening in the photo" loading="lazy">
-     <figcaption>Your caption</figcaption>
-   </figure>
-   ```
+**3. Add each photo to the slideshow.** In `events.html`, find the event's heading and add a
+slide inside its `<div class="carousel__track">`:
 
-4. **Always fill in the `alt` text.** It's what blind visitors hear and what shows if the
-   image fails to load.
+```html
+<figure class="carousel__slide">
+  <img src="images/ds-2026/web/your-photo.jpg"
+       alt="Describe what is happening in the photo" loading="lazy">
+  <figcaption>Your caption</figcaption>
+</figure>
+```
 
-Leftover blank tiles are fine to delete, and you can copy an existing tile to add more.
+Copy an existing slide and change the three parts: the filename, the `alt`, and the caption.
+**Always fill in the `alt` text** — it's what blind visitors hear.
 
-### Adding a whole new event group
+### Adding a new event slideshow
 
-Copy a `<div class="gallery-group">` block, change the heading, date, and venue, then create
-a matching folder under `images/`.
-
-> ⚠️ **The photo gallery sits OUTSIDE the `AUTO:` markers, so the daily robot can never
-> overwrite your photos.** Just don't move the gallery in between those markers.
+Copy a whole `<div class="gallery-group">` block, change the heading, date, and venue, then
+make a matching folder under `images/` and run the shrink script again.
 
 ### Good to know
 
-- **Resize before uploading.** Aim for about **1600 pixels wide**. A photo straight off a
-  phone can be 5 MB and will make the page painfully slow.
-- **HEIC files will not work.** iPhone photos are often `.HEIC`, which browsers cannot
-  display. Export as JPEG first (on a Mac: open in Preview → File → Export → JPEG).
-- **Get permission** before posting a photo of identifiable people on a public website.
+- The slideshow **scrolls and swipes on its own** using plain CSS. The arrow buttons are a
+  bonus added by `script.js` — if JavaScript ever breaks, people can still swipe through.
+- **Only the `web/` copies get published.** The originals are deliberately excluded in
+  `.gitignore` because a repository full of 15 MB photos would quickly become unusable.
+- ⚠️ The gallery sits **outside the `AUTO:` markers**, so the daily calendar robot can never
+  overwrite your photos. Just don't move it in between them.
 
 ---
 

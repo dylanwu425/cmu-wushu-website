@@ -737,6 +737,100 @@ tbody tr:hover { background: #FCE8EC; }
   opacity: 1;
 }
 
+/* --------------------------------------------------------------------------
+   CAROUSEL — one scrolling slideshow per event.
+   It is a plain horizontal scroller with CSS scroll-snap, so swiping and
+   trackpad scrolling work with no JavaScript at all. The arrow buttons are
+   an extra convenience added by script.js.
+   -------------------------------------------------------------------------- */
+.carousel { position: relative; }
+
+.carousel__track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 0.75rem;
+  /* thin scrollbar, styled to match */
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-300) transparent;
+}
+.carousel__track::-webkit-scrollbar { height: 8px; }
+.carousel__track::-webkit-scrollbar-track { background: var(--gray-100); border-radius: 99px; }
+.carousel__track::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 99px; }
+.carousel__track::-webkit-scrollbar-thumb:hover { background: var(--gray-600); }
+.carousel__track:focus-visible { outline: 3px solid var(--cardinal); outline-offset: 4px; }
+
+.carousel__slide {
+  position: relative;
+  flex: 0 0 min(560px, 82%);
+  scroll-snap-align: center;
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--gray-100);
+  aspect-ratio: 3 / 2;
+}
+.carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.carousel__slide figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2rem 1rem 0.9rem;
+  color: var(--white);
+  font-size: 0.92rem;
+  font-weight: 600;
+  background: linear-gradient(to top, rgba(17, 17, 17, 0.88), transparent);
+}
+
+/* Arrow buttons — only shown once JavaScript has set them up. */
+.carousel__btn {
+  position: absolute;
+  top: calc(50% - 1.25rem);
+  transform: translateY(-50%);
+  z-index: 2;
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--black);
+  color: var(--white);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-lift);
+  transition: background var(--transition), opacity var(--transition);
+}
+.carousel.is-ready .carousel__btn { display: grid; }
+.carousel__btn:hover { background: var(--cardinal); }
+.carousel__btn[disabled] { opacity: 0.25; cursor: default; }
+.carousel__btn[disabled]:hover { background: var(--black); }
+.carousel__btn--prev { left: -14px; }
+.carousel__btn--next { right: -14px; }
+
+@media (max-width: 900px) {
+  /* Keep the arrows on top of the image rather than hanging outside it. */
+  .carousel__btn--prev { left: 6px; }
+  .carousel__btn--next { right: 6px; }
+}
+@media (max-width: 620px) {
+  .carousel__slide { flex-basis: 88%; }
+  .carousel__btn { width: 38px; height: 38px; font-size: 1.25rem; }
+}
+
+/* A carousel that only has blank tiles doesn't need snapping. */
+.carousel__track--empty { scroll-snap-type: none; }
+
 /* --- Blank placeholder tile ---
    A tile with no photo yet. Delete the <figure> or replace its contents
    with an <img> once you have a real picture. */

@@ -13,3 +13,11 @@
 # Python
 __pycache__/
 *.pyc
+
+# Original camera files stay on your computer only — they are far too large
+# for the website (some are 15 MB each). Run scripts/optimize_images.py to
+# create the small web/ copies, and only those get published.
+images/*/*
+!images/*/README.txt
+!images/*/web/
+!images/*/web/**
