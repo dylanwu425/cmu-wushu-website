@@ -423,10 +423,6 @@ a Google Form or a real mailing list, replace that paragraph and point the butto
 <a class="btn btn--primary" href="https://your-signup-link-here">Sign up</a>
 ```
 
-### The FAQ
-
-Also on `contact.html`. Each question is a `<details>` block — copy one to add a question,
-delete one to remove it. They expand and collapse automatically with no JavaScript needed.
 
 ---
 

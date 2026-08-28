@@ -569,40 +569,6 @@ tbody tr:hover { background: #FCE8EC; }
 }
 .steps li strong { display: block; color: var(--black); }
 
-/* FAQ using native <details> — no JavaScript required. */
-.faq details {
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius);
-  background: var(--white);
-  margin-bottom: 0.85rem;
-  overflow: hidden;
-}
-.faq summary {
-  padding: 1.1rem 1.35rem;
-  font-weight: 700;
-  font-family: var(--font-display);
-  cursor: pointer;
-  list-style: none;
-  position: relative;
-  padding-right: 3rem;
-}
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after {
-  content: "+";
-  position: absolute;
-  right: 1.35rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.4rem;
-  color: var(--cardinal);
-  line-height: 1;
-}
-.faq details[open] summary::after { content: "\2212"; }
-.faq details > p {
-  padding: 0 1.35rem 1.2rem;
-  margin: 0;
-  color: var(--gray-600);
-}
 
 /* --- Call-to-action strip --- */
 .cta-band {
