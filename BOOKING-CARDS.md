@@ -1,5 +1,8 @@
 # "What we offer" cards on the Book a Performance page
 
+> **APPLIED and live.** Your edits to cards 1 and 2 are on the site. Card 3 was left as-is.
+> Keep this file if you want to revise them again, or delete it.
+
 These are the three cards near the top of `booking.html`. They are the first thing an event
 organizer reads, so they mostly need to answer "what would we actually be booking, and how
 long does it run".
@@ -22,8 +25,7 @@ Current:  "Solo or group routines showcasing speed, stances, and acrobatic
 New heading (or KEEP):  _________________________________
 
 New text:
-_______________________________________________________________________
-_______________________________________________________________________
+Solo or group routines showcasing speed, stances, and jumps.       <-- APPLIED
 ```
 
 ---
@@ -36,11 +38,11 @@ Heading:  Weapons Demonstrations
 Current:  "Staff, broadsword, straightsword, and spear routines. Usually the
            crowd favorite."
 
-New heading (or KEEP):  _________________________________
+New heading (or KEEP):  
+Keep
 
 New text:
-_______________________________________________________________________
-_______________________________________________________________________
+Staff, broadsword, straightsword, fan, and chain whip routines.    <-- APPLIED
 ```
 
 Worth checking: the card lists staff, broadsword, straightsword, and spear. The home page now
