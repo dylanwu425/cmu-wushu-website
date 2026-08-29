@@ -16,7 +16,7 @@ Two deliberate safety rules:
      times, Google Meet links, and phone PINs. Blurbs come from
      event-notes.json instead.
   2. Internal logistics (rehearsals, board meetings, elections, rides)
-     are filtered out — see SKIP below.
+     are filtered out. See SKIP below.
 """
 
 import json
@@ -40,7 +40,7 @@ EXTRAS = os.path.join(HERE, "event-extras.json")
 
 MAX_UPCOMING = 6      # cards shown under "Upcoming events"
 
-# Events we never publish — internal logistics, not public happenings.
+# Events we never publish: internal logistics, not public happenings.
 SKIP = re.compile(r"rehearsal|stage blocking|pickup and drive|arrive and meet"
                   r"|prepare \(|board meeting|elections|practice|tricking", re.I)
 
@@ -127,7 +127,7 @@ def nice_place(loc):
     m = re.match(r"^CUC-?\s*(.+)$", loc, re.I)
     if m:
         key = m.group(1).strip().upper()
-        return "Cohon Center &mdash; " + ROOMS.get(key, m.group(1).strip().title())
+        return "Cohon Center, " + ROOMS.get(key, m.group(1).strip().title())
     m = re.match(r"^DH-?\s*(\d+)$", loc, re.I)
     if m:
         return "Doherty Hall " + m.group(1)
@@ -160,8 +160,8 @@ def build_cards(events, notes):
               <span class="tag">Nothing scheduled</span>
               <h3>No upcoming events right now</h3>
               <p>
-                Check back soon, or follow us on Instagram &mdash; new events are added
-                to our calendar throughout the semester.
+                Check back soon, or follow us on Instagram. New events are added to our
+                calendar throughout the semester.
               </p>
             </div>
           </article>""")
@@ -191,7 +191,7 @@ def build_rows(events):
     out = []
     for e in events:
         _, label = tag_for(e["title"], e.get("type"))
-        place = nice_place(e["location"]) or "&mdash;"
+        place = nice_place(e["location"]) or "Not listed"
         out.append(f"""              <tr>
                 <th scope="row">{e['start'].strftime('%b %-d, %Y')}</th>
                 <td>{esc(nice_title(e['title']))}</td>

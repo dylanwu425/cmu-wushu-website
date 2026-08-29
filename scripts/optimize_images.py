@@ -6,13 +6,13 @@ Run it after adding photos:      python3 scripts/optimize_images.py
 
 For every image in images/<event>/ it writes a smaller version to
 images/<event>/web/. Your originals are never modified and never uploaded to
-the website — only the web/ copies are.
+the website. Only the web/ copies are.
 
 Handles:
   * huge camera JPEGs  -> resized to WIDTH px and recompressed
   * iPhone .HEIC files -> converted to .jpg (browsers cannot show HEIC)
   * sideways photos    -> rotated upright using the EXIF orientation tag
-Videos (.mp4/.mov) are skipped — put those on YouTube instead.
+Videos (.mp4/.mov) are skipped. Put those on YouTube instead.
 """
 
 import os
