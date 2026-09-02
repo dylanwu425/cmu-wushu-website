@@ -392,11 +392,11 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
   width: 100%;
   /* height:auto is required, otherwise the width/height attributes on the
      img fix the rendered height and the photo stretches. */
+  /* Every officer photo is pre-cropped to the same 3:4 frame, centred on the
+     face, so no CSS cropping is needed and all the cards line up. */
+  aspect-ratio: 3 / 4;
   height: auto;
-  /* One very tall photo would otherwise stretch its card far past the rest,
-     so cap the height and letterbox anything taller. */
-  max-height: 470px;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   background: var(--gray-100);
   border-bottom: 1px solid var(--gray-300);
