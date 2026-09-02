@@ -386,6 +386,26 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
 .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
 .card h3 { margin-bottom: 0.5rem; }
 
+/* Officer cards: photo on top, cropped to a consistent square.
+   object-position favours the upper part of the frame, where faces usually are. */
+.officer { padding: 0; overflow: hidden; }
+.officer__photo {
+  width: 100%;
+  /* height:auto is required, otherwise the width/height attributes on the
+     img fix the rendered height and the photo stretches. */
+  height: auto;
+  /* One very tall photo would otherwise stretch its card far past the rest,
+     so cap the height and letterbox anything taller. */
+  max-height: 470px;
+  object-fit: contain;
+  display: block;
+  background: var(--gray-100);
+  border-bottom: 1px solid var(--gray-300);
+}
+.officer h3 { margin: 1.25rem 1.5rem 0.4rem; }
+.officer > p { margin-left: 1.5rem; margin-right: 1.5rem; }
+.officer > p:last-child { margin-bottom: 1.5rem; }
+
 /* Year and major line on the officer cards. */
 .card__meta {
   font-size: 0.88rem;

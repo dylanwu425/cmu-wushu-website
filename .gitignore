@@ -21,3 +21,6 @@ images/*/*
 !images/*/README.txt
 !images/*/web/
 !images/*/web/**
+
+# Source document for the officer bios. Kept locally, not published.
+*.docx
