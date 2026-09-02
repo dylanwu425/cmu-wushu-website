@@ -28,3 +28,6 @@ images/*/*
 
 # Source document for the officer bios. Kept locally, not published.
 *.docx
+
+# Source photo for the hero, resized copy lives in images/hero-ds.jpg
+ds group photo.jpg
