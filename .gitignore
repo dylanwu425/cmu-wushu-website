@@ -21,6 +21,10 @@ images/*/*
 !images/*/README.txt
 !images/*/web/
 !images/*/web/**
+# Officer headshots are already resized and live directly in this folder,
+# so they need their own exception to the rule above.
+!images/officers/
+!images/officers/*.jpg
 
 # Source document for the officer bios. Kept locally, not published.
 *.docx
