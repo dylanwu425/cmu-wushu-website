@@ -385,6 +385,13 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
 }
 .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
 .card h3 { margin-bottom: 0.5rem; }
+
+/* Year and major line on the officer cards. */
+.card__meta {
+  font-size: 0.88rem;
+  color: var(--gray-600);
+  margin-top: -0.35rem;
+}
 .card p:last-child { margin-bottom: 0; }
 .card__icon {
   display: grid;
