@@ -1,46 +1,37 @@
 # Remaining placeholder text
 
-**8 placeholder strings left, all in one place: the officer bios.** Everything else from the
-last round is applied and live.
+**1 placeholder string left: Emily's bio.** Everything else from the board doc is applied and live.
 
 ---
 
-## 1. OFFICER BIOS  (`about.html`) — the only thing left
+## 1. OFFICER BIOS  (`about.html`)
 
-You said you're still collecting people's info, so this is the whole remaining list.
-I already have every name and role — just the year, major, and a line each:
+Pulled from the Google Doc on 2026-09-03. Seven of eight are done and live:
 
 ```
-Nicholas Chung    (President)              Year: 5     Major: ____________
-  Bio: ______________________________________________________________
+Nick Chung        (President)              1st Year Masters, Robotics    DONE
+Dylan Wu          (Vice President)         Sophomore, ECE                DONE
+Jonathan Wang     (Secretary)              67, Nursing                   DONE
+Alvin Wang        (Performance Director)   Sophomore, ECE                DONE
+Preston Steimel   (Performance Director)   Fifth Year, BXA               DONE
+Addison Cho       (Finance Officer)        Sophomore, Information Sys.   DONE
+Ari Rodriguez     (Social Events Chair)    1st-year master's, BME        DONE
 
-Dylan Wu          (Vice President)         Year: ____  Major: ____________
-  Bio: ______________________________________________________________
-
-Jonathan Wang     (Secretary)              Year: ____  Major: ____________
-  Bio: ______________________________________________________________
-
-Alvin Wang        (Performance Director)   Year: ____  Major: ____________
-  Bio: ______________________________________________________________
-
-Preston Steimel   (Performance Director)   Year: ____  Major: ____________
-  Bio: ______________________________________________________________
-
-Addison Cho       (Finance Officer)        Year: ____  Major: ____________
-  Bio: ______________________________________________________________
-
-Emily Stapleford  (Marketing / Social)     Year: ____  Major: ____________
-  Bio: ______________________________________________________________
-
-Ariadna Rodriguez (Graphic Design)         Year: ____  Major: ____________
-  Bio: ______________________________________________________________
+Emily Stapleford  (Marketing / Social)     Sophomore, Ethics, History, and Public Policy
+  Bio: ______________________________________________________________   STILL BLANK
 ```
 
-I have **Nick down as Year 5** from your last edit but held it back, since a card showing only
-a year and no bio looks odder than one that plainly says "bio coming". It goes in with the rest.
+Emily's row in the doc is still a row of underscores, so her card reads "Bio coming soon."
+Fill it in the doc and I'll pull it over, or just paste it here.
 
-Officer photos — you said yes earlier. Still want them? **yes / no:** ______
-If yes, drop headshots into a folder and I'll wire them up.
+Two things I changed to match the doc, in case they were not intended:
+
+- **"Nicholas Dean Ang Chung" is now "Nick Chung"** (the doc says Nick Chung)
+- **"Jonathan Wang Steimel" is now "Jonathan Wang"** (the doc says Jonathan Wang; the
+  Steimel part appears to belong to Preston, whom his bio calls "Prestonian Steimelian")
+
+Nick's bio in the doc ends with two emoji that came through the export corrupted, so I left
+them off. Say the word if you want them back and I'll add the real characters.
 
 ---
 
