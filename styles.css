@@ -405,6 +405,48 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
 .officer > p { margin-left: 1.5rem; margin-right: 1.5rem; }
 .officer > p:last-child { margin-bottom: 1.5rem; }
 
+/* Long officer bios. The opening sentence always shows and the rest lives in a
+   <details>, which opens when you click "Read more". This is plain HTML, so it
+   works with JavaScript switched off. Nothing to wire up: copy the <details>
+   block in about.html onto any other officer whose bio runs long. */
+.officer > .bio { margin: -0.4rem 1.5rem 1.5rem; }
+.officer > .bio > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--cardinal);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+/* Safari and older Chrome draw their own triangle; this hides it so the
+   chevron below is the only marker. */
+.officer > .bio > summary::-webkit-details-marker { display: none; }
+.officer > .bio > summary::after {
+  content: "";
+  width: 0.45em;
+  height: 0.45em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--transition);
+}
+.officer > .bio[open] > summary::after { transform: translateY(1px) rotate(-135deg); }
+.officer > .bio > summary:hover { color: var(--cardinal-dark); text-decoration: underline; }
+.officer > .bio > summary:focus-visible {
+  outline: 2px solid var(--cardinal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.officer > .bio p { margin: 0.7rem 0 0; }
+
+/* Swap the label when the bio is open. Both labels are real text, so screen
+   readers announce whichever one is currently showing. */
+.bio__less { display: none; }
+.officer > .bio[open] .bio__more { display: none; }
+.officer > .bio[open] .bio__less { display: inline; }
+
 /* Year and major line on the officer cards. */
 .card__meta {
   font-size: 0.88rem;
