@@ -103,10 +103,10 @@
 /* ==========================================================================
    Preston's birthday easter egg (About page)
    Year round: clicking the word "beans" in his bio rains beans down his card.
-   On his birthday the whole card becomes the trigger, so clicking his photo
-   works too, the third click turns his photo over to the birthday picture, and
-   the card gets a cake beside his name, a greeting line and a shimmer, with the
-   beans falling once by themselves on page load.
+   On his birthday the card wears the party hat photo instead of his portrait,
+   the whole card becomes the trigger, the third click turns the photo over to
+   the lion dance picture, and the card gets a cake beside his name, a greeting
+   line and a shimmer, with the beans falling once by themselves on page load.
 
    The date lives in data-birthday on his card in about.html, as MM-DD. Edit it
    there; you never need to touch this file. An empty or malformed value simply
@@ -175,22 +175,23 @@
     ? ["🫘", "🫘", "🎂", "🎉", "🐺"]  // beans, cake, party, wolf
     : ["🫘"];                     // just beans
 
-  // A few clicks in, the portrait gives way to the birthday picture. It happens
-  // once per visit, and only on the day. The path lives in data-birthday-photo
-  // on the card, so swapping the picture never means editing this file.
-  function turnPhoto() {
+  // Put a different picture on the card. Both birthday photos live in data
+  // attributes in about.html, so changing either never means editing this file.
+  // fade is off for the one applied on load, which has nothing to fade from.
+  function setPhoto(pathAttr, altAttr, fade) {
     var photo = card.querySelector(".officer__photo");
-    var next = card.getAttribute("data-birthday-photo");
+    var next = card.getAttribute(pathAttr);
     if (!photo || !next) return;
 
     function apply() {
       photo.src = next;
-      photo.alt = photo.getAttribute("data-birthday-alt") || photo.alt;
+      var alt = card.getAttribute(altAttr);
+      if (alt) photo.alt = alt;
       photo.classList.remove("is-turning");
     }
 
-    if (calm) {
-      apply(); // no fade for anyone who asked for less motion
+    if (!fade || calm) {
+      apply(); // no fade on load, or for anyone who asked for less motion
       return;
     }
     photo.classList.add("is-turning");
@@ -217,7 +218,9 @@
 
       shower(18, faces);
       clicks++;
-      if (clicks === CLICKS_TO_TURN) turnPhoto();
+      if (clicks === CLICKS_TO_TURN) {
+        setPhoto("data-birthday-reveal", "data-birthday-reveal-alt", true);
+      }
     }
 
     card.addEventListener("click", tapped);
@@ -250,6 +253,10 @@
   if (birthday) {
     card.classList.add("is-birthday");
 
+    // The party hat photo is simply how his card looks all day, so it goes on
+    // straight away rather than fading in.
+    setPhoto("data-birthday-photo", "data-birthday-photo-alt", false);
+
     // The cake is decoration; the greeting below is the real text, so screen
     // readers get the message once rather than twice.
     var name = card.querySelector("h3");
@@ -265,8 +272,8 @@
     line.textContent = "Happy birthday, Preston!";
     card.appendChild(line);
 
-    // Fetch the birthday picture up front, so the turn doesn't show a gap.
-    var waiting = card.getAttribute("data-birthday-photo");
+    // Fetch the reveal up front, so the turn doesn't show a gap.
+    var waiting = card.getAttribute("data-birthday-reveal");
     if (waiting) new Image().src = waiting;
 
     shower(22, faces);

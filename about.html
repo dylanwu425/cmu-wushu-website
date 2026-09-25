@@ -176,15 +176,18 @@
                     shimmer. An empty value means that part never fires, so fill
                     it in to switch it on. Add ?birthday to the page URL to
                     preview it on any other day.
-                 3. On his birthday only, the third click turns his photo over to
-                    data-birthday-photo. Clear that attribute to drop the swap and
-                    keep everything else.
+                 3. On his birthday his card wears data-birthday-photo instead of
+                    his usual portrait, and the third click turns that over to
+                    data-birthday-reveal. Clear either attribute to drop that half
+                    and keep the rest.
                With JavaScript off the card reads as a perfectly normal card. -->
           <article class="card officer" data-birthday="09-25"
-                   data-birthday-photo="images/officers/preston_birthday.jpg">
+                   data-birthday-photo="images/officers/preston-steimel-bday.jpg"
+                   data-birthday-photo-alt="Preston Wolf Steimel wearing a party hat"
+                   data-birthday-reveal="images/officers/preston_birthday.jpg"
+                   data-birthday-reveal-alt="Preston Wolf Steimel as a lion dancer in shiny orange pants">
             <img class="officer__photo" src="images/officers/preston-steimel.jpg"
-                 alt="Preston Wolf Steimel, Performance Director" loading="lazy" width="600" height="800"
-                 data-birthday-alt="Preston Wolf Steimel as a lion dancer in shiny orange pants">
+                 alt="Preston Wolf Steimel, Performance Director" loading="lazy" width="600" height="800">
             <h3>Preston Wolf Steimel</h3>
             <p><strong>Performance Director</strong></p>
             <p class="card__meta">Fifth Year &middot; BXA</p>
