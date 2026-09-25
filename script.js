@@ -98,3 +98,147 @@
     });
   });
 })();
+
+
+/* ==========================================================================
+   Preston's birthday easter egg (About page)
+   Year round: clicking the word "beans" in his bio rains beans down his card.
+   On his birthday the whole card becomes the trigger, so clicking his photo
+   works too, the third click turns his photo over to the birthday picture, and
+   the card gets a cake beside his name, a greeting line and a shimmer, with the
+   beans falling once by themselves on page load.
+
+   The date lives in data-birthday on his card in about.html, as MM-DD. Edit it
+   there; you never need to touch this file. An empty or malformed value simply
+   leaves the birthday half switched off. Add ?birthday to the page URL to
+   preview the birthday state on any other day.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var card = document.querySelector(".officer[data-birthday]");
+  if (!card) return; // Not the About page.
+
+  // The rest of the site honours this, so the beans and the shimmer do too.
+  var calm = window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var CLICKS_TO_TURN = 3; // how many birthday clicks before the photo changes
+
+  function pad(n) {
+    return (n < 10 ? "0" : "") + n;
+  }
+
+  function isBirthdayToday(value) {
+    if (!/^\d{2}-\d{2}$/.test(value)) return false; // blank date: stay quiet
+    var now = new Date();
+    return value === pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+  }
+
+  // Beans remove themselves once they land, so repeated clicks never pile up.
+  function shower(count, faces) {
+    if (calm) return;
+
+    var stage = card.querySelector(".officer__beans");
+    if (!stage) {
+      stage = document.createElement("div");
+      stage.className = "officer__beans";
+      stage.setAttribute("aria-hidden", "true");
+      card.appendChild(stage);
+    }
+
+    // A ceiling, so a run of impatient clicks can't flood the card.
+    if (stage.childElementCount > 120) return;
+
+    for (var i = 0; i < count; i++) {
+      var bean = document.createElement("span");
+      bean.className = "bean";
+      bean.textContent = faces[Math.floor(Math.random() * faces.length)];
+      bean.style.left = Math.round(Math.random() * 88) + "%";
+      bean.style.animationDelay = (Math.random() * 0.6).toFixed(2) + "s";
+      bean.style.animationDuration = (1.8 + Math.random() * 1.2).toFixed(2) + "s";
+      bean.style.setProperty("--bean-distance", (card.offsetHeight + 40) + "px");
+      bean.style.setProperty("--bean-spin", Math.round(180 + Math.random() * 540) + "deg");
+      bean.addEventListener("animationend", function () {
+        this.parentNode.removeChild(this);
+      });
+      stage.appendChild(bean);
+    }
+  }
+
+  var birthday = isBirthdayToday(card.getAttribute("data-birthday")) ||
+                 /[?&]birthday(&|=|$)/.test(window.location.search);
+  // The wolf is for his middle name. Beans are listed twice so they stay the
+  // most common thing falling even on his birthday — it is still his bio.
+  var faces = birthday
+    ? ["🫘", "🫘", "🎂", "🎉", "🐺"]  // beans, cake, party, wolf
+    : ["🫘"];                     // just beans
+
+  // A few clicks in, the portrait gives way to the birthday picture. It happens
+  // once per visit, and only on the day. The path lives in data-birthday-photo
+  // on the card, so swapping the picture never means editing this file.
+  function turnPhoto() {
+    var photo = card.querySelector(".officer__photo");
+    var next = card.getAttribute("data-birthday-photo");
+    if (!photo || !next) return;
+
+    function apply() {
+      photo.src = next;
+      photo.alt = photo.getAttribute("data-birthday-alt") || photo.alt;
+      photo.classList.remove("is-turning");
+    }
+
+    if (calm) {
+      apply(); // no fade for anyone who asked for less motion
+      return;
+    }
+    photo.classList.add("is-turning");
+    window.setTimeout(apply, 320); // matches the CSS fade
+  }
+
+  // Off-season, the word "beans" in his bio is the only way in. On his birthday
+  // the whole card is live, so tapping his photo works as well. That listener
+  // sits on the card and catches the word too as the click bubbles up, so a
+  // birthday click fires the shower once rather than twice.
+  if (birthday) {
+    var clicks = 0;
+    card.addEventListener("click", function () {
+      shower(18, faces);
+      clicks++;
+      if (clicks === CLICKS_TO_TURN) turnPhoto();
+    });
+  } else {
+    var trigger = card.querySelector(".bean-trigger");
+    if (trigger) {
+      trigger.addEventListener("click", function () {
+        shower(9, faces);
+      });
+    }
+  }
+
+  if (birthday) {
+    card.classList.add("is-birthday");
+
+    // The cake is decoration; the greeting below is the real text, so screen
+    // readers get the message once rather than twice.
+    var name = card.querySelector("h3");
+    if (name) {
+      var cake = document.createElement("span");
+      cake.setAttribute("aria-hidden", "true");
+      cake.textContent = " 🎂";
+      name.appendChild(cake);
+    }
+
+    var line = document.createElement("p");
+    line.className = "officer__bday";
+    line.textContent = "Happy birthday, Preston!";
+    card.appendChild(line);
+
+    // Fetch the birthday picture up front, so the turn doesn't show a gap.
+    var waiting = card.getAttribute("data-birthday-photo");
+    if (waiting) new Image().src = waiting;
+
+    shower(22, faces);
+  }
+})();

@@ -93,8 +93,8 @@
           <hr class="accent-rule">
         </div>
 
-        <!-- PLACEHOLDER: replace this with the club's real history. -->
-        <p>Club history yap yap yap</p>
+        <!-- PLACEHOLDER: still standing in for the club's real history. -->
+        <p>Ask Petrina</p>
 
       </div>
     </section>
@@ -166,13 +166,30 @@
             <p>Hello I&rsquo;m Alvin I am Alvin&hellip;</p>
           </article>
 
-          <article class="card officer">
+          <!-- Preston's card carries the birthday easter egg. Two parts, both
+               wired up in script.js:
+                 1. The word "beans" below is a hidden button. Clicking it rains
+                    beans down his card, any day of the year. On his birthday the
+                    whole card responds, so clicking his photo does it too.
+                 2. data-birthday is his birthday as MM-DD. On that date, every
+                    year, the card also gets a cake, a greeting line and a
+                    shimmer. An empty value means that part never fires, so fill
+                    it in to switch it on. Add ?birthday to the page URL to
+                    preview it on any other day.
+                 3. On his birthday only, the third click turns his photo over to
+                    data-birthday-photo. Clear that attribute to drop the swap and
+                    keep everything else.
+               With JavaScript off the card reads as a perfectly normal card. -->
+          <article class="card officer" data-birthday="09-25"
+                   data-birthday-photo="images/officers/preston_birthday.jpg">
             <img class="officer__photo" src="images/officers/preston-steimel.jpg"
-                 alt="Preston Wolf Steimel, Performance Director" loading="lazy" width="600" height="800">
+                 alt="Preston Wolf Steimel, Performance Director" loading="lazy" width="600" height="800"
+                 data-birthday-alt="Preston Wolf Steimel as a lion dancer in shiny orange pants">
             <h3>Preston Wolf Steimel</h3>
             <p><strong>Performance Director</strong></p>
             <p class="card__meta">Fifth Year &middot; BXA</p>
-            <p>I wear shiny pants and eat lots of beans.</p>
+            <p>I wear shiny pants and eat lots of
+              <button class="bean-trigger" type="button">beans</button>.</p>
           </article>
 
           <article class="card officer">

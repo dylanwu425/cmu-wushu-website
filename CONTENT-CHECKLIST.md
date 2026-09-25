@@ -1,6 +1,8 @@
 # Remaining placeholder text
 
 **1 placeholder string left: Emily's bio.** Everything else from the board doc is applied and live.
+The club history section reads "Ask Petrina" by request, and Preston's card has a birthday
+easter egg set to Sep 25 (`data-birthday="09-25"` in `about.html`).
 
 ---
 
@@ -35,7 +37,7 @@ them off. Say the word if you want them back and I'll add the real characters.
 
 ---
 
-## 2. CLUB HISTORY — currently reads "Club history yap yap yap"
+## 2. CLUB HISTORY — currently reads "Ask Petrina"
 
 Exactly as you asked, but flagging it because **this is live and public right now**:
 

@@ -447,6 +447,83 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
 .officer > .bio[open] .bio__more { display: none; }
 .officer > .bio[open] .bio__less { display: inline; }
 
+/* Preston's birthday easter egg (about.html).
+   Nothing in here is visible until script.js adds the classes, so the card
+   looks ordinary with JavaScript off. The card itself is the stage for the
+   falling beans, and it already clips its overflow, so they never spill onto
+   the officers beside him. */
+.officer { position: relative; }
+
+/* "beans" has to read as plain body text — no underline, no pointer cursor —
+   or it stops being a secret. It stays a real <button> so a keyboard can still
+   reach it, and only then does it show a focus ring. */
+.bean-trigger {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: text;
+}
+.bean-trigger:focus-visible {
+  outline: 2px solid var(--cardinal);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* The beans live in their own layer so they can never swallow a click. */
+.officer__beans {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bean {
+  position: absolute;
+  top: -1.5em;
+  font-size: 1.35rem;
+  line-height: 1;
+  animation: bean-fall 2.2s linear forwards;
+}
+/* script.js sets the distance and spin per bean so no two fall alike. */
+@keyframes bean-fall {
+  from { transform: translateY(0) rotate(0deg); opacity: 1; }
+  to   { transform: translateY(var(--bean-distance, 420px)) rotate(var(--bean-spin, 360deg)); opacity: 0.85; }
+}
+
+/* --- Birthday-only dressing --- */
+/* On the day, the whole card is clickable, so it says so with the cursor.
+   The rest of the year the card is inert and only the word "beans" responds. */
+.officer.is-birthday { border-color: var(--cardinal); cursor: pointer; }
+
+/* The shiny pants he claims to wear: a highlight sweeps the card, then waits a
+   couple of seconds before coming back round. */
+.officer.is-birthday::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg,
+              transparent 42%, rgba(255, 255, 255, 0.5) 50%, transparent 58%);
+  background-size: 300% 100%;
+  animation: shiny-pants 5s ease-in-out infinite;
+}
+@keyframes shiny-pants {
+  0%        { background-position: 140% 0; }
+  55%, 100% { background-position: -140% 0; }
+}
+
+/* The portrait fades out and the birthday picture fades in over the top of it.
+   Only the birthday path ever adds this class. */
+.officer__photo { transition: opacity 0.3s ease; }
+.officer__photo.is-turning { opacity: 0; }
+
+.officer__bday {
+  margin: 0.35rem 1.5rem 1.5rem;
+  color: var(--cardinal);
+  font-weight: 600;
+}
+
 /* Year and major line on the officer cards. */
 .card__meta {
   font-size: 0.88rem;
