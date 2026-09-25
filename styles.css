@@ -463,7 +463,21 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
   background: none;
   border: 0;
   padding: 0;
+  margin: 0;
   cursor: text;
+  /* Safari on iOS draws its own rounded button chrome no matter what the
+     background and border say, so the appearance reset is what actually makes
+     this read as plain text on a phone. border-radius and text-align go with
+     it; without them the native styling leaks back in. */
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+  text-align: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+  /* Phones also flash a grey box over anything tappable, which on this word is
+     a dead giveaway. */
+  -webkit-tap-highlight-color: transparent;
 }
 .bean-trigger:focus-visible {
   outline: 2px solid var(--cardinal);
@@ -493,8 +507,15 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
 
 /* --- Birthday-only dressing --- */
 /* On the day, the whole card is clickable, so it says so with the cursor.
-   The rest of the year the card is inert and only the word "beans" responds. */
-.officer.is-birthday { border-color: var(--cardinal); cursor: pointer; }
+   The rest of the year the card is inert and only the word "beans" responds.
+   Do not drop the cursor: iOS Safari refuses to fire a click on a plain
+   <article> unless it looks clickable, so that line is what makes tapping his
+   photo work on an iPhone at all. */
+.officer.is-birthday {
+  border-color: var(--cardinal);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* The shiny pants he claims to wear: a highlight sweeps the card, then waits a
    couple of seconds before coming back round. */

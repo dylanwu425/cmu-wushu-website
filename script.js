@@ -203,11 +203,41 @@
   // birthday click fires the shower once rather than twice.
   if (birthday) {
     var clicks = 0;
-    card.addEventListener("click", function () {
+    var lastTap = 0;
+    var fromX = 0;
+    var fromY = 0;
+    var startedAt = 0;
+
+    function tapped() {
+      // A touch is followed by a synthetic click, so the same tap arrives
+      // twice. Anything inside 400ms is that echo, not a second tap.
+      var now = Date.now();
+      if (now - lastTap < 400) return;
+      lastTap = now;
+
       shower(18, faces);
       clicks++;
       if (clicks === CLICKS_TO_TURN) turnPhoto();
-    });
+    }
+
+    card.addEventListener("click", tapped);
+
+    // Safari on a phone will not reliably fire a click on a plain <article>,
+    // so the card watches the touch itself. It only counts as a tap if the
+    // finger barely moved and lifted quickly — otherwise scrolling past his
+    // card would set the beans off.
+    card.addEventListener("touchstart", function (event) {
+      var touch = event.changedTouches[0];
+      fromX = touch.clientX;
+      fromY = touch.clientY;
+      startedAt = Date.now();
+    }, { passive: true });
+
+    card.addEventListener("touchend", function (event) {
+      var touch = event.changedTouches[0];
+      var drift = Math.abs(touch.clientX - fromX) + Math.abs(touch.clientY - fromY);
+      if (drift < 12 && Date.now() - startedAt < 500) tapped();
+    }, { passive: true });
   } else {
     var trigger = card.querySelector(".bean-trigger");
     if (trigger) {
