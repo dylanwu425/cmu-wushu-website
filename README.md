@@ -68,7 +68,7 @@ cmu-wushu-website/
 ├── .github/        ← the robot that runs it daily
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
-├── script.js       ← Only runs the mobile hamburger menu. You won't need to touch it.
+├── script.js       ← Menu, carousels, easter egg, theme calligraphy. You won't need to touch it.
 ├── images/         ← Logo, plus one folder of photos per event
 ├── event-extras.json ← events not on the Google Calendar (see 5c)
 └── README.md       ← This file
@@ -466,21 +466,30 @@ button will still open a blank email with the right address and subject.
 
 ### Colors
 
-Open **`styles.css`**. The very top of the file has a section called `1. VARIABLES`:
+The site's look is the **Ink Night** theme: ink-black pages, rice-paper panels, gold lines and
+red seal stamps. It lives at the bottom of **`styles.css`**, in the section called
+`9. INK NIGHT THEME`. That section starts with a list of colours:
 
 ```css
 :root {
-  --cardinal: #C41230;        /* CMU cardinal red — primary brand color */
-  --cardinal-dark: #8E0D22;   /* darker red, used for hover states */
-  --black: #111111;
+  --night: #100F0D;            /* the ink stone: page background */
+  --paper: #EFE7D8;            /* the rice-paper panels */
+  --gold: #B8955A;             /* gold lines and small headings */
+  --seal: #B3261E;             /* red seal stamps and buttons */
   ...
 }
 ```
 
-Change a color here and it updates **everywhere on the site at once** — buttons, headings,
-the nav bar, everything. You almost never need to hunt through the rest of the file.
+Change a colour there and it updates **everywhere on the site at once**. The older colour list
+at the top of the file (`1. VARIABLES`) is mostly overridden by the theme, so editing it won't
+do much.
 
-`#C41230` is CMU's official cardinal red. Please keep it unless you have a good reason.
+### Page banner photos
+
+Each inner page's banner photo is set in section 9 of `styles.css`. Search for
+`html[data-page="about"] .page-hero::before` (or `schedule`, `events`, `booking`, `contact`)
+and change the image path. Each page says which page it is with `data-page="..."` on its
+`<html>` tag, so leave that attribute alone.
 
 ### The tagline on the home page
 

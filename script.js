@@ -1,6 +1,7 @@
 /* ==========================================================================
    CMU Wushu Club — site JavaScript
-   This file does exactly one thing: open and close the mobile menu.
+   Opens the mobile menu, runs the photo carousels and Preston's easter egg,
+   and adds the Ink Night theme's calligraphy and scroll fades (at the end).
    You should not need to edit it to update page content.
    ========================================================================== */
 
@@ -278,4 +279,117 @@
 
     shower(22, faces);
   }
+})();
+
+
+/* ==========================================================================
+   Ink Night theme: home page calligraphy and scroll fades
+   1. Adds the home hero's brushed 武术, seal and caption. The photo and its
+      ink-splash mask are pure CSS; the text in index.html is never touched.
+   2. Fades sections in as they scroll into view. No blur: a short fade and
+      a small rise, then the element is handed back to its normal styles.
+   Nothing is hidden unless this file runs, so the page reads fine without it.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var calm = window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!calm) root.classList.add("night-motion");
+
+  function ready(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
+    }
+  }
+
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+
+  function buildHero() {
+    var hero = document.querySelector(".hero");
+    if (!hero) return;
+
+    var callig = el("div", "night-callig");
+    callig.setAttribute("aria-hidden", "true");
+    callig.appendChild(el("span", "night-callig__small", "卡内基梅隆大学 · 武术社"));
+    callig.appendChild(el("span", "night-callig__big", "武术"));
+
+    var seal = el("span", "ink-seal", "卡梅武术"); // CMU wushu, read right to left
+    seal.setAttribute("aria-hidden", "true");
+
+    var caption = el("p", "night-caption", "Oops!… It’s DS Again · Dancers Symposium, April 2026");
+    caption.setAttribute("aria-hidden", "true");
+
+    hero.appendChild(callig);
+    hero.appendChild(seal);
+    hero.appendChild(caption);
+
+    window.requestAnimationFrame(function () { hero.classList.add("is-playing"); });
+  }
+
+  function reveals() {
+    if (calm || !("IntersectionObserver" in window)) return;
+
+    var selector = [
+      "main .section-header",
+      "main .split > *",
+      "main .grid > *",
+      "main .contact-grid > *",
+      "main .steps > li",
+      "main .gallery-group",
+      "main .table-wrap",
+      "main .cal-embed",
+      ".cta-band .container"
+    ].join(",");
+
+    var nodes = [];
+    Array.prototype.forEach.call(document.querySelectorAll(selector), function (node) {
+      if (nodes.indexOf(node) !== -1) return;
+      // Anything already on screen stays put; only what is below the fold
+      // waits for its turn.
+      if (node.getBoundingClientRect().top < window.innerHeight * 0.92) return;
+      var index = 0;
+      var sib = node.previousElementSibling;
+      while (sib) {
+        if (sib.classList.contains("night-reveal")) index++;
+        sib = sib.previousElementSibling;
+      }
+      node.style.transitionDelay = Math.min(index, 4) * 70 + "ms";
+      node.classList.add("night-reveal");
+      nodes.push(node);
+    });
+
+    function settle(node) {
+      node.classList.remove("night-reveal", "is-in");
+      node.style.transitionDelay = "";
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var node = entry.target;
+        io.unobserve(node);
+        node.classList.add("is-in");
+        // Hand the element back so hover lifts use their own timing again.
+        window.setTimeout(function () { settle(node); }, 800);
+      });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.06 });
+
+    nodes.forEach(function (node) { io.observe(node); });
+  }
+
+  ready(function () {
+    buildHero();
+    reveals();
+  });
 })();
