@@ -191,7 +191,7 @@ def build_rows(events):
     out = []
     for e in events:
         _, label = tag_for(e["title"], e.get("type"))
-        place = nice_place(e["location"]) or "Not listed"
+        place = nice_place(e["location"]) or "&mdash;"
         out.append(f"""              <tr>
                 <th scope="row">{e['start'].strftime('%b %-d, %Y')}</th>
                 <td>{esc(nice_title(e['title']))}</td>
