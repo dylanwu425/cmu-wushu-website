@@ -1689,36 +1689,36 @@ html[data-page="about"] .page-hero::before {
   background-image:
     linear-gradient(180deg, rgba(16, 15, 13, 0.8) 0%, rgba(16, 15, 13, 0) 24%),
     linear-gradient(90deg, rgba(16, 15, 13, 0.86) 0%, rgba(16, 15, 13, 0.5) 45%, rgba(16, 15, 13, 0.12) 100%),
-    url("images/ds-2026/web/dscf6247.jpg");
-  background-position: center, center, center 38%;
+    url("images/ds-2026/web/wushu-31.jpg");
+  background-position: center, center, 60% 50%;
 }
 html[data-page="schedule"] .page-hero::before {
   background-image:
     linear-gradient(180deg, rgba(16, 15, 13, 0.8) 0%, rgba(16, 15, 13, 0) 24%),
     linear-gradient(90deg, rgba(16, 15, 13, 0.88) 0%, rgba(16, 15, 13, 0.5) 45%, rgba(16, 15, 13, 0.15) 100%),
-    url("images/ds-2026/web/dscf6271.jpg");
-  background-position: center, center, center 74%;
+    url("images/ds-2026/web/dscf6218.jpg");
+  background-position: center, center, 65% 50%;
 }
 html[data-page="events"] .page-hero::before {
   background-image:
     linear-gradient(180deg, rgba(16, 15, 13, 0.8) 0%, rgba(16, 15, 13, 0) 24%),
     linear-gradient(90deg, rgba(16, 15, 13, 0.86) 0%, rgba(16, 15, 13, 0.5) 45%, rgba(16, 15, 13, 0.12) 100%),
     url("images/ds-2026/web/dscf6345.jpg");
-  background-position: center, center, center 52%;
+  background-position: center, center, 60% 52%;
 }
 html[data-page="booking"] .page-hero::before {
   background-image:
     linear-gradient(180deg, rgba(16, 15, 13, 0.8) 0%, rgba(16, 15, 13, 0) 24%),
     linear-gradient(90deg, rgba(16, 15, 13, 0.88) 0%, rgba(16, 15, 13, 0.52) 45%, rgba(16, 15, 13, 0.15) 100%),
-    url("images/ds-2026/web/dscf6426.jpg");
-  background-position: center, center, center 55%;
+    url("images/ds-2026/web/dscf6247.jpg");
+  background-position: center, center, 70% 48%;
 }
 html[data-page="contact"] .page-hero::before {
   background-image:
     linear-gradient(180deg, rgba(16, 15, 13, 0.8) 0%, rgba(16, 15, 13, 0) 24%),
     linear-gradient(90deg, rgba(16, 15, 13, 0.86) 0%, rgba(16, 15, 13, 0.5) 45%, rgba(16, 15, 13, 0.12) 100%),
-    url("images/ds-2026/web/dscf6218.jpg");
-  background-position: center, center, center 45%;
+    url("images/penguins-2026/web/dscf6144.jpg");
+  background-position: center, center, 60% 68%;
 }
 
 .page-hero .container { position: relative; }
