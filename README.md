@@ -70,6 +70,7 @@ cmu-wushu-website/
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
 ├── script.js       ← Menu, carousels, easter egg, ink bloom, lightbox, practice line. Leave it be.
+├── data/           ← live.json (made by the calendar robot) and members.csv (local only)
 ├── images/         ← Logo, plus one folder of photos per event
 ├── event-extras.json ← events not on the Google Calendar (see 5c)
 └── README.md       ← This file
@@ -466,29 +467,25 @@ button will still open a blank email with the right address and subject.
 ## 7c. How to add or remove members
 
 The About page lists regular members under the officers: a small card with a square photo
-(or a red seal with their initials if they'd rather not have a photo), their name, year and
-major, and what they train. No bios.
+(or a red seal with their initials if they didn't send one), their name, year and major, the
+year they joined, a fun fact, and their Instagram if they gave one.
 
-**Before anything goes up:** ask. It's a public website. A short Google Form works well:
-name as they'd like it shown (first name only is fine), year, major, what they train, an
-optional photo, and a checkbox agreeing to be listed.
+The list is **built from the sign-up form**, "CMU Wushu Club — Member Profile". People fill
+it in themselves, and only those who tick the consent box are shown. To refresh the list:
 
-**To add someone with a photo:**
+1. Open the form's responses Sheet. **File → Download → Comma-separated values (.csv)**.
+   Save it as `data/members.csv`. (This file stays on your computer: it has email addresses
+   in it, and the site is set up never to publish it.)
+2. In Drive, open the form's **"File responses"** folder, download it, and put the photos in
+   `images/members/originals/`. iPhone HEIC files are fine.
+3. Run `python3 scripts/build_members.py`.
 
-1. Save their photo in `images/members/originals/` named `firstname-lastname.jpg`.
-2. Run `python3 scripts/crop_members.py`. It makes the square copy `images/members/firstname-lastname.jpg`.
-3. In `about.html`, find the `MEMBERS` comment, copy a block that starts with
-   `<li class="member">` and has an `<img>`, paste it, and change the file name, the name,
-   the year and major, and the "what they train" line (delete that line if they didn't say).
+It crops each person's first photo to a square, writes the cards into `about.html` between
+the `MEMBERS:START` and `MEMBERS:END` markers, and tells you who was left off for not
+consenting. Don't edit between those markers by hand; the script overwrites them.
 
-**To add someone without a photo:** copy a block that has `<span class="member__seal">`
-instead of an `<img>`, and type their initials between the `<span>` tags.
-
-**To remove someone:** delete their whole block from `<li class="member">` to `</li>`, and
-delete their photo. Do this the same day someone asks.
-
-Member photos people upload go in the **Member Photos** folder in the club Drive, next to the
-event folders.
+**To remove someone:** delete their row from `data/members.csv` and their photo from the
+`originals` folder, run the script again, and push. Do this the same day someone asks.
 
 ---
 

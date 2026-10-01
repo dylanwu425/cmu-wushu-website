@@ -36,3 +36,6 @@ images/*/*
 
 # Source photo for the hero, resized copy lives in images/hero-ds.jpg
 ds group photo.jpg
+
+# The member sign-up answers hold email addresses. Local only.
+data/members.csv
