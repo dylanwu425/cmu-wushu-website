@@ -1989,8 +1989,9 @@ html[data-page="home"] main > .hero + .section .card:hover {
 /* --- Members: the same cards as the officers, under them ---
    Each <li> carries the officer classes too, so size, paper, type and
    shadows all come from the officer rules above. What is added here: the
-   list's own grid, the two-photo swap, the seal for anyone without a photo,
-   and the Instagram line. scripts/build_members.py writes the markup. */
+   list's own grid, the two-photo swap (which officer cards can use too),
+   the seal for anyone without a photo, and the Instagram line.
+   scripts/build_members.py writes the members' markup. */
 .members-head { margin-top: 4.5rem; }
 .members {
   list-style: none;
@@ -2002,7 +2003,8 @@ html[data-page="home"] main > .hero + .section .card:hover {
      instead of stretching one card across the row. */
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
-.member__photo {
+.member__photo,
+.photo-swap__img {
   display: block;
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -2012,12 +2014,14 @@ html[data-page="home"] main > .hero + .section .card:hover {
   filter: sepia(0.12) saturate(0.92);
   transition: opacity 0.45s ease, filter 0.6s ease;
 }
-.member:hover .member__photo { filter: none; }
+.officer:hover .member__photo,
+.officer:hover .photo-swap__img { filter: none; }
 
-/* Two photos: the formal one shows; the informal one lies on top of it,
-   clear, and fades in on hover, on keyboard focus, or when the photo is
-   tapped (script.js flips aria-pressed, which is what phones use). */
-.member__photos {
+/* Two photos on one card (members, and any officer who has a second one).
+   The first image shows; the second lies on top of it, clear, and fades in
+   on hover, on keyboard focus plus Enter, or when the photo is tapped
+   (script.js flips aria-pressed, which is what phones use). */
+.photo-swap {
   position: relative;
   display: block;
   width: 100%;
@@ -2030,21 +2034,21 @@ html[data-page="home"] main > .hero + .section .card:hover {
   appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
-.member__photo--informal {
+.photo-swap__img--alt {
   position: absolute;
   inset: 0;
   height: 100%;
   opacity: 0;
 }
-.member__photos[aria-pressed="true"] .member__photo--informal { opacity: 1; }
+.photo-swap[aria-pressed="true"] .photo-swap__img--alt { opacity: 1; }
 @media (hover: hover) {
-  .member__photos:hover .member__photo--informal { opacity: 1; }
-  /* Pressed and hovered at once reads as "back to formal". */
-  .member__photos[aria-pressed="true"]:hover .member__photo--informal { opacity: 0; }
+  .photo-swap:hover .photo-swap__img--alt { opacity: 1; }
+  /* Pressed and hovered at once reads as "back to the first photo". */
+  .photo-swap[aria-pressed="true"]:hover .photo-swap__img--alt { opacity: 0; }
 }
-.member__photos:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; }
+.photo-swap:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; }
 /* A small mark in the corner says there is a second photo behind this one. */
-.member__photos::after {
+.photo-swap::after {
   content: "";
   position: absolute;
   right: 10px;
@@ -2060,7 +2064,7 @@ html[data-page="home"] main > .hero + .section .card:hover {
   pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .member__photo { transition: none; }
+  .member__photo, .photo-swap__img { transition: none; }
 }
 
 /* No photo: the same portrait frame, paper, with a rough-edged red seal

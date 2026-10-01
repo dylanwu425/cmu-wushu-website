@@ -470,10 +470,15 @@ The About page lists regular members under the officers, on cards the same size 
 officers': a portrait photo, their name, the year they joined, their year and major, a fun
 fact, and their Instagram if they gave one.
 
-**Two photos.** Each member can have a *formal* photo and an *informal* one. The card shows
-the formal one and swaps to the informal one when you hover over it, or tap it on a phone.
+**Two photos.** Each member can have an *informal* photo and a *formal* one. The card shows
+the informal one and swaps to the formal one when you hover over it, or tap it on a phone.
 Someone who uploads one photo just gets that photo; someone who uploads none gets a red seal
 with their initials.
+
+**Officers can have two photos too.** In `about.html`, Dylan's officer card shows how: his
+single `<img>` is replaced by a `<button class="photo-swap">` holding two images. Copy that
+block onto another officer's card and point the second image at a 600 x 800 photo saved in
+`images/officers/`.
 
 The list is **built from the sign-up form**, "CMU Wushu Club — Member Profile". People fill
 it in themselves, and only those who tick the consent box are shown. Anyone who already has

@@ -124,9 +124,19 @@
             <p>I love wushu. Come to wushu club to love wushu just like me.</p>
           </article>
 
+          <!-- TWO PHOTOS ON ONE CARD: the first shows, the second fades in when
+               you hover over it (or tap it on a phone). To give another officer
+               a second photo, copy this <button class="photo-swap"> block over
+               their single <img>, and point the second image at a 600 x 800
+               photo in images/officers/. -->
           <article class="card officer">
-            <img class="officer__photo" src="images/officers/dylan-wu.jpg"
-                 alt="Dylan Wu, Vice President" loading="lazy" width="600" height="800">
+            <button class="photo-swap" type="button" aria-pressed="false"
+                    aria-label="Show Dylan Wu&rsquo;s other photo">
+              <img class="photo-swap__img" src="images/officers/dylan-wu.jpg"
+                   alt="Dylan Wu, Vice President" loading="lazy" width="600" height="800">
+              <img class="photo-swap__img photo-swap__img--alt" src="images/officers/dylan-wu-formal.jpg"
+                   alt="" loading="lazy" width="600" height="800">
+            </button>
             <h3>Dylan Wu</h3>
             <p><strong>Vice President</strong></p>
             <p class="card__meta">Sophomore &middot; ECE</p>
@@ -241,11 +251,11 @@
         <ul class="members">
           <!-- MEMBERS:START -->
           <li class="card officer member">
-            <button class="member__photos" type="button" aria-pressed="false"
+            <button class="photo-swap" type="button" aria-pressed="false"
                     aria-label="Show Kaden D Wong&rsquo;s other photo">
-              <img class="member__photo" src="images/members/kaden-d-wong-formal.jpg"
+              <img class="photo-swap__img" src="images/members/kaden-d-wong-informal.jpg"
                    alt="Kaden D Wong" loading="lazy" width="600" height="800">
-              <img class="member__photo member__photo--informal" src="images/members/kaden-d-wong-informal.jpg"
+              <img class="photo-swap__img photo-swap__img--alt" src="images/members/kaden-d-wong-formal.jpg"
                    alt="" loading="lazy" width="600" height="800">
             </button>
             <h3>Kaden D Wong</h3>

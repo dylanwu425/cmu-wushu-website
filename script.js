@@ -397,21 +397,20 @@
 })();
 
 /* ==========================================================================
-   Member cards with two photos (About page)
-   Hovering swaps the formal photo for the informal one in CSS alone. Phones
-   have no hover, so tapping the photo (or pressing Enter or Space on it)
-   flips it instead: this only toggles aria-pressed, and the styles do the
-   rest. With JavaScript off the formal photo simply stays.
+   Cards with two photos (About page: members, and officers who have one)
+   Hovering swaps the first photo for the second in CSS alone. Phones have
+   no hover, so tapping the photo (or pressing Enter or Space on it) flips it
+   instead: this only toggles aria-pressed, and the styles do the rest. With
+   JavaScript off the first photo simply stays.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  var list = document.querySelector(".members");
-  if (!list) return; // Not the About page.
+  if (!document.querySelector(".photo-swap")) return; // No such card here.
 
-  list.addEventListener("click", function (event) {
-    var button = event.target.closest(".member__photos");
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest(".photo-swap");
     if (!button) return;
     var on = button.getAttribute("aria-pressed") === "true";
     button.setAttribute("aria-pressed", on ? "false" : "true");

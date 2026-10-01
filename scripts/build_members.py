@@ -26,8 +26,8 @@ It then:
   * rewrites the list in about.html between the MEMBERS:START / MEMBERS:END
     markers. Everything outside those markers is left alone.
 
-Two photos per person. Each card shows a FORMAL photo, and swaps to an
-INFORMAL one when you hover over it (or tap it on a phone). By default the
+Two photos per person. Each card shows their INFORMAL photo, and swaps to
+the FORMAL one when you hover over it (or tap it on a phone). By default the
 formal photo is their "Photo 1" and the informal one their "Photo 2"; someone
 with one upload just gets the one photo, and someone with none gets a red
 seal with their initials.
@@ -235,17 +235,19 @@ def esc(s):
 def card(person):
     name = esc(person["name"])
     out = ['          <li class="card officer member">']
-    formal, informal = person.get("formal"), person.get("informal")
-    if formal and informal:
-        out.append('            <button class="member__photos" type="button" aria-pressed="false"')
+    # The informal photo is the one that shows; the formal one is behind it.
+    first = person.get("informal") or person.get("formal")
+    second = person.get("formal") if person.get("informal") else None
+    if first and second:
+        out.append('            <button class="photo-swap" type="button" aria-pressed="false"')
         out.append(f'                    aria-label="Show {name}&rsquo;s other photo">')
-        out.append(f'              <img class="member__photo" src="images/members/{formal}"')
+        out.append(f'              <img class="photo-swap__img" src="images/members/{first}"')
         out.append(f'                   alt="{name}" loading="lazy" width="{WIDTH}" height="{HEIGHT}">')
-        out.append(f'              <img class="member__photo member__photo--informal" src="images/members/{informal}"')
+        out.append(f'              <img class="photo-swap__img photo-swap__img--alt" src="images/members/{second}"')
         out.append(f'                   alt="" loading="lazy" width="{WIDTH}" height="{HEIGHT}">')
         out.append('            </button>')
-    elif formal:
-        out.append(f'            <img class="member__photo" src="images/members/{formal}"')
+    elif first:
+        out.append(f'            <img class="member__photo" src="images/members/{first}"')
         out.append(f'                 alt="{name}" loading="lazy" width="{WIDTH}" height="{HEIGHT}">')
     else:
         out.append(f'            <span class="member__seal" aria-hidden="true">{esc(person["initials"])}</span>')
@@ -324,8 +326,6 @@ def main():
             dst = os.path.join(OUT, f"{slug(name)}-{kind}.jpg")
             if make_portrait(photos[pick - 1], dst, want.get("focus"), float(want.get("zoom", 1.0))):
                 person[kind] = os.path.basename(dst)
-        if person.get("informal") and not person.get("formal"):
-            person["formal"] = person.pop("informal")
         people.append(person)
     people.sort(key=lambda p: p["name"].lower())
 
