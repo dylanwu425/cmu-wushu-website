@@ -70,7 +70,7 @@ cmu-wushu-website/
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
 ├── script.js       ← Menu, carousels, easter egg, ink bloom, lightbox, practice line. Leave it be.
-├── data/           ← live.json (made by the calendar robot) and members.csv (local only)
+├── data/           ← live.json (calendar robot), members.csv (local only), members-extra.json
 ├── images/         ← Logo, plus one folder of photos per event
 ├── event-extras.json ← events not on the Google Calendar (see 5c)
 └── README.md       ← This file
@@ -480,6 +480,10 @@ single `<img>` is replaced by a `<button class="photo-swap">` holding two images
 block onto another officer's card and point the second image at a 600 x 800 photo saved in
 `images/officers/`.
 
+Members are listed **longest-standing first**, by the year they joined, and alphabetically
+within a year. Nearly everyone is at CMU, so CMU is left off the cards; anyone from another
+school keeps theirs.
+
 The list is **built from the sign-up form**, "CMU Wushu Club — Member Profile". People fill
 it in themselves, and only those who tick the consent box are shown. Anyone who already has
 an officer card is left out so they don't appear twice. To refresh the list:
@@ -513,8 +517,28 @@ in the form:
 and down the photo (0.5, 0.5 is dead centre). `zoom` above 1 crops in closer. Run the script
 again to see the result.
 
-**To remove someone:** delete their row from `data/members.csv`, run the script again, and
-push. Do this the same day someone asks.
+**Someone who never filled the form in.** If a member tells an officer their details instead,
+add them to `data/members-extra.json`:
+
+```json
+{
+  "name": "Petrina Steimel",
+  "year": "Junior",
+  "major": "BXA",
+  "since": "2024",
+  "bio": "i have a vision",
+  "photos": { "informal": "petrina-steimel-informal.jpg" }
+}
+```
+
+Leave `school` out if they're at CMU. The photo names are files you put in
+`images/members/originals/` yourself; list only the ones they gave you. **Only add someone
+here if they've said yes to being on a public website** — there's no consent box to check,
+so you're vouching for them. If they later fill the form in, their own answers win and you
+can delete them from this file.
+
+**To remove someone:** delete their row from `data/members.csv`, or their entry from
+`data/members-extra.json`, run the script again, and push. Do this the same day someone asks.
 
 ---
 

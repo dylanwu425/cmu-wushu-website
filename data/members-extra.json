@@ -1,0 +1,15 @@
+{
+  "_comment": "Members who did not fill in the sign-up form, but told an officer their details and said yes to being listed. scripts/build_members.py merges these with the form's answers. Fields: name (as they want it shown), year, major, school (leave out if CMU), since (the year they joined), bio, insta, and photos: the file names of their pictures in images/members/originals/. If someone here later fills in the form, their own answers win and you can delete them from this file.",
+  "members": [
+    {
+      "name": "Petrina Steimel",
+      "year": "Junior",
+      "major": "BXA",
+      "since": "2024",
+      "bio": "i have a vision",
+      "photos": {
+        "informal": "petrina-steimel-informal.jpg"
+      }
+    }
+  ]
+}

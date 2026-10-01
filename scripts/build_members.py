@@ -18,13 +18,18 @@ semester, or whenever new people sign up:
      whose photo is whose.
   3. Run:   python3 scripts/build_members.py
 
+Someone who never filled the form in, but told an officer their details and
+said yes to being listed, goes in data/members-extra.json instead. Both lists
+are merged; if a person is in both, their own form answers win.
+
 It then:
   * keeps only people whose "Photo consent" answer says they consent,
   * leaves out anyone who already has an officer card on the page,
   * crops each person's photos to 600 x 800 (the officer cards' shape) in
     images/members/ (the originals are never published),
   * rewrites the list in about.html between the MEMBERS:START / MEMBERS:END
-    markers. Everything outside those markers is left alone.
+    markers, longest-standing members first. Everything outside those markers
+    is left alone.
 
 Two photos per person. Each card shows their INFORMAL photo, and swaps to
 the FORMAL one when you hover over it (or tap it on a phone). By default the
@@ -65,6 +70,7 @@ ORIGINALS = os.path.join(HERE, "images", "members", "originals")
 OUT = os.path.join(HERE, "images", "members")
 ABOUT = os.path.join(HERE, "about.html")
 FRAMING = os.path.join(HERE, "data", "member-photos.json")
+EXTRA = os.path.join(HERE, "data", "members-extra.json")
 # Where Google Drive for Desktop shows the form's uploads, one folder per
 # upload question ("Photo 1! (File responses)", "Photo 2! ...").
 DRIVE_UPLOADS = os.path.join(
@@ -130,13 +136,24 @@ def slug(name):
     return s or "member"
 
 
-def tidy_meta(year, major):
-    """'Social Work/Freshman/University of Pittsburgh' ->
-    'Social Work · Freshman · University of Pittsburgh'. The form's free-text
-    field can hold anything, so this only tidies the separators."""
-    bits = [b.strip() for b in re.split(r"\s*[/·|,]\s*", major or "") if b.strip()]
-    if year and year.strip() and year.strip().lower() not in [b.lower() for b in bits]:
-        bits.insert(0, year.strip())
+# Nearly everyone is at CMU, so saying so on every card is noise. Anyone
+# from anywhere else keeps their school.
+HOME_SCHOOL = re.compile(r"^(cmu|carnegie\s*mellon(\s+university)?)$", re.I)
+
+
+def tidy_meta(*parts):
+    """Join whatever the form or members-extra.json gives into one line:
+    'Social Work/Freshman/University of Pittsburgh' becomes
+    'Social Work · Freshman · University of Pittsburgh', and 'Junior', 'BXA',
+    'CMU' becomes 'Junior · BXA'. Only separators are tidied; nothing is
+    reordered, because the free-text field can hold anything."""
+    bits = []
+    for part in parts:
+        for bit in re.split(r"\s*[/·|,]\s*", (part or "").strip()):
+            bit = bit.strip()
+            if bit and not HOME_SCHOOL.match(bit) and \
+               bit.lower() not in [b.lower() for b in bits]:
+                bits.append(bit)
     return " · ".join(bits)
 
 
@@ -190,6 +207,18 @@ def find_photos(full_name):
             if m and same_person(m.group(1), full_name):
                 found.append(os.path.join(folder, f))
     return found
+
+
+def load_extra():
+    """Members who never filled the form in. The officer who added them is
+    saying they consented, so there is no consent column to check here."""
+    if not os.path.exists(EXTRA):
+        return []
+    try:
+        data = json.load(open(EXTRA, encoding="utf-8"))
+    except ValueError as e:
+        sys.exit(f"data/members-extra.json is not valid JSON: {e}")
+    return [m for m in data.get("members", []) if m.get("name")]
 
 
 def load_framing():
@@ -289,7 +318,7 @@ def main():
     def cell(row, key):
         return (row.get(cols.get(key, ""), "") or "").strip()
 
-    people, no_consent, are_officers = [], [], []
+    people, no_consent, are_officers, in_form = [], [], [], []
     seen = []
     for row in reversed(rows):           # newest answer wins if someone resubmits
         full = cell(row, "full")
@@ -327,7 +356,44 @@ def main():
             if make_portrait(photos[pick - 1], dst, want.get("focus"), float(want.get("zoom", 1.0))):
                 person[kind] = os.path.basename(dst)
         people.append(person)
-    people.sort(key=lambda p: p["name"].lower())
+
+    # Anyone who never filled the form in, added by an officer instead. Their
+    # photos are named outright rather than picked out of the form's uploads.
+    for entry in load_extra():
+        full = entry["name"].strip()
+        if any(same_person(full, p["name"]) for p in people):
+            in_form.append(full)
+            continue
+        if any(same_person(full, o) for o in officers):
+            are_officers.append(full)
+            continue
+        name = clean_name(entry.get("preferred", ""), full)
+        person = {
+            "name": name,
+            "initials": initials(name),
+            "meta": tidy_meta(entry.get("year"), entry.get("major"), entry.get("school")),
+            "since": re.sub(r"\D", "", str(entry.get("since", "")))[:4],
+            "bio": (entry.get("bio") or "").strip(),
+            "insta": (entry.get("insta") or "").strip(),
+        }
+        frame = framing.get(full.lower(), {})
+        for kind, filename in (entry.get("photos") or {}).items():
+            if kind not in ("formal", "informal") or not filename:
+                continue
+            src = os.path.join(ORIGINALS, filename)
+            if not os.path.exists(src):
+                print(f"   {full}: no {kind} photo at images/members/originals/{filename}")
+                continue
+            want = frame.get(kind, {})
+            dst = os.path.join(OUT, f"{slug(name)}-{kind}.jpg")
+            if make_portrait(src, dst, want.get("focus"), float(want.get("zoom", 1.0))):
+                person[kind] = os.path.basename(dst)
+        people.append(person)
+
+    # Longest-standing members first; anyone without a joining year goes
+    # last, and people who joined the same year are listed alphabetically.
+    people.sort(key=lambda p: (int(p["since"]) if p["since"] else 9999,
+                               p["name"].lower()))
 
     body = "\n".join(card(p) for p in people) if people else \
         "          <!-- nobody yet: the list fills in as members sign up -->"
@@ -339,13 +405,16 @@ def main():
         print(f"about.html updated: {len(people)} member(s) listed.")
     else:
         print(f"No change to about.html: {len(people)} member(s) listed.")
-    two = sum(1 for p in people if p.get("informal"))
-    one = sum(1 for p in people if p.get("formal") and not p.get("informal"))
+    two = sum(1 for p in people if p.get("informal") and p.get("formal"))
+    one = sum(1 for p in people if bool(p.get("informal")) != bool(p.get("formal")))
     print(f"   {two} with two photos, {one} with one, {len(people) - two - one} with a seal.")
     if no_consent:
         print(f"   Left off (no consent): {', '.join(no_consent)}")
     if are_officers:
         print(f"   Left off (already an officer card): {', '.join(are_officers)}")
+    if in_form:
+        print(f"   In members-extra.json but also in the form, so the form won: "
+              f"{', '.join(in_form)}. You can delete them from members-extra.json.")
 
 
 if __name__ == "__main__":
