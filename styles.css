@@ -7,8 +7,11 @@
      3. Layout helpers               7. Gallery grid
      4. Header + navigation          8. Mobile / responsive rules
                                      9. Ink Night theme (the site's look)
-   The site's current look is section 9, at the bottom of this file. It
-   builds on sections 1-8, so change colours and fonts there first.
+                                    10. Motion and live details
+   The site's current look is section 9, near the bottom of this file. It
+   builds on sections 1-8, so change colours and fonts there first. Section
+   10 adds the movement (ink bloom, paint-in rules, lightbox) and the
+   next-practice line; it never changes what the pages say.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -2291,4 +2294,807 @@ main > .section--gray:not(.section--gray + .section--gray) .contact-card {
   html, body { background: #fff; color: #000; }
   .hero::before, .hero::after, .page-hero::before, .site-footer::before,
   .cta-band::before, .cta-band::after, .section--dark::before, .section--dark::after { display: none; }
+}
+
+/* ==========================================================================
+   10. MOTION AND LIVE DETAILS
+   Four parts, each one self-contained and written to sit on top of the
+   theme above. Removing any one of them leaves the site whole.
+   ========================================================================== */
+
+
+/* ---------- 10a. Polish: floating paper, brush rules that paint in, seals that press ---------- */
+
+/* ==========================================================================
+   Preview layer: Polish
+   Small finishing touches on top of the Ink Night theme. Nothing here changes
+   the page structure; it only deepens shadows and gives the brush rules,
+   seals, nav links and buttons some life.
+     1. Paper that floats: the deckled sheets and cards cast real shadows.
+     2. Brush rules paint in left to right as their section scrolls in.
+     3. Seals press down under the pointer and leave a faint ink halo.
+     4. Nav underlines paint in; ghost buttons fill with a brush sweep.
+   script.js adds html.polish-motion only when reduced motion is off; every
+   animation and transition hangs off that class, so the static look is the
+   fallback everywhere.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Paper that floats
+   The sheet is a masked pseudo, so a box-shadow on it gets clipped by the
+   mask. A drop-shadow filter on the sheet's container follows the sheet's
+   real outline instead, torn edge included. A whisper of warm light around
+   it reads as lamplight on paper rather than a grey halo.
+   -------------------------------------------------------------------------- */
+main > .section--gray:not(.section--gray + .section--gray) > .container,
+html[data-page="home"] main > .hero + .section > .container {
+  filter:
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.9))
+    drop-shadow(0 26px 30px rgba(0, 0, 0, 0.62))
+    drop-shadow(0 0 34px rgba(184, 149, 90, 0.09));
+}
+@media (max-width: 699px) {
+  /* Phones get one cheaper shadow: a filter this size re-rasterises the whole
+     sheet whenever something inside it moves. */
+  main > .section--gray:not(.section--gray + .section--gray) > .container,
+  html[data-page="home"] main > .hero + .section > .container {
+    filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.65));
+  }
+}
+
+/* Cards on the black: a paper-thickness highlight along the top edge, a crisp
+   contact shadow and a deep soft pool that grows on hover. */
+.card,
+.event-card,
+.contact-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 240, 0.55),
+    0 2px 3px rgba(0, 0, 0, 0.55),
+    0 22px 40px -24px rgba(0, 0, 0, 0.95);
+}
+.card:hover,
+.event-card:hover,
+.contact-card:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 240, 0.55),
+    0 3px 5px rgba(0, 0, 0, 0.6),
+    0 32px 52px -22px rgba(0, 0, 0, 1);
+}
+/* On a paper sheet the cards are ruled boxes on the same paper; they only get
+   the thickness highlight and a slightly deeper lift on hover. */
+main > .section--gray:not(.section--gray + .section--gray) .card,
+html[data-page="home"] main > .hero + .section .card,
+main > .section--gray:not(.section--gray + .section--gray) .contact-card {
+  box-shadow: inset 0 1px 0 rgba(255, 252, 245, 0.85);
+}
+main > .section--gray:not(.section--gray + .section--gray) .card:hover,
+html[data-page="home"] main > .hero + .section .card:hover,
+main > .section--gray:not(.section--gray + .section--gray) .contact-card:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 252, 245, 0.85),
+    0 18px 30px -20px rgba(27, 26, 23, 0.55);
+}
+.polish-motion .card,
+.polish-motion .event-card,
+.polish-motion .contact-card {
+  transition: transform 0.25s ease, box-shadow 0.35s ease, border-color 0.25s ease;
+}
+
+/* --------------------------------------------------------------------------
+   2. Brush rules that paint in
+   Hidden behind a clip that sits just outside the glyph box, then released
+   left to right. script.js adds .is-painted as each one scrolls into view.
+   The eyebrow's dash flicks in first, the big rule follows a beat later.
+   -------------------------------------------------------------------------- */
+.polish-motion .eyebrow::before {
+  clip-path: inset(-30% 100% -30% -4%);
+  transition: clip-path 0.38s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.polish-motion .eyebrow.is-painted::before { clip-path: inset(-30% -6% -30% -4%); }
+
+/* The big rule cannot use clip-path: a clip that hides it also empties its
+   box for IntersectionObserver, so it would never be seen scrolling in. A
+   second mask layer, intersected with the brush, does the same job. */
+.polish-motion .accent-rule {
+  -webkit-mask-image: var(--brush), linear-gradient(#000, #000);
+  -webkit-mask-position: center, left center;
+  -webkit-mask-size: 100% 100%, 0% 100%;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-image: var(--brush), linear-gradient(#000, #000);
+  mask-position: center, left center;
+  mask-size: 100% 100%, 0% 100%;
+  mask-repeat: no-repeat, no-repeat;
+  mask-composite: intersect;
+  transition: mask-size 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.22s,
+              -webkit-mask-size 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.22s;
+}
+.polish-motion .accent-rule.is-painted {
+  -webkit-mask-size: 100% 100%, 100% 100%;
+  mask-size: 100% 100%, 100% 100%;
+}
+
+/* The gold hairlines under the home title and above inner-page titles draw
+   from the left once the title has landed. */
+.polish-motion .hero h1::after {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.polish-motion .hero.is-playing h1::after {
+  animation: polish-line 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.55s forwards;
+}
+.polish-motion .page-hero h1::before {
+  transform-origin: left center;
+  animation: polish-line 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+}
+@keyframes polish-line {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* --------------------------------------------------------------------------
+   3. Seals that press
+   The square seals (Join Us, the primary button, carousel arrows) sink a
+   pixel under the pointer and bloom a faint vermilion halo that dries out,
+   like ink pushed from under a stamp. --polish-ring carries each element's
+   own inner rings so the halo animation can sit outside them.
+   -------------------------------------------------------------------------- */
+a.nav__join,
+.nav__links a.nav__join.is-active {
+  --polish-ring: inset 0 0 0 3px var(--seal), inset 0 0 0 4px rgba(243, 236, 223, 0.75);
+}
+a.nav__join:hover { --polish-ring: inset 0 0 0 3px var(--seal-dark), inset 0 0 0 4px rgba(243, 236, 223, 0.75); }
+.btn--primary { --polish-ring: 0 0 0 0 transparent; }
+.carousel__btn { --polish-ring: 0 0 0 1px rgba(243, 236, 223, 0.35), 0 12px 24px -12px rgba(0, 0, 0, 0.9); }
+
+.polish-motion a.nav__join,
+.polish-motion .btn--primary,
+.polish-motion .carousel__btn {
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+a.nav__join:hover,
+.btn--primary:hover { transform: translateY(1px); }
+.polish-motion a.nav__join:hover,
+.polish-motion .btn--primary:hover,
+.polish-motion .carousel__btn:hover:not([disabled]) {
+  animation: polish-halo 0.45s ease-out forwards;
+}
+a.nav__join:active,
+.btn--primary:active,
+.carousel__btn:active:not([disabled]) { transform: translateY(1px) scale(0.96); }
+@keyframes polish-halo {
+  from { box-shadow: var(--polish-ring), 0 0 0 4px rgba(179, 38, 30, 0.4); }
+  to   { box-shadow: var(--polish-ring), 0 0 0 14px rgba(179, 38, 30, 0); }
+}
+
+/* The rough-edged seals (card icons, step numbers, the hero stamp) are
+   masked, so nothing can show outside them. They press and darken instead:
+   tilt back a couple of degrees, sink a pixel, ink a shade deeper. */
+.polish-motion .card__icon,
+.polish-motion .contact-card__icon,
+.polish-motion .steps li::before,
+.polish-motion .ink-seal {
+  transition: transform 0.22s ease, filter 0.22s ease;
+}
+.card:hover .card__icon,
+.contact-card:hover .contact-card__icon,
+.steps li:hover::before {
+  transform: rotate(-1deg) translateY(1px);
+  filter: brightness(0.9);
+}
+/* The hero seal keeps its stamp animation's transform; only the ink deepens. */
+.hero .ink-seal:hover { filter: brightness(0.88); }
+
+/* --------------------------------------------------------------------------
+   4. Nav underlines and brush-swept buttons
+   -------------------------------------------------------------------------- */
+/* Every text link gets the same brush the active page already wears, kept
+   folded away at zero width until hovered or focused. */
+.nav__links a:not(.nav__join)::after {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  right: 0.55rem;
+  bottom: 0.1rem;
+  height: 7px;
+  background: var(--seal-light);
+  -webkit-mask: var(--brush) center / 100% 100% no-repeat;
+  mask: var(--brush) center / 100% 100% no-repeat;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.polish-motion .nav__links a:not(.nav__join)::after {
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.nav__links a:not(.nav__join):hover::after,
+.nav__links a:not(.nav__join):focus-visible::after,
+.nav__links a.is-active:not(.nav__join)::after { transform: scaleX(1); }
+@media (max-width: 820px) {
+  .nav__links a:not(.nav__join)::after {
+    left: 0.2rem;
+    right: auto;
+    width: 4.5rem;
+    bottom: 0.45rem;
+  }
+}
+
+/* Ghost and outline buttons: instead of the fill snapping on, a brush stroke
+   sweeps through the button from the left. The stroke is oversized so its
+   thick middle covers the text and only the tapered tips fall outside. */
+.btn--ghost,
+.btn--outline {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn--ghost::before,
+.btn--outline::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  background: var(--gold);
+  -webkit-mask: var(--brush) center / 140% 230% no-repeat;
+  mask: var(--brush) center / 140% 230% no-repeat;
+  transform: translateX(-104%);
+}
+.btn--outline::before { background: var(--fg-strong); }
+.cta-band .btn--ghost::before { background: var(--paper); }
+.polish-motion .btn--ghost::before,
+.polish-motion .btn--outline::before {
+  transition: transform 0.38s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.btn--ghost:hover,
+.btn--ghost:focus-visible,
+.btn--outline:hover,
+.btn--outline:focus-visible,
+.cta-band .btn--ghost:hover,
+.cta-band .btn--ghost:focus-visible { background: transparent; }
+.btn--ghost:hover::before,
+.btn--ghost:focus-visible::before,
+.btn--outline:hover::before,
+.btn--outline:focus-visible::before { transform: translateX(0); }
+
+/* The brush stroke tapers at its tips, so on wide or two-line buttons the
+   finished sweep leaves ragged gaps at the corners. A plain fill fades in
+   over it just as the sweep lands, so the resting state is always a full,
+   clean fill; on leave it drops away at once and the brush slides out. */
+.btn--ghost::after,
+.btn--outline::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  background: var(--gold);
+  opacity: 0;
+  pointer-events: none;
+}
+.btn--outline::after { background: var(--fg-strong); }
+.cta-band .btn--ghost::after { background: var(--paper); }
+.polish-motion .btn--ghost::after,
+.polish-motion .btn--outline::after { transition: opacity 0.12s ease; }
+.polish-motion .btn--ghost:hover::after,
+.polish-motion .btn--ghost:focus-visible::after,
+.polish-motion .btn--outline:hover::after,
+.polish-motion .btn--outline:focus-visible::after { transition: opacity 0.18s ease 0.28s; }
+.btn--ghost:hover::after,
+.btn--ghost:focus-visible::after,
+.btn--outline:hover::after,
+.btn--outline:focus-visible::after { opacity: 1; }
+
+
+/* ---------- 10b. Ink bloom: the home hero's photo blooms out of a blot ---------- */
+
+/* ==========================================================================
+   Bloom (home only) — the ink moves in the hero.
+   Sits on top of the Ink Night theme (section 9) and the Polish part above.
+     1. Hero ink bloom: on wide screens script.js swaps the hero photo's
+        mask for an animated copy of the same drawing, so the browser moves
+        the torn edge, the pool and the drops itself while the photo
+        develops underneath. The photo itself (its box, its picture, its
+        transform) is never touched, so nothing can shift. Narrow screens
+        and reduced motion keep the theme's plain fade.
+     2. Hero parallax: the photo drifts up slower than the words.
+   Nothing here touches the other pages.
+   Everything is gated on .night-motion (script.js adds it only when reduced
+   motion is off), so a visitor who asked for calm gets the plain fade.
+   ========================================================================== */
+
+/* The photo's box is fixed to the viewport, not to the hero's height. The
+   hero grows when the next-practice line, or a late web font, arrives; if
+   the photo followed it, it would visibly resize mid-bloom. Phones already
+   size it this way in the theme (max-width: 720px). */
+@media (min-width: 721px) {
+  .hero::before {
+    top: 16px;
+    bottom: auto;
+    height: clamp(560px, calc(86svh - 32px), 828px);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   1. Hero ink bloom
+   script.js adds .bloom-armed to <html> on wide screens as soon as it runs,
+   .bloom-run on the hero when the animated drawing goes on and the ink
+   starts to spread, and .bloom-done when it has settled. If it gives up it
+   removes .bloom-armed and the theme's own fade takes over.
+   -------------------------------------------------------------------------- */
+
+/* The photo develops inside the ink: opacity only, never a transform. */
+@keyframes bloom-develop {
+  from { opacity: 0.2; }
+  to   { opacity: 1; }
+}
+
+/* Armed: the photo waits (hidden) until the ink starts. */
+html.night-motion.bloom-armed .hero.is-playing::before {
+  animation: none;
+  opacity: 0;
+}
+/* Running and done share one rule, so nothing restarts when the ink settles. */
+html.night-motion.bloom-armed .hero.is-playing.bloom-run::before {
+  animation: bloom-develop 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  opacity: 1;
+}
+
+/* The calligraphy, caption and seal wait for the ink to settle. */
+html.night-motion.bloom-armed .hero.is-playing .night-callig__big { animation-delay: 1.1s; }
+html.night-motion.bloom-armed .hero.is-playing .night-callig__small { animation-delay: 2s; }
+html.night-motion.bloom-armed .hero.is-playing .night-caption { animation-delay: 1.9s; }
+html.night-motion.bloom-armed .hero.is-playing .ink-seal { animation-delay: 2.1s; }
+
+/* --------------------------------------------------------------------------
+   2. Hero parallax — CSS scroll-driven, no JS. Uses the `translate`
+   property, which starts at 0 at the top of the page, so the photo sits
+   exactly where the theme puts it until the visitor scrolls. Firefox has
+   no scroll timelines yet and simply gets a still photo.
+   -------------------------------------------------------------------------- */
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 721px) {
+    @keyframes bloom-drift {
+      from { translate: 0 0; }
+      to   { translate: 0 -60px; }
+    }
+    /* Not armed (narrow screens, or the script gave up): the theme's fade
+       plus the drift. */
+    .night-motion .hero.is-playing::before {
+      animation: night-fade 0.9s ease forwards,
+                 bloom-drift linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 100vh;
+    }
+    html.night-motion.bloom-armed .hero.is-playing::before {
+      animation: none;
+      opacity: 0;
+    }
+    html.night-motion.bloom-armed .hero.is-playing.bloom-run::before {
+      animation: bloom-develop 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) forwards,
+                 bloom-drift linear both;
+      animation-timeline: auto, scroll(root);
+      animation-range: normal, 0 100vh;
+      opacity: 1;
+    }
+  }
+}
+
+
+/* ---------- 10c. Gallery: lightbox, print hover, carousel spotlight ---------- */
+
+/* ==========================================================================
+   Gallery layer — prints you can pick up
+   Sits over the Ink Night theme (styles.css section 9) and the polish layer.
+     1. Print hover: the mount lifts off the wall, and the photo's edge "wets"
+        with a touch of vermilion that dries again.
+     2. Carousel spotlight: the print nearest the centre sits bright and a
+        touch larger; its neighbours rest a step back (scroll-driven, so
+        browsers without it simply keep the flat row).
+     3. Lightbox: one <dialog class="gallery-lightbox"> built by script.js.
+   No blur anywhere. Motion hangs off .night-motion, which script.js only adds
+   when reduced motion is not requested.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Print hover
+   -------------------------------------------------------------------------- */
+.carousel__slide {
+  transition: translate 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
+              rotate 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
+              box-shadow 0.28s ease;
+}
+.night-motion .carousel__slide:hover,
+.night-motion .carousel__slide:focus-within {
+  translate: 0 -6px;
+  rotate: -0.5deg;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.45), 0 34px 44px -22px rgba(0, 0, 0, 1);
+}
+/* Only a pointer once the lightbox is wired up. */
+.gallery-ready .carousel__slide img,
+.gallery-ready .officer:not([data-birthday]) .officer__photo { cursor: zoom-in; }
+.gallery-ready .carousel__slide img:focus-visible,
+.gallery-ready .officer:not([data-birthday]) .officer__photo:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 3px;
+}
+
+/* The wet edge: the photo sits inside a paper mount, so a thin bleed of
+   vermilion around it reads as ink soaking into the paper, then drying. */
+.night-motion .carousel__slide:hover img,
+.night-motion .carousel__slide:focus-within img,
+.night-motion .officer:not([data-birthday]):hover .officer__photo {
+  animation: gallery-wet 0.9s ease-out forwards;
+}
+@keyframes gallery-wet {
+  0%   { box-shadow: 0 0 0 0 rgba(179, 38, 30, 0); }
+  30%  { box-shadow: 0 0 0 2.5px rgba(179, 38, 30, 0.55); }
+  100% { box-shadow: 0 0 0 2px rgba(179, 38, 30, 0.14); }
+}
+
+/* --------------------------------------------------------------------------
+   2. Carousel spotlight
+   -------------------------------------------------------------------------- */
+/* Only a print that is partly clipped by the track's edge steps back. Two
+   animations, one for entering and one for leaving, each filling only on its
+   own outer side, so any fully visible print (the first one at rest, the
+   last one when scrolled to the end) sits at full strength. */
+@supports (animation-timeline: view()) {
+  .night-motion .carousel__track:not(.carousel__track--empty) > .carousel__slide {
+    animation: gallery-enter linear backwards, gallery-exit linear forwards;
+    animation-timeline: view(inline), view(inline);
+    animation-range: entry 0% entry 100%, exit 0% exit 100%;
+  }
+  @keyframes gallery-enter {
+    from { scale: 0.94; opacity: 0.72; }
+    to   { scale: 1;    opacity: 1; }
+  }
+  @keyframes gallery-exit {
+    from { scale: 1;    opacity: 1; }
+    to   { scale: 0.94; opacity: 0.72; }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Lightbox
+   -------------------------------------------------------------------------- */
+html.gallery-lock { overflow: hidden; }
+
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--moon);
+  overflow: hidden;
+}
+.gallery-lightbox:focus { outline: none; }
+.gallery-lightbox::backdrop {
+  background:
+    radial-gradient(ellipse at center, rgba(16, 15, 13, 0.86) 0%, rgba(10, 9, 8, 0.97) 100%);
+}
+/* On a phone the photo fills the width, so the page behind must not show
+   through around it. */
+@media (max-width: 620px) {
+  .gallery-lightbox::backdrop { background: rgba(16, 15, 13, 0.96); }
+  /* ...and the page itself steps back, so even paper-white headings behind
+     the photo stay out of the way. The dialog sits in the top layer, so it
+     is not affected. */
+  html.gallery-lock .site-header,
+  html.gallery-lock main,
+  html.gallery-lock .site-footer { opacity: 0.2; }
+}
+
+.gallery-lightbox__figure {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  place-items: center;
+  gap: 0.9rem;
+  padding: 4.5rem clamp(1rem, 6vw, 5.5rem) 2rem;
+}
+.gallery-lightbox__img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  outline: 1px solid var(--gold);
+  outline-offset: 7px;
+  box-shadow: 0 40px 70px -30px rgba(0, 0, 0, 1);
+  background: var(--night-2);
+  min-height: 0;
+}
+/* Keeps the image cell from growing past the viewport. */
+.gallery-lightbox__stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Caption on a paper strip, the counter set small in gold to its left. */
+.gallery-lightbox__caption {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  max-width: min(100%, 900px);
+  padding: 0.55rem 1.1rem;
+  background: var(--paper-card);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.35;
+  box-shadow: 0 14px 28px -16px rgba(0, 0, 0, 1);
+}
+.gallery-lightbox__count {
+  flex: none;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+}
+.gallery-lightbox__caption:empty { display: none; }
+
+/* Arrows: the theme's seal-red circles. */
+.gallery-lightbox__btn {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--seal);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(243, 236, 223, 0.35), 0 12px 24px -12px rgba(0, 0, 0, 0.9);
+  transition: background 0.2s ease, opacity 0.2s ease, scale 0.15s ease;
+}
+.gallery-lightbox__btn:hover { background: var(--seal-dark); }
+.gallery-lightbox__btn:active { scale: 0.94; }
+.gallery-lightbox__btn[disabled] { opacity: 0.3; cursor: default; }
+.gallery-lightbox__btn[disabled]:hover { background: var(--seal); }
+.gallery-lightbox__btn--prev { left: clamp(0.6rem, 2vw, 1.6rem); }
+.gallery-lightbox__btn--next { right: clamp(0.6rem, 2vw, 1.6rem); }
+.gallery-lightbox__btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* Close: a square seal in the corner. */
+.gallery-lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: var(--seal);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 3px var(--seal), inset 0 0 0 4.5px rgba(243, 236, 223, 0.8);
+  -webkit-mask: var(--rough-seal) center / 100% 100% no-repeat;
+  mask: var(--rough-seal) center / 100% 100% no-repeat;
+  transform: rotate(-4deg);
+}
+.gallery-lightbox__close:hover { background: var(--seal-dark); box-shadow: inset 0 0 0 3px var(--seal-dark), inset 0 0 0 4.5px rgba(243, 236, 223, 0.8); }
+.gallery-lightbox__close:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+/* Motion: the print settles in, the seal stamps down. */
+.night-motion .gallery-lightbox[open] .gallery-lightbox__stage { animation: gallery-settle 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.night-motion .gallery-lightbox[open] .gallery-lightbox__caption { animation: gallery-settle 0.28s ease 0.08s both; }
+.night-motion .gallery-lightbox[open] .gallery-lightbox__close { animation: gallery-stamp 0.38s cubic-bezier(0.3, 1.6, 0.5, 1) 0.12s both; }
+.night-motion .gallery-lightbox[open]::backdrop { animation: night-fade 0.25s ease both; }
+.night-motion .gallery-lightbox__stage.is-turning { animation: gallery-settle 0.22s ease both; }
+@keyframes gallery-settle {
+  from { opacity: 0; scale: 0.975; }
+  to   { opacity: 1; scale: 1; }
+}
+@keyframes gallery-stamp {
+  from { opacity: 0; transform: rotate(-12deg) scale(1.5); }
+  to   { opacity: 1; transform: rotate(-4deg) scale(1); }
+}
+
+@media (max-width: 620px) {
+  .gallery-lightbox__figure { padding: 4.25rem 0.9rem 1.25rem; gap: 0.7rem; }
+  .gallery-lightbox__img { outline-offset: 5px; }
+  /* Arrows drop to a row of their own under the caption, so neither one
+     covers the other however long the caption runs. */
+  .gallery-lightbox__btn { width: 44px; height: 44px; font-size: 1.6rem; top: auto; bottom: 0.9rem; translate: none; }
+  .gallery-lightbox__btn--prev { left: calc(50% - 4.2rem); }
+  .gallery-lightbox__btn--next { right: calc(50% - 4.2rem); }
+  .gallery-lightbox__caption { font-size: 1rem; padding: 0.5rem 0.9rem; margin-bottom: 3.9rem; }
+  .gallery-lightbox__close { top: 0.75rem; right: 0.75rem; width: 44px; height: 44px; }
+  /* No hover on phones, so no lift; keep the row calm. */
+  .night-motion .carousel__slide:hover { translate: none; rotate: none; }
+}
+
+@media print {
+  .gallery-lightbox { display: none; }
+}
+
+
+/* ---------- 10d. Next practice: the line under the home hero buttons ---------- */
+
+/* ==========================================================================
+   Practice layer: the "Next practice" line under the home hero.
+   One quiet row in the hero's own voice: a small vermilion seal, a gold
+   small-caps label like the eyebrow above the title, the day and time in
+   the heading serif, the room in the body serif, and how soon it is in the
+   same serif. It sits between two gold hairlines on the ink, so it belongs
+   to the hero rather than competing with the paper sheet below.
+   Added by script.js; the page has none of it, so with the script off
+   the hero is simply the hero.
+   ========================================================================== */
+
+.hero .practice {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 28rem;
+  margin-top: 2.4rem;
+  padding: 0.85rem 0.25rem 0.85rem 0;
+  border-top: 1px solid var(--gold-hair);
+  border-bottom: 1px solid var(--gold-hair);
+  color: var(--moon-2);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* The seal: the same small rough-edged stamp the theme uses, kept modest. */
+.practice__seal {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  font-family: var(--font-brush);
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--paper);
+  background: var(--seal);
+  box-shadow: inset 0 0 0 2px var(--seal), inset 0 0 0 3px rgba(243, 236, 223, 0.75);
+  -webkit-mask: var(--rough-seal) center / 100% 100% no-repeat;
+  mask: var(--rough-seal) center / 100% 100% no-repeat;
+  text-shadow: none;
+}
+
+.practice__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Same voice as the "Carnegie Mellon University" eyebrow above the title. */
+.practice__label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.practice__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.75rem;
+}
+.practice__when {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--moon);
+}
+.practice__where {
+  font-size: 0.92rem;
+  color: var(--moon-soft);
+}
+
+/* How soon: quiet, right-aligned, in the same serif as everything else. */
+.practice__rel {
+  flex: none;
+  margin-left: auto;
+  padding-left: 1rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.practice__rel--now::before {
+  content: "";
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0 0.5rem 0.15rem 0;
+  border-radius: 50%;
+  background: var(--seal);
+  box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.25);
+}
+
+/* The theme rises each child of the hero's text column in turn; the line
+   is the fifth, so it follows the buttons. Static when motion is reduced. */
+.night-motion .hero.is-playing .hero__inner > .practice { animation-delay: 0.4s; }
+
+/* Space is reserved before the data arrives (see script.js), so every
+   line has the same height whether it is still empty or filled. The heights
+   are what the filled line measures at each width; an unusually long room
+   name simply grows the line, which is rare and harmless. */
+.hero .practice { min-height: 6.55rem; box-sizing: border-box; }
+.hero .practice--pending { visibility: hidden; border-color: transparent; }
+.hero .practice--in { visibility: visible; animation: practice-in 0.5s ease both; }
+@keyframes practice-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero .practice--in { animation: none; }
+}
+
+/* Tablets: the hero photo starts around a third of the way across, so keep
+   the strip inside the text column rather than running under its edge. */
+@media (min-width: 721px) and (max-width: 1200px) {
+  .hero .practice { max-width: min(28rem, 32vw); min-height: 6.05rem; }
+  .practice__when { font-size: 1.15rem; white-space: nowrap; }
+  .practice__where { font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .practice__line { flex-direction: column; gap: 0.05rem; }
+  .practice__rel { margin-left: 0; padding-left: 0; font-size: 1rem; align-self: flex-start; padding-top: 0.15rem; }
+}
+
+@media (max-width: 720px) {
+  .hero .practice { margin-top: 1.8rem; }
+  .practice__when { font-size: 1.2rem; }
+}
+/* Phones: two short lines beside the seal, with "tomorrow" tucked onto the
+   label line so the whole thing stays compact. */
+@media (max-width: 620px) {
+  .hero .practice {
+    max-width: none;
+    min-height: 5.45rem;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding: 0.7rem 0;
+    flex-wrap: wrap;
+  }
+  .practice__seal { width: 1.9rem; height: 1.9rem; font-size: 1.2rem; }
+  .practice__body { flex: 1 1 0; }
+  .practice__label { font-size: 0.62rem; letter-spacing: 0.18em; }
+  .practice__when { font-size: 1.08rem; }
+  .practice__where {
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .practice__line { flex-direction: column; gap: 0.05rem; }
+  .practice__rel { font-size: 1rem; align-self: flex-start; padding-top: 0.15rem; }
 }

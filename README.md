@@ -68,7 +68,7 @@ cmu-wushu-website/
 ├── .github/        ← the robot that runs it daily
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
 ├── styles.css      ← ALL the visual styling for every page
-├── script.js       ← Menu, carousels, easter egg, theme calligraphy. You won't need to touch it.
+├── script.js       ← Menu, carousels, easter egg, ink bloom, lightbox, practice line. Leave it be.
 ├── images/         ← Logo, plus one folder of photos per event
 ├── event-extras.json ← events not on the Google Calendar (see 5c)
 └── README.md       ← This file
@@ -483,6 +483,20 @@ red seal stamps. It lives at the bottom of **`styles.css`**, in the section call
 Change a colour there and it updates **everywhere on the site at once**. The older colour list
 at the top of the file (`1. VARIABLES`) is mostly overridden by the theme, so editing it won't
 do much.
+
+### The "Next practice" line on the home page
+
+Under the home page's buttons there is a line like *Thursday · 7:00–9:00 PM · Cohon Center,
+Activities Room · tomorrow*. It comes from the club's Google Calendar: the same daily robot
+that updates the Events page also writes `data/live.json` with every practice in the current
+series, and the home page picks the next one. You never edit it by hand. If a practice is
+cancelled, delete that one occurrence in Google Calendar and the site follows the next day.
+If nothing is scheduled, the line simply doesn't appear.
+
+### Photos open full-size
+
+On the Events page, clicking any photo opens it large with arrows, swipe and Esc. This
+needs no setup: keep adding photos the way section 6 describes and it just works.
 
 ### Page banner photos
 

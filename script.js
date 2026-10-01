@@ -1,7 +1,9 @@
 /* ==========================================================================
    CMU Wushu Club — site JavaScript
    Opens the mobile menu, runs the photo carousels and Preston's easter egg,
-   and adds the Ink Night theme's calligraphy and scroll fades (at the end).
+   adds the Ink Night theme's calligraphy and scroll fades, and then the
+   motion and live details (paint-in rules, ink bloom, lightbox, next
+   practice line), each in its own block at the end.
    You should not need to edit it to update page content.
    ========================================================================== */
 
@@ -391,5 +393,580 @@
   ready(function () {
     buildHero();
     reveals();
+  });
+})();
+
+/* ==========================================================================
+   MOTION AND LIVE DETAILS (styles.css section 10)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   Preview layer: Polish — behaviour
+   Adds html.polish-motion when the visitor has not asked for reduced motion,
+   then marks each brush rule .is-painted as it scrolls into view so
+   styles.css section 10 can paint it in. Without this file every rule simply shows.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var calm = window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (calm || !("IntersectionObserver" in window)) return;
+
+  root.classList.add("polish-motion");
+
+  function ready(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
+    }
+  }
+
+  ready(function () {
+    var rules = document.querySelectorAll(".eyebrow, .accent-rule");
+    if (!rules.length) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        entry.target.classList.add("is-painted");
+      });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.2 });
+
+    Array.prototype.forEach.call(rules, function (node) { io.observe(node); });
+  });
+})();
+
+
+/* ==========================================================================
+   Bloom (home only) — the hero's ink bloom (wide screens only).
+   On load a blot appears where the stage photo will be, its edge tears and
+   spreads for about a second, and the photo develops inside it.
+
+   How: the theme draws the hero photo as .hero::before, masked by the
+   --splash drawing in styles.css. This script never touches that element's
+   box, transform or picture. It only swaps the MASK for an animated copy of
+   the same drawing: the same SVG with <animate> elements inside it, so the
+   browser itself moves the tear, the pool and the drops every frame, as
+   smoothly as the machine allows. The animation ends on exactly the shapes
+   the theme's drawing has, and then the --splash variable is handed back to
+   the theme, so there is nothing to hand off and nothing that can move. If
+   anything goes wrong the theme's plain fade runs instead.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var calm = window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var wide = window.matchMedia && window.matchMedia("(min-width: 960px)").matches;
+
+  if (calm || !wide || !document.querySelector || !window.requestAnimationFrame) return;
+  if (!/(^|\s)home(\s|$)/.test(root.getAttribute("data-page") || "")) return;
+
+  var DURATION = 1.3;  // seconds, blot to full splash (the SVG's own clock)
+  var SETTLE = 250;    // ms of margin after that before handing the mask back
+
+  // Arm straight away: styles.css section 10 holds the photo at opacity 0 and the
+  // calligraphy back until we start (see the armed rules there).
+  root.classList.add("bloom-armed");
+
+  function ready(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
+    }
+  }
+
+  // Short number for an SVG attribute: 380 stays "380", 152.5 -> "152.5".
+  function num(v) { return String(Math.round(v * 100) / 100); }
+
+  /* The theme's --splash drawing, written out as a template. With `anim`
+     false it is character for character the value in styles.css (checked
+     below). With `anim` true the same shapes carry <animate> elements: the
+     pool grows from 40% of its size, the torn edge calms from 520 to 150,
+     and the tails and drops fade in once the pool is well under way. Every
+     animation freezes on the theme's own numbers. */
+  function splash(anim) {
+    var EASE = " calcMode='spline' keySplines='0.2 0.8 0.2 1'";
+    var dur = " dur='" + num(DURATION) + "s' fill='freeze'";
+    function e(cx, cy, rx, ry) {
+      if (!anim) return "<ellipse cx='" + cx + "' cy='" + cy + "' rx='" + rx + "' ry='" + ry + "'/>";
+      return "<ellipse cx='" + cx + "' cy='" + cy + "' rx='" + num(rx * 0.4) + "' ry='" + num(ry * 0.4) + "'>" +
+        "<animate attributeName='rx' values='" + num(rx * 0.4) + ";" + rx + "'" + EASE + dur + "/>" +
+        "<animate attributeName='ry' values='" + num(ry * 0.4) + ";" + ry + "'" + EASE + dur + "/>" +
+        "</ellipse>";
+    }
+    var tear = anim
+      ? "<feDisplacementMap in='SourceGraphic' in2='n' scale='520' xChannelSelector='R' yChannelSelector='G'>" +
+          "<animate attributeName='scale' values='520;150'" + EASE + dur + "/></feDisplacementMap>"
+      : "<feDisplacementMap in='SourceGraphic' in2='n' scale='150' xChannelSelector='R' yChannelSelector='G'/>";
+    // Tails and drops: hidden at first, in by the time the pool settles.
+    var late = anim
+      ? " opacity='0'><animate attributeName='opacity' values='0;1' begin='" + num(DURATION * 0.4) + "s' dur='" + num(DURATION * 0.45) + "s' fill='freeze'/"
+      : "";
+    // The browser keeps an SVG image, clock and all, for as long as its
+    // address is the same, so a second visit would get the finished drawing
+    // and no bloom. A stamp on the animated copy makes every visit's address
+    // new; the still copy must stay exactly the theme's, so it has none.
+    var stamp = anim ? " data-run='" + Date.now().toString(36) + "'" : "";
+    return "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 700' preserveAspectRatio='none'" + stamp + ">" +
+      "<filter id='a' x='-20%25' y='-20%25' width='140%25' height='140%25'>" +
+        "<feTurbulence type='fractalNoise' baseFrequency='0.008' numOctaves='4' seed='4' result='n'/>" +
+        tear +
+      "</filter>" +
+      "<filter id='b' x='-20%25' y='-80%25' width='140%25' height='260%25'>" +
+        "<feTurbulence type='fractalNoise' baseFrequency='0.003 0.12' numOctaves='3' seed='8' result='n'/>" +
+        "<feDisplacementMap in='SourceGraphic' in2='n' scale='46' xChannelSelector='R' yChannelSelector='G'/>" +
+      "</filter>" +
+      "<filter id='c' x='-50%25' y='-50%25' width='200%25' height='200%25'>" +
+        "<feTurbulence type='fractalNoise' baseFrequency='0.06' numOctaves='2' seed='2' result='n'/>" +
+        "<feDisplacementMap in='SourceGraphic' in2='n' scale='12' xChannelSelector='R' yChannelSelector='G'/>" +
+      "</filter>" +
+      "<g filter='url(%23a)'>" + e(560, 345, 380, 265) + e(340, 420, 210, 150) + e(760, 230, 200, 150) + "</g>" +
+      "<g filter='url(%23b)'" + late + "><rect x='150' y='582' width='700' height='34' rx='17'/><rect x='230' y='150' width='400' height='26' rx='13'/></g>" +
+      "<g filter='url(%23c)'" + late + "><circle cx='120' cy='262' r='17'/><circle cx='82' cy='314' r='7'/><circle cx='150' cy='330' r='4'/><circle cx='930' cy='80' r='13'/><circle cx='968' cy='128' r='6'/><circle cx='900' cy='650' r='11'/><circle cx='205' cy='655' r='6'/><circle cx='955' cy='520' r='5'/></g>" +
+      "</svg>";
+  }
+
+  // The theme's own value, e.g. url("data:image/svg+xml,<svg ...>").
+  function themeSplash() {
+    var v = window.getComputedStyle(root).getPropertyValue("--splash") || "";
+    return v.trim();
+  }
+
+  function fallback(hero) {
+    hero.style.removeProperty("--splash");
+    root.classList.remove("bloom-armed");
+    hero.classList.remove("bloom-run");
+    hero.classList.add("bloom-fallback");
+  }
+
+  function play(hero) {
+    var theme = themeSplash();
+    if (!/^url\(/.test(theme)) return fallback(hero);
+
+    // Our frozen end state must be the theme's drawing. If it ever is not
+    // (someone edited --splash in styles.css), the theme's value is still
+    // what ends up on the element, so nothing can jump; the bloom just
+    // settles onto a slightly different shape in its last step.
+    if ('url("' + splash(false) + '")' !== theme && window.console && console.warn) {
+      console.warn("bloom: --splash in styles.css differs from the bloom template; the bloom ends on the theme's drawing.");
+    }
+
+    // The animated drawing's clock starts when the browser loads it, so it
+    // goes on in the same breath as the photo starts to develop.
+    hero.style.setProperty("--splash", 'url("' + splash(true) + '")');
+    hero.classList.add("bloom-run");
+
+    window.setTimeout(function () {
+      // Back to the theme's own drawing: the same shapes the animation
+      // froze on, so the picture does not change here.
+      hero.style.removeProperty("--splash");
+      hero.classList.add("bloom-done");
+    }, DURATION * 1000 + SETTLE);
+  }
+
+  ready(function () {
+    var hero = document.querySelector(".hero");
+    if (!hero) { root.classList.remove("bloom-armed"); return; }
+    try {
+      play(hero);
+    } catch (e) {
+      fallback(hero);
+    }
+  });
+})();
+
+
+/* ==========================================================================
+   Gallery layer — the lightbox
+   Click (or press Enter on) any photo in an Events page carousel, or an
+   officer's photo on the About page, and it opens full-size in a <dialog>:
+   gold hairline frame, the alt text as a caption on a paper strip, arrows,
+   ← → keys and swipe to move within the same carousel, Esc or the seal to
+   close. Focus goes back to the photo you were on.
+
+   Nothing here touches the HTML officers edit: it reads the same
+   <figure class="carousel__slide"> blocks they already paste in. Preston's
+   card is skipped: it has its own click behaviour for his birthday.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  if (typeof HTMLDialogElement === "undefined") return; // very old browser: nothing changes
+
+  var root = document.documentElement;
+  var calm = window.matchMedia &&
+             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function ready(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
+    }
+  }
+
+  function el(tag, className, attrs) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (attrs) Object.keys(attrs).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+    return node;
+  }
+
+  var PHOTO = ".carousel__slide img, .officer:not([data-birthday]) .officer__photo";
+
+  // Every photo that opens the lightbox. Officer photos on the About page
+  // form one group; each carousel is its own group.
+  function groupFor(img) {
+    var track = img.closest(".carousel__track");
+    if (track) return Array.prototype.slice.call(track.querySelectorAll(".carousel__slide img"));
+    return Array.prototype.slice.call(document.querySelectorAll(".officer:not([data-birthday]) .officer__photo"));
+  }
+
+  var dialog, stage, image, caption, count, prev, next, close;
+  var group = [];
+  var index = 0;
+  var opener = null;
+
+  function build() {
+    dialog = el("dialog", "gallery-lightbox", { "aria-label": "Photo viewer", tabindex: "-1" });
+
+    var figure = el("figure", "gallery-lightbox__figure");
+    stage = el("div", "gallery-lightbox__stage");
+    image = el("img", "gallery-lightbox__img", { alt: "" });
+    stage.appendChild(image);
+
+    caption = el("figcaption", "gallery-lightbox__caption");
+    count = el("span", "gallery-lightbox__count");
+    var text = el("span", "gallery-lightbox__text");
+    caption.appendChild(count);
+    caption.appendChild(text);
+
+    figure.appendChild(stage);
+    figure.appendChild(caption);
+
+    prev = el("button", "gallery-lightbox__btn gallery-lightbox__btn--prev", { type: "button", "aria-label": "Previous photo" });
+    prev.innerHTML = "&lsaquo;";
+    next = el("button", "gallery-lightbox__btn gallery-lightbox__btn--next", { type: "button", "aria-label": "Next photo" });
+    next.innerHTML = "&rsaquo;";
+    close = el("button", "gallery-lightbox__close", { type: "button", "aria-label": "Close" });
+    close.innerHTML = "&times;";
+
+    dialog.appendChild(prev);
+    dialog.appendChild(figure);
+    dialog.appendChild(next);
+    dialog.appendChild(close);
+    document.body.appendChild(dialog);
+
+    prev.addEventListener("click", function () { go(-1); });
+    next.addEventListener("click", function () { go(1); });
+    close.addEventListener("click", function () { dialog.close(); });
+
+    // Clicking the dark ground (not the print, caption or buttons) closes.
+    dialog.addEventListener("click", function (e) {
+      if (e.target === dialog || e.target === figure || e.target === stage) dialog.close();
+    });
+
+    dialog.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
+      else if (e.key === "Home") { e.preventDefault(); show(0); }
+      else if (e.key === "End") { e.preventDefault(); show(group.length - 1); }
+    });
+
+    // Swipe left / right on a phone.
+    var fromX = 0, fromY = 0, startedAt = 0;
+    dialog.addEventListener("touchstart", function (e) {
+      var t = e.changedTouches[0];
+      fromX = t.clientX; fromY = t.clientY; startedAt = Date.now();
+    }, { passive: true });
+    dialog.addEventListener("touchend", function (e) {
+      var t = e.changedTouches[0];
+      var dx = t.clientX - fromX, dy = t.clientY - fromY;
+      if (Date.now() - startedAt < 600 && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        go(dx < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+
+    dialog.addEventListener("close", function () {
+      root.classList.remove("gallery-lock");
+      var current = group[index];
+      if (current) {
+        // Bring the carousel to the print that was open, then hand focus back.
+        if (current !== opener) {
+          var slide = current.closest(".carousel__slide");
+          if (slide) slide.scrollIntoView({ inline: "center", block: "nearest", behavior: "instant" });
+        }
+        current.focus({ preventScroll: true });
+      }
+      image.removeAttribute("src");
+      group = [];
+      opener = null;
+    });
+  }
+
+  function show(i) {
+    if (i < 0 || i >= group.length) return;
+    var turning = i !== index && !calm;
+    index = i;
+    var src = group[i].currentSrc || group[i].src;
+
+    if (turning) {
+      stage.classList.remove("is-turning");
+      void stage.offsetWidth; // restart the little settle
+      stage.classList.add("is-turning");
+    }
+    image.src = src;
+    image.alt = group[i].alt || "";
+    caption.lastChild.textContent = group[i].alt || "";
+    count.textContent = (i + 1) + " / " + group.length;
+    caption.style.display = group[i].alt ? "" : "none";
+
+    prev.disabled = i === 0;
+    next.disabled = i === group.length - 1;
+
+    // Fetch the neighbours so the next turn shows no gap.
+    [i - 1, i + 1].forEach(function (n) {
+      if (group[n]) new Image().src = group[n].currentSrc || group[n].src;
+    });
+  }
+
+  function go(step) { show(index + step); }
+
+  function open(img) {
+    group = groupFor(img);
+    index = Math.max(0, group.indexOf(img));
+    opener = img;
+    root.classList.add("gallery-lock");
+    show(index);
+    dialog.showModal();
+    dialog.focus();
+  }
+
+  ready(function () {
+    build();
+
+    // Photos become real controls: focusable, and Enter / Space opens them.
+    Array.prototype.forEach.call(document.querySelectorAll(PHOTO), function (img) {
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("role", "button");
+      img.setAttribute("aria-haspopup", "dialog");
+    });
+
+    document.addEventListener("click", function (e) {
+      var img = e.target.closest && e.target.closest(PHOTO);
+      if (!img) return;
+      e.preventDefault();
+      open(img);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var img = e.target.closest && e.target.closest(PHOTO);
+      if (!img) return;
+      e.preventDefault();
+      open(img);
+    });
+
+    root.classList.add("gallery-ready");
+  });
+})();
+
+
+/* ==========================================================================
+   Practice layer: the "Next practice" line under the home hero.
+   Reads data/live.json, which scripts/update_events.py rewrites from the
+   club calendar every day, picks the first session still to come (or a
+   one-off event if that is sooner) and writes one line into the hero.
+   Home page only. Nothing is in the HTML: if the script or the fetch fails,
+   the hero is simply the hero. Times are always shown in Pittsburgh time.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var ZONE = "America/New_York";
+  var page = document.documentElement.getAttribute("data-page") || "";
+  if (page !== "home" || !window.fetch) return;
+
+  function ready(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn);
+    } else {
+      fn();
+    }
+  }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  /* ---------- Pittsburgh clock helpers ---------- */
+
+  // Calendar date of a moment in Pittsburgh, as a day number, so "tomorrow"
+  // means tomorrow there even for someone browsing from another time zone.
+  function dayNumber(date) {
+    var parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: ZONE, year: "numeric", month: "numeric", day: "numeric"
+    }).formatToParts(date);
+    var v = {};
+    parts.forEach(function (p) { v[p.type] = p.value; });
+    return Math.round(Date.UTC(+v.year, +v.month - 1, +v.day) / 864e5);
+  }
+
+  function fmt(date, opts) {
+    opts.timeZone = ZONE;
+    return new Intl.DateTimeFormat("en-US", opts).format(date);
+  }
+
+  function clock(date) {
+    return fmt(date, { hour: "numeric", minute: "2-digit" });
+  }
+
+  // "7:00–9:00 PM" when both halves share a suffix, "11:30 AM–1:00 PM" otherwise.
+  function span(start, end) {
+    if (!end) return clock(start);
+    var a = clock(start), b = clock(end);
+    if (a.slice(-2) === b.slice(-2)) a = a.slice(0, -3);
+    return a + "–" + b;
+  }
+
+  function relative(diff, inProgress, start) {
+    if (inProgress) return "happening now";
+    if (diff <= 0) return "today at " + clock(start).replace(":00", "");
+    if (diff === 1) return "tomorrow";
+    if (diff < 14) return "in " + diff + " days";
+    var weeks = Math.round(diff / 7);
+    return "in " + weeks + " week" + (weeks === 1 ? "" : "s");
+  }
+
+  /* ---------- pick the next session ---------- */
+
+  function pickNext(data, now) {
+    var soonest = null;
+    function consider(item, kind) {
+      var start = new Date(item.start);
+      var end = item.end ? new Date(item.end) : null;
+      if (isNaN(start)) return;
+      // A session already under way still counts until it ends; an all-day
+      // event counts for the whole of its day.
+      var lastMoment = end || (item.allDay ? new Date(start.getTime() + 864e5) : start);
+      if (lastMoment <= now) return;
+      if (!soonest || start < soonest.start) {
+        soonest = { start: start, end: end, item: item, kind: kind };
+      }
+    }
+    (data.practices || []).forEach(function (p) { consider(p, "practice"); });
+    (data.events || []).forEach(function (e) { consider(e, "event"); });
+    return soonest;
+  }
+
+  /* ---------- the line ---------- */
+
+  function build(next, now) {
+    var isPractice = next.kind === "practice";
+    var diff = dayNumber(next.start) - dayNumber(now);
+    var inProgress = next.start <= now;
+
+    var when;
+    if (next.item.allDay) {
+      when = fmt(next.start, { weekday: "long", month: "long", day: "numeric" });
+    } else {
+      var day = diff < 7
+        ? fmt(next.start, { weekday: "long" })
+        : fmt(next.start, { weekday: "short", month: "short", day: "numeric" });
+      when = day + " · " + span(next.start, next.end);
+    }
+
+    var strip = el("aside", "practice");
+    strip.setAttribute("aria-label", isPractice ? "Next practice" : "Next event");
+
+    var seal = el("span", "practice__seal", isPractice ? "练" : "演"); // practise / perform
+    seal.setAttribute("aria-hidden", "true");
+    strip.appendChild(seal);
+
+    var body = el("div", "practice__body");
+    body.appendChild(el("span", "practice__label",
+      isPractice ? "Next practice" : "Next up · " + next.item.title));
+
+    var line = el("span", "practice__line");
+    line.appendChild(el("span", "practice__when", when));
+    if (next.item.location) {
+      line.appendChild(el("span", "practice__where", next.item.location));
+    }
+    body.appendChild(line);
+    strip.appendChild(body);
+
+    var rel = el("span", "practice__rel", relative(diff, inProgress, next.start));
+    if (inProgress) rel.classList.add("practice__rel--now");
+    strip.appendChild(rel);
+
+    return strip;
+  }
+
+  ready(function () {
+    // It goes under the hero buttons, inside the text column, so the
+    // sections after the hero keep their places.
+    var inner = document.querySelector("main > .hero .hero__inner");
+    if (!inner) return;
+
+    // The line's space is reserved straight away, before the data arrives,
+    // so the hero is its final height from the first paint. Otherwise the
+    // line would land mid-way through the ink bloom and the photo, which is
+    // sized off the hero, would visibly grow. The placeholder is invisible
+    // (visibility, not opacity, so the theme's rise animation can't reveal
+    // it) and only holds the height that styles.css section 10 gives every line.
+    var strip = el("aside", "practice practice--pending");
+    strip.setAttribute("aria-hidden", "true");
+    inner.appendChild(strip);
+
+    // No session to show: let go of the space, but only once the hero has
+    // finished playing, so nothing moves while the visitor is watching it.
+    function release() {
+      var hero = inner.closest(".hero");
+      var settled = function () { if (strip.parentNode) strip.parentNode.removeChild(strip); };
+      var armed = document.documentElement.classList.contains("bloom-armed");
+      if (armed && hero && !hero.classList.contains("bloom-done")) {
+        var watch = new MutationObserver(function () {
+          if (hero.classList.contains("bloom-done") || hero.classList.contains("bloom-fallback")) {
+            watch.disconnect();
+            window.setTimeout(settled, 600);
+          }
+        });
+        watch.observe(hero, { attributes: true, attributeFilter: ["class"] });
+        window.setTimeout(function () { watch.disconnect(); settled(); }, 4000);
+      } else {
+        window.setTimeout(settled, 2200);
+      }
+    }
+
+    fetch("data/live.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) {
+        var now = new Date();
+        var next = pickNext(data, now);
+        if (!next) return release();
+        var built = build(next, now);
+        strip.className = built.className;
+        strip.setAttribute("aria-label", built.getAttribute("aria-label"));
+        strip.removeAttribute("aria-hidden");
+        while (built.firstChild) strip.appendChild(built.firstChild);
+        // Force a style flush so the fade below starts from hidden.
+        void strip.offsetWidth;
+        strip.classList.add("practice--in");
+      })
+      .catch(release);
   });
 })();

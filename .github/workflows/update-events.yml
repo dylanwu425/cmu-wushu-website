@@ -35,10 +35,10 @@ jobs:
 
       - name: Commit and push if anything changed
         run: |
-          if [ -n "$(git status --porcelain events.html)" ]; then
+          if [ -n "$(git status --porcelain events.html data/live.json)" ]; then
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add events.html
+            git add events.html data/live.json
             git commit -m "Update events from the club calendar [skip ci]"
             git push
             echo "### Events page updated from the calendar" >> "$GITHUB_STEP_SUMMARY"

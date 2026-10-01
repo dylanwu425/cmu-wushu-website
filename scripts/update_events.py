@@ -11,6 +11,12 @@ It rewrites ONLY the two regions of events.html marked with
 Anything outside those markers is left alone, so it is safe to hand-edit
 the rest of the page.
 
+It also writes data/live.json, which the site reads in the browser for the
+"Next practice" strip and the numbers band: every practice in the current
+weekly series (expanded from the calendar's repeat rules), the next few
+public events, and a few club statistics. The member count comes from
+event-extras.json ("stats"), so it survives regeneration.
+
 Two deliberate safety rules:
   1. Calendar DESCRIPTION fields are NEVER published. They contain call
      times, Google Meet links, and phone PINs. Blurbs come from
@@ -19,12 +25,13 @@ Two deliberate safety rules:
      are filtered out. See SKIP below.
 """
 
+import html
 import json
 import os
 import re
 import sys
 import urllib.request
-from datetime import datetime, timezone, date
+from datetime import datetime, timedelta, timezone, date
 from zoneinfo import ZoneInfo
 
 # --- Settings ---------------------------------------------------------------
@@ -37,8 +44,11 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(HERE, "events.html")
 NOTES = os.path.join(HERE, "event-notes.json")
 EXTRAS = os.path.join(HERE, "event-extras.json")
+LIVE = os.path.join(HERE, "data", "live.json")
 
 MAX_UPCOMING = 6      # cards shown under "Upcoming events"
+LIVE_EVENTS = 3       # upcoming public events listed in data/live.json
+LIVE_HORIZON = 200    # days ahead a repeating practice is expanded, at most
 
 # Events we never publish: internal logistics, not public happenings.
 SKIP = re.compile(r"rehearsal|stage blocking|pickup and drive|arrive and meet"
@@ -68,7 +78,11 @@ def fetch_ics(url):
 
 
 def parse_events(raw):
-    """Return [{start: datetime, title, location, recurring: bool}] in Eastern."""
+    """Return [{start: datetime, title, location, recurring: bool, ...}] in Eastern.
+
+    The extra keys (end, uid, rrule, exdates, recurrence_id, all_day) only
+    matter for data/live.json; the Events page ignores them.
+    """
     raw = re.sub(r"\r?\n[ \t]", "", raw)        # unfold wrapped lines
     out = []
     for block in raw.split("BEGIN:VEVENT")[1:]:
@@ -84,8 +98,21 @@ def parse_events(raw):
         rrule = field("RRULE")[1]
         start = to_eastern(prop, val)
         if start and title:
+            end = to_eastern(*field("DTEND"))
+            # A skipped date can come as several EXDATE lines, or one line
+            # with several dates separated by commas.
+            exdates = []
+            for eprop, evals in re.findall(r"^(EXDATE[^:\n]*):(.*)$", block, re.M):
+                for ev in evals.split(","):
+                    d = to_eastern(eprop, ev.strip())
+                    if d:
+                        exdates.append(d)
+            rid = to_eastern(*field("RECURRENCE-ID"))
             out.append({"start": start, "title": title,
-                        "location": loc, "recurring": bool(rrule)})
+                        "location": loc, "recurring": bool(rrule),
+                        "end": end, "uid": field("UID")[1], "rrule": rrule,
+                        "exdates": exdates, "recurrence_id": rid,
+                        "all_day": "VALUE=DATE" in prop})
     return out
 
 
@@ -124,7 +151,7 @@ def nice_place(loc):
     loc = loc.replace("\\,", ",").strip()
     loc = re.sub(r"\s*TABLE\s*\d+", "", loc, flags=re.I)
     loc = re.sub(r",\s*Pittsburgh,\s*PA[^,]*(,\s*USA)?\s*$", "", loc)
-    m = re.match(r"^CUC-?\s*(.+)$", loc, re.I)
+    m = re.match(r"^CUC\s*-?\s*(.+)$", loc, re.I)
     if m:
         key = m.group(1).strip().upper()
         return "Cohon Center, " + ROOMS.get(key, m.group(1).strip().title())
@@ -210,11 +237,141 @@ def replace_region(html, name, body):
     return f"{pre}{start}\n{body}\n{' ' * 10}{end}{post}"
 
 
+# --- data/live.json ---------------------------------------------------------
+WEEKDAYS = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
+PRACTICE = re.compile(r"practice", re.I)
+CANCELLED = re.compile(r"cancel", re.I)
+
+
+def rule_of(e):
+    return dict(kv.split("=", 1) for kv in e["rrule"].split(";") if "=" in kv)
+
+
+def series_until(e):
+    """When a repeating event stops, or None if it never says."""
+    u = rule_of(e).get("UNTIL")
+    if not u:
+        return None
+    if len(u) == 8:                           # a bare date: valid all that day
+        return datetime.strptime(u, "%Y%m%d").replace(
+            hour=23, minute=59, second=59, tzinfo=TZ)
+    return to_eastern("", u)
+
+
+def expand_weekly(e, overrides, horizon):
+    """Turn one repeating event into its dated occurrences, in Eastern time.
+
+    Google's feed only uses FREQ=WEEKLY for practices, with BYDAY, UNTIL and
+    the odd COUNT or INTERVAL, so that is all this handles. Dates listed in
+    EXDATE are skipped, and an occurrence Google exported separately (a
+    RECURRENCE-ID entry, meaning someone edited that one date) takes the
+    edited time, room and title instead. A cancelled one is dropped.
+    """
+    rule = rule_of(e)
+    if rule.get("FREQ") != "WEEKLY":
+        return []
+    first = e["start"]
+    length = (e["end"] - first) if e["end"] else None
+    interval = max(1, int(rule.get("INTERVAL", "1")))
+    days = [d for d in rule.get("BYDAY", "").split(",") if d in WEEKDAYS] \
+        or [WEEKDAYS[first.weekday()]]
+    count = int(rule["COUNT"]) if rule.get("COUNT", "").isdigit() else None
+
+    until = series_until(e)
+
+    skipped = {d for d in e["exdates"]}
+    week = first - timedelta(days=first.weekday())   # Monday of the first week
+    out, made = [], 0
+    while True:
+        for i, name in enumerate(WEEKDAYS):
+            if name not in days:
+                continue
+            when = week + timedelta(days=i)
+            if when < first:
+                continue
+            if until and when > until:
+                return out
+            if when > horizon or (count and made >= count):
+                return out
+            made += 1
+            if when in skipped:
+                continue
+            occ = overrides.get((e["uid"], when))
+            if occ is None:
+                occ = {"start": when, "end": when + length if length else None,
+                       "title": e["title"], "location": e["location"]}
+            elif CANCELLED.search(occ["title"]):
+                continue
+            out.append(occ)
+        week += timedelta(weeks=interval)
+
+
+def live_item(e):
+    place = nice_place(e.get("location", ""))
+    return {
+        "title": nice_title(e["title"]),
+        "start": e["start"].isoformat(),
+        "end": e["end"].isoformat() if e.get("end") else None,
+        "allDay": bool(e.get("all_day")) or bool(e.get("extra")),
+        "location": html.unescape(place) if place else None,
+    }
+
+
+def build_live(events, upcoming, past, extras_stats, today):
+    """Everything the browser needs for the live strip and the numbers band."""
+    horizon = datetime.combine(today, datetime.min.time(), TZ) + timedelta(days=LIVE_HORIZON)
+    overrides = {(e["uid"], e["recurrence_id"]): e
+                 for e in events if e["recurrence_id"]}
+
+    practices = []
+    for e in events:
+        if not PRACTICE.search(e["title"]) or CANCELLED.search(e["title"]):
+            continue
+        if e["recurring"]:
+            # Every date in a still-running series, not just the next few, so
+            # the file only changes when the calendar does, not every morning.
+            until = series_until(e)
+            if until and until.date() < today - timedelta(days=1):
+                continue
+            practices += expand_weekly(e, overrides, horizon)
+        elif not e["recurrence_id"] and e["start"].date() >= today:
+            practices.append(e)          # a one-off practice
+    practices.sort(key=lambda x: x["start"])
+    seen, keep = set(), []
+    for o in practices:
+        key = (o["start"], o.get("location", ""))
+        if key in seen:
+            continue
+        seen.add(key)
+        keep.append(o)
+    live_practices = [live_item(o) for o in keep]
+
+    performances = sum(1 for e in past if tag_for(e["title"], e.get("type"))[1] == "Performance")
+    founded = extras_stats.get("founded")
+    if not founded and past:
+        founded = min(e["start"] for e in past).year
+    years = (today.year - founded + 1) if founded else None
+
+    return {
+        "_comment": "Written by scripts/update_events.py from the club calendar. "
+                    "Do not edit by hand: change the calendar, or the stats in "
+                    "event-extras.json, and it will be regenerated.",
+        "practices": live_practices,
+        "events": [live_item(e) for e in upcoming[:LIVE_EVENTS]],
+        "stats": {
+            "years": years,
+            "performances": performances,
+            "members": extras_stats.get("members"),
+        },
+    }
+
+
 # --- Main -------------------------------------------------------------------
 def load_extras():
-    """Events kept in event-extras.json because they are not on the calendar."""
+    """Events kept in event-extras.json because they are not on the calendar,
+    plus the hand-kept numbers under "stats"."""
     if not os.path.exists(EXTRAS):
-        return []
+        return [], {}
     with open(EXTRAS, encoding="utf-8") as f:
         data = json.load(f)
     out = []
@@ -227,7 +384,7 @@ def load_extras():
         out.append({"start": d, "title": e.get("title", "Untitled"),
                     "location": e.get("location", ""), "recurring": False,
                     "extra": True, "type": e.get("type"), "note": e.get("note", "")})
-    return out
+    return out, data.get("stats", {})
 
 
 def main():
@@ -238,7 +395,7 @@ def main():
             notes = json.load(f)
 
     events = parse_events(fetch_ics(ICS_URL))
-    extras = load_extras()
+    extras, extras_stats = load_extras()
     today = datetime.now(TZ).date()
 
     singles = [e for e in events if not e["recurring"] and not SKIP.search(e["title"])]
@@ -254,14 +411,25 @@ def main():
 
     print(f"{len(upcoming)} upcoming, {len(past)} past events "
           f"({len(extras)} from event-extras.json)")
-    if new == html:
+
+    live = build_live(events, upcoming, past, extras_stats, today)
+    live_text = json.dumps(live, indent=2, ensure_ascii=False) + "\n"
+    old_live = open(LIVE, encoding="utf-8").read() if os.path.exists(LIVE) else None
+    print(f"{len(live['practices'])} practice dates in the current series")
+
+    if new == html and live_text == old_live:
         print("No change.")
         return 0
     if dry:
-        print("Would update events.html (dry run).")
+        print("Would update events.html and/or data/live.json (dry run).")
         return 0
-    open(PAGE, "w", encoding="utf-8").write(new)
-    print("Updated events.html")
+    if new != html:
+        open(PAGE, "w", encoding="utf-8").write(new)
+        print("Updated events.html")
+    if live_text != old_live:
+        os.makedirs(os.path.dirname(LIVE), exist_ok=True)
+        open(LIVE, "w", encoding="utf-8").write(live_text)
+        print("Updated data/live.json")
     return 0
 
 
