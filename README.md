@@ -466,12 +466,18 @@ button will still open a blank email with the right address and subject.
 
 ## 7c. How to add or remove members
 
-The About page lists regular members under the officers: a small card with a square photo
-(or a red seal with their initials if they didn't send one), their name, year and major, the
-year they joined, a fun fact, and their Instagram if they gave one.
+The About page lists regular members under the officers, on cards the same size as the
+officers': a portrait photo, their name, the year they joined, their year and major, a fun
+fact, and their Instagram if they gave one.
+
+**Two photos.** Each member can have a *formal* photo and an *informal* one. The card shows
+the formal one and swaps to the informal one when you hover over it, or tap it on a phone.
+Someone who uploads one photo just gets that photo; someone who uploads none gets a red seal
+with their initials.
 
 The list is **built from the sign-up form**, "CMU Wushu Club — Member Profile". People fill
-it in themselves, and only those who tick the consent box are shown. To refresh the list:
+it in themselves, and only those who tick the consent box are shown. Anyone who already has
+an officer card is left out so they don't appear twice. To refresh the list:
 
 1. Open the form's responses Sheet. **File → Download → Comma-separated values (.csv)**.
    Save it as `data/members.csv`. (This file stays on your computer: it has email addresses
@@ -482,24 +488,28 @@ it in themselves, and only those who tick the consent box are shown. To refresh 
    put the photos in `images/members/originals/`. iPhone HEIC files are fine.
 3. Run `python3 scripts/build_members.py`.
 
-It crops each person's photo to a square, writes the cards into `about.html` between the
-`MEMBERS:START` and `MEMBERS:END` markers, and tells you who was left off for not
-consenting. Don't edit between those markers by hand; the script overwrites them.
+It crops each photo to the cards' portrait shape, writes the cards into `about.html` between
+the `MEMBERS:START` and `MEMBERS:END` markers, and tells you who was left off and why. Don't
+edit between those markers by hand; the script overwrites them.
 
-**Picking a better photo or crop.** Everyone gets their "Photo 1", cropped around the middle.
-If their second photo is better, or the crop cuts them off, add them to
-`data/member-photos.json` under the full name they typed in the form:
+**Which photo is which, and fixing a crop.** By default "Photo 1" is the formal photo and
+"Photo 2" the informal one, each cropped around the middle. To swap them, or to move or
+tighten a crop, add the person to `data/member-photos.json` under the full name they typed
+in the form:
 
 ```json
-"Jane Doe": { "photo": 2, "focus": [0.45, 0.6], "zoom": 1.3 }
+"Jane Doe": {
+  "formal":   { "photo": 2, "focus": [0.45, 0.6], "zoom": 1.2 },
+  "informal": { "photo": 1 }
+}
 ```
 
-`photo` is 1 or 2. `focus` is where the middle of the square should sit, as fractions across
+`photo` is 1 or 2. `focus` is where the middle of the crop should sit, as fractions across
 and down the photo (0.5, 0.5 is dead centre). `zoom` above 1 crops in closer. Run the script
 again to see the result.
 
-**To remove someone:** delete their row from `data/members.csv` and their photo from the
-`originals` folder, run the script again, and push. Do this the same day someone asks.
+**To remove someone:** delete their row from `data/members.csv`, run the script again, and
+push. Do this the same day someone asks.
 
 ---
 

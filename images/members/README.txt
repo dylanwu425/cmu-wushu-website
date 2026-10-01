@@ -1,8 +1,9 @@
 Member photos for the About page.
 
-  originals/   <- drop the photos people send you in here (any size, HEIC fine)
-  *.jpg        <- the 480x480 square copies the site uses, made by:
-                  python3 scripts/crop_members.py
+  *-formal.jpg / *-informal.jpg   <- the 600x800 copies the site uses, made by
+                                     python3 scripts/build_members.py
+  originals/                      <- only needed without Google Drive for
+                                     Desktop: put the form's uploads here
 
-Then copy a <li class="member"> block in about.html for each person.
-Only list people who said yes to being on a public website.
+Don't edit or rename the copies by hand; change data/member-photos.json and
+run the script again. See README section 7c.

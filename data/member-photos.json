@@ -1,11 +1,21 @@
 {
-  "_comment": "Which upload to use for a member's card and how to crop it. Keyed by the Full name they typed in the form. photo: 1 or 2. focus: where the middle of the square sits, as fractions of the photo's width and height. zoom: 1 keeps as much as fits, higher crops in. Anyone not listed gets their Photo 1, cropped around the middle.",
+  "_comment": "Which upload is a member's formal photo and which their informal one, and how to crop each. Keyed by the Full name they typed in the form. photo: 1 or 2. focus: where the middle of the crop sits, as fractions of the photo's width and height. zoom: 1 keeps as much as fits, higher crops in. Anyone not listed gets Photo 1 as formal and Photo 2 as informal, cropped around the middle.",
   "Kaden Dan Wong": {
-    "photo": 2,
-    "focus": [
-      0.455,
-      0.6
-    ],
-    "zoom": 1.3
+    "formal": {
+      "photo": 2,
+      "focus": [
+        0.455,
+        0.6
+      ],
+      "zoom": 1.0
+    },
+    "informal": {
+      "photo": 1,
+      "focus": [
+        0.53,
+        0.455
+      ],
+      "zoom": 1.7
+    }
   }
 }

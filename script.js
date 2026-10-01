@@ -397,6 +397,29 @@
 })();
 
 /* ==========================================================================
+   Member cards with two photos (About page)
+   Hovering swaps the formal photo for the informal one in CSS alone. Phones
+   have no hover, so tapping the photo (or pressing Enter or Space on it)
+   flips it instead: this only toggles aria-pressed, and the styles do the
+   rest. With JavaScript off the formal photo simply stays.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  var list = document.querySelector(".members");
+  if (!list) return; // Not the About page.
+
+  list.addEventListener("click", function (event) {
+    var button = event.target.closest(".member__photos");
+    if (!button) return;
+    var on = button.getAttribute("aria-pressed") === "true";
+    button.setAttribute("aria-pressed", on ? "false" : "true");
+  });
+})();
+
+
+/* ==========================================================================
    MOTION AND LIVE DETAILS (styles.css section 10)
    ========================================================================== */
 

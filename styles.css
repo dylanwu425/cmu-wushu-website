@@ -1986,58 +1986,98 @@ html[data-page="home"] main > .hero + .section .card:hover {
 }
 .bean-trigger:focus-visible { outline-color: var(--seal); }
 
-/* --- Members: a denser roll call under the officers ---
-   Small paper cards: a square photo (or a red seal with initials for anyone
-   without one), the name, year and major, and what they train. Kept light
-   on purpose so thirty of them don't bury the page. */
-.members-head { margin-top: 4rem; }
+/* --- Members: the same cards as the officers, under them ---
+   Each <li> carries the officer classes too, so size, paper, type and
+   shadows all come from the officer rules above. What is added here: the
+   list's own grid, the two-photo swap, the seal for anyone without a photo,
+   and the Instagram line. scripts/build_members.py writes the markup. */
+.members-head { margin-top: 4.5rem; }
 .members {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
+  /* auto-fill, not auto-fit: a short list keeps officer-sized cards
+     instead of stretching one card across the row. */
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
-.member {
-  position: relative;
-  padding: 8px 8px 0.9rem;
-  background-color: var(--paper-card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-lift);
-  --fg: var(--ink-2);
-  --fg-strong: var(--ink);
-  --fg-soft: var(--ink-soft);
-  --line: rgba(27, 26, 23, 0.14);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.member:hover { transform: translateY(-3px); }
 .member__photo {
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   height: auto;
   object-fit: cover;
   border: 1px solid rgba(27, 26, 23, 0.18);
   filter: sepia(0.12) saturate(0.92);
-  transition: filter 0.6s ease;
+  transition: opacity 0.45s ease, filter 0.6s ease;
 }
 .member:hover .member__photo { filter: none; }
-/* No photo: the same square, paper, with a rough-edged red seal carrying
-   their initials. The seal is a pseudo-element behind the text; isolation
-   keeps it above the paper but under the letters. */
+
+/* Two photos: the formal one shows; the informal one lies on top of it,
+   clear, and fades in on hover, on keyboard focus, or when the photo is
+   tapped (script.js flips aria-pressed, which is what phones use). */
+.member__photos {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.member__photo--informal {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  opacity: 0;
+}
+.member__photos[aria-pressed="true"] .member__photo--informal { opacity: 1; }
+@media (hover: hover) {
+  .member__photos:hover .member__photo--informal { opacity: 1; }
+  /* Pressed and hovered at once reads as "back to formal". */
+  .member__photos[aria-pressed="true"]:hover .member__photo--informal { opacity: 0; }
+}
+.member__photos:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; }
+/* A small mark in the corner says there is a second photo behind this one. */
+.member__photos::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 22px;
+  height: 22px;
+  background:
+    linear-gradient(var(--paper), var(--paper)) 6px 2px / 14px 14px no-repeat,
+    linear-gradient(rgba(243, 236, 223, 0.55), rgba(243, 236, 223, 0.55)) 2px 6px / 14px 14px no-repeat;
+  border-radius: 1px;
+  opacity: 0.85;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .member__photo { transition: none; }
+}
+
+/* No photo: the same portrait frame, paper, with a rough-edged red seal
+   carrying their initials. The seal is a pseudo-element behind the text;
+   isolation keeps it above the paper but under the letters. */
 .member__seal {
   position: relative;
   isolation: isolate;
   display: grid;
   place-items: center;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   border: 1px solid rgba(27, 26, 23, 0.18);
   background: var(--paper-2);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.55rem;
+  font-size: 2.2rem;
   letter-spacing: 0.06em;
   color: var(--paper);
   text-shadow: none;
@@ -2046,52 +2086,14 @@ html[data-page="home"] main > .hero + .section .card:hover {
   content: "";
   position: absolute;
   z-index: -1;
-  width: 46%;
+  width: 40%;
   aspect-ratio: 1 / 1;
   background: var(--seal);
   -webkit-mask: var(--rough-seal) center / 100% 100% no-repeat;
   mask: var(--rough-seal) center / 100% 100% no-repeat;
 }
-.member h3 {
-  margin: 0.8rem 0.25rem 0.15rem;
-  font-size: 1.15rem;
-  line-height: 1.2;
-}
-.member__meta, .member__tags {
-  margin: 0 0.25rem;
-  font-size: 0.78rem;
-  line-height: 1.4;
-}
-.member__meta { color: var(--fg-soft); }
-.member__since {
-  margin: 0.1rem 0.25rem 0;
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-.member__bio {
-  margin: 0.45rem 0.25rem 0;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 0.95rem;
-  line-height: 1.3;
-  color: var(--fg);
-}
-.member__insta { margin: 0.35rem 0.25rem 0; font-size: 0.74rem; }
+.member__insta { font-size: 0.85rem; }
 .member__insta a { color: var(--seal); font-weight: 600; }
-.member__tags {
-  margin-top: 0.3rem;
-  color: var(--seal);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.66rem;
-}
-@media (max-width: 620px) {
-  .members { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; }
-  .member h3 { font-size: 1.05rem; }
-}
 
 /* --------------------------------------------------------------------------
    Events, tags, gallery
