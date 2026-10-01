@@ -198,8 +198,16 @@
                    data-birthday-photo-alt="Preston Wolf Steimel wearing a party hat"
                    data-birthday-reveal="images/officers/preston_birthday.jpg"
                    data-birthday-reveal-alt="Preston Wolf Steimel as a lion dancer in shiny orange pants">
-            <img class="officer__photo" src="images/officers/preston-steimel.jpg"
-                 alt="Preston Wolf Steimel, Performance Director" loading="lazy" width="600" height="800">
+            <!-- Two photos, as on Dylan's card. The first image keeps the
+                 officer__photo class because the birthday easter egg in
+                 script.js looks for it by that name to swap his picture. -->
+            <button class="photo-swap" type="button" aria-pressed="false"
+                    aria-label="Show Preston&rsquo;s other photo">
+              <img class="officer__photo photo-swap__img" src="images/officers/preston-steimel.jpg"
+                   alt="Preston Wolf Steimel, Performance Director" loading="lazy" width="600" height="800">
+              <img class="photo-swap__img photo-swap__img--alt" src="images/officers/preston-steimel-formal.jpg"
+                   alt="" loading="lazy" width="600" height="800">
+            </button>
             <h3>Preston Wolf Steimel</h3>
             <p><strong>Performance Director</strong></p>
             <p class="card__meta">Fifth Year &middot; BXA</p>
@@ -251,8 +259,13 @@
         <ul class="members">
           <!-- MEMBERS:START -->
           <li class="card officer member">
-            <img class="member__photo" src="images/members/petrina-steimel-informal.jpg"
-                 alt="Petrina Steimel" loading="lazy" width="600" height="800">
+            <button class="photo-swap" type="button" aria-pressed="false"
+                    aria-label="Show Petrina Steimel&rsquo;s other photo">
+              <img class="photo-swap__img" src="images/members/petrina-steimel-informal.jpg"
+                   alt="Petrina Steimel" loading="lazy" width="600" height="800">
+              <img class="photo-swap__img photo-swap__img--alt" src="images/members/petrina-steimel-formal.jpg"
+                   alt="" loading="lazy" width="600" height="800">
+            </button>
             <h3>Petrina Steimel</h3>
             <p><strong>Member since 2024</strong></p>
             <p class="card__meta">Junior · BXA</p>

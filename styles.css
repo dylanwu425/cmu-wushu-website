@@ -2047,6 +2047,9 @@ html[data-page="home"] main > .hero + .section .card:hover {
   .photo-swap[aria-pressed="true"]:hover .photo-swap__img--alt { opacity: 0; }
 }
 .photo-swap:focus-visible { outline: 2px solid var(--seal); outline-offset: 3px; }
+/* On Preston's birthday his card swaps its own photos (script.js), so the
+   hover swap stands down and leaves the day to the easter egg. */
+.officer.is-birthday .photo-swap__img--alt { display: none; }
 /* A small mark in the corner says there is a second photo behind this one. */
 .photo-swap::after {
   content: "";
