@@ -10,12 +10,11 @@ Put photos for this event in THIS folder.
 
        <figure class="gallery__item">
          <img src="images/oca-natural-history-2025/01-group-form.jpg"
-              alt="Describe what is happening in the photo"
+              alt=""
               loading="lazy">
          <figcaption>Your caption</figcaption>
        </figure>
 
-  4. Always fill in the alt text — it is what blind visitors hear.
 
 Tip: resize photos to about 1600px wide before adding them, so pages load fast.
 HEIC files from an iPhone will NOT display in browsers — export as JPEG first.

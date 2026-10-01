@@ -784,8 +784,10 @@
     image.src = src;
     image.alt = group[i].alt || "";
     caption.lastChild.textContent = group[i].alt || "";
-    count.textContent = (i + 1) + " / " + group.length;
-    caption.style.display = group[i].alt ? "" : "none";
+    // Gallery photos carry no caption, so the strip is just the position in
+    // the set; a photo shown on its own has no position worth printing.
+    count.textContent = group.length > 1 ? (i + 1) + " / " + group.length : "";
+    caption.style.display = (group[i].alt || group.length > 1) ? "" : "none";
 
     prev.disabled = i === 0;
     next.disabled = i === group.length - 1;

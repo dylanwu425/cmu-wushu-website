@@ -358,15 +358,13 @@ slide inside its `<div class="carousel__track">`:
 ```html
 <figure class="carousel__slide">
   <img src="images/ds-2026/web/your-photo.jpg"
-       alt="Describe what is happening in the photo" loading="lazy">
+       alt="" loading="lazy">
 </figure>
 ```
 
-Copy an existing slide and change two things: the filename and the `alt` text.
-
-**Always fill in the `alt` text.** It is *not* shown on the page — it's what blind visitors
-hear read aloud, and what appears if the image fails to load. It also helps the site show up
-in search results.
+Copy an existing slide and change one thing: the filename. **Leave `alt=""` empty.** The
+event's heading above the slideshow already says what the photos are, so screen readers skip
+past the pictures rather than reading a description of each one.
 
 ### Adding a new event slideshow
 
@@ -545,13 +543,13 @@ entry in `data/members-extra.json`:
 "secret": {
   "word": "vision",
   "photo": "petrina-preston.png",
-  "alt": "Petrina and Preston as children at a wushu competition"
+  "alt": "Petrina and Preston"
 }
 ```
 
 The word must appear in their bio, and the photo goes in `images/members/originals/`. The
 word is styled to look like ordinary text, so finding it is the point; the `alt` is the
-caption shown under the photo.
+caption shown under the photo, so keep it short.
 
 **To remove someone:** delete their row from `data/members.csv`, or their entry from
 `data/members-extra.json`, run the script again, and push. Do this the same day someone asks.
