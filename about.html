@@ -223,6 +223,66 @@
             <p>hallo</p>
           </article>
         </div>
+
+        <!-- ============================================================
+             MEMBERS: one <li> per person, small on purpose: name, year and
+             major, and what they train. No bios.
+
+             WITH A PHOTO: put the square photo in images/members/ (run
+             python3 scripts/crop_members.py on the original first, see
+             README section 7c) and use the first block below.
+
+             WITHOUT A PHOTO: use the second block; the red seal shows their
+             initials instead. Fill in the initials inside the <span>.
+
+             Only list people who said yes to being on the website. To take
+             someone off, delete their whole <li> ... </li>.
+             ============================================================ -->
+        <div class="section-header members-head">
+          <span class="eyebrow">Members</span>
+          <h2>The club</h2>
+          <hr class="accent-rule">
+          <p>Everyone who trains with us this semester.</p>
+        </div>
+
+        <ul class="members">
+          <!-- PLACEHOLDER ENTRIES: replace these with real members. -->
+          <li class="member">
+            <img class="member__photo" src="images/members/example.jpg"
+                 alt="" loading="lazy" width="480" height="480">
+            <h3>Member Name</h3>
+            <p class="member__meta">Junior &middot; Physics</p>
+            <p class="member__tags">Staff &middot; Fan</p>
+          </li>
+          <li class="member">
+            <span class="member__seal" aria-hidden="true">JD</span>
+            <h3>Jane Doe</h3>
+            <p class="member__meta">Sophomore &middot; Mechanical Engineering</p>
+            <p class="member__tags">Broadsword</p>
+          </li>
+          <li class="member">
+            <span class="member__seal" aria-hidden="true">AL</span>
+            <h3>Alex L.</h3>
+            <p class="member__meta">First year &middot; Computer Science</p>
+          </li>
+          <li class="member">
+            <span class="member__seal" aria-hidden="true">MK</span>
+            <h3>Maya Kim</h3>
+            <p class="member__meta">Senior &middot; Design</p>
+            <p class="member__tags">Straightsword &middot; Chain whip</p>
+          </li>
+          <li class="member">
+            <span class="member__seal" aria-hidden="true">RP</span>
+            <h3>Ravi Patel</h3>
+            <p class="member__meta">Master&rsquo;s &middot; Robotics</p>
+            <p class="member__tags">Barehand</p>
+          </li>
+          <li class="member">
+            <span class="member__seal" aria-hidden="true">SC</span>
+            <h3>Sam Chen</h3>
+            <p class="member__meta">Junior &middot; Statistics</p>
+          </li>
+        </ul>
       </div>
     </section>
 

@@ -1986,6 +1986,96 @@ html[data-page="home"] main > .hero + .section .card:hover {
 }
 .bean-trigger:focus-visible { outline-color: var(--seal); }
 
+/* --- Members: a denser roll call under the officers ---
+   Small paper cards: a square photo (or a red seal with initials for anyone
+   without one), the name, year and major, and what they train. Kept light
+   on purpose so thirty of them don't bury the page. */
+.members-head { margin-top: 4rem; }
+.members {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+.member {
+  position: relative;
+  padding: 8px 8px 0.9rem;
+  background-color: var(--paper-card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lift);
+  --fg: var(--ink-2);
+  --fg-strong: var(--ink);
+  --fg-soft: var(--ink-soft);
+  --line: rgba(27, 26, 23, 0.14);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.member:hover { transform: translateY(-3px); }
+.member__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  object-fit: cover;
+  border: 1px solid rgba(27, 26, 23, 0.18);
+  filter: sepia(0.12) saturate(0.92);
+  transition: filter 0.6s ease;
+}
+.member:hover .member__photo { filter: none; }
+/* No photo: the same square, paper, with a rough-edged red seal carrying
+   their initials. The seal is a pseudo-element behind the text; isolation
+   keeps it above the paper but under the letters. */
+.member__seal {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid rgba(27, 26, 23, 0.18);
+  background: var(--paper-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: 0.06em;
+  color: var(--paper);
+  text-shadow: none;
+}
+.member__seal::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 46%;
+  aspect-ratio: 1 / 1;
+  background: var(--seal);
+  -webkit-mask: var(--rough-seal) center / 100% 100% no-repeat;
+  mask: var(--rough-seal) center / 100% 100% no-repeat;
+}
+.member h3 {
+  margin: 0.8rem 0.25rem 0.15rem;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+.member__meta, .member__tags {
+  margin: 0 0.25rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+.member__meta { color: var(--fg-soft); }
+.member__tags {
+  margin-top: 0.3rem;
+  color: var(--seal);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.66rem;
+}
+@media (max-width: 620px) {
+  .members { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; }
+  .member h3 { font-size: 1.05rem; }
+}
+
 /* --------------------------------------------------------------------------
    Events, tags, gallery
    -------------------------------------------------------------------------- */

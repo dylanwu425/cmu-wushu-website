@@ -25,6 +25,11 @@ images/*/*
 # so they need their own exception to the rule above.
 !images/officers/
 !images/officers/*.jpg
+# Member photos work the same way: the square copies that
+# scripts/crop_members.py makes live directly in images/members/, while the
+# originals stay in images/members/originals/ on your computer only.
+!images/members/
+!images/members/*.jpg
 
 # Source document for the officer bios. Kept locally, not published.
 *.docx

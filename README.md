@@ -21,6 +21,7 @@ thing at a time, and refresh the page in your browser to see the result.
 6. [How to add photos to an event](#6-how-to-add-photos-to-an-event)
 7. [How to update contact info](#7-how-to-update-contact-info)
 7b. [How to update the booking page](#7b-how-to-update-the-booking-page)
+7c. [How to add or remove members](#7c-how-to-add-or-remove-members)
 8. [How to change colors and text everywhere](#8-how-to-change-colors-and-text-everywhere)
 9. [The yearly handoff checklist](#9-the-yearly-handoff-checklist)
 10. [If something breaks](#10-if-something-breaks)
@@ -459,6 +460,35 @@ It's URL-encoded, which is why it looks like nonsense. The two codes you need:
 `%3A` is a colon (`:`) and `%0A` is a line break. So `Date%3A%0A` means "Date:" followed by a
 new line. If that's too fiddly, it's completely fine to delete the whole `&body=...` part — the
 button will still open a blank email with the right address and subject.
+
+---
+
+## 7c. How to add or remove members
+
+The About page lists regular members under the officers: a small card with a square photo
+(or a red seal with their initials if they'd rather not have a photo), their name, year and
+major, and what they train. No bios.
+
+**Before anything goes up:** ask. It's a public website. A short Google Form works well:
+name as they'd like it shown (first name only is fine), year, major, what they train, an
+optional photo, and a checkbox agreeing to be listed.
+
+**To add someone with a photo:**
+
+1. Save their photo in `images/members/originals/` named `firstname-lastname.jpg`.
+2. Run `python3 scripts/crop_members.py`. It makes the square copy `images/members/firstname-lastname.jpg`.
+3. In `about.html`, find the `MEMBERS` comment, copy a block that starts with
+   `<li class="member">` and has an `<img>`, paste it, and change the file name, the name,
+   the year and major, and the "what they train" line (delete that line if they didn't say).
+
+**To add someone without a photo:** copy a block that has `<span class="member__seal">`
+instead of an `<img>`, and type their initials between the `<span>` tags.
+
+**To remove someone:** delete their whole block from `<li class="member">` to `</li>`, and
+delete their photo. Do this the same day someone asks.
+
+Member photos people upload go in the **Member Photos** folder in the club Drive, next to the
+event folders.
 
 ---
 
