@@ -476,13 +476,27 @@ it in themselves, and only those who tick the consent box are shown. To refresh 
 1. Open the form's responses Sheet. **File → Download → Comma-separated values (.csv)**.
    Save it as `data/members.csv`. (This file stays on your computer: it has email addresses
    in it, and the site is set up never to publish it.)
-2. In Drive, open the form's **"File responses"** folder, download it, and put the photos in
-   `images/members/originals/`. iPhone HEIC files are fine.
+2. Photos. If **Google Drive for Desktop** is installed on your Mac and signed in to the
+   account that owns the form, skip this step: the script reads the uploads straight from
+   Drive. Otherwise open the form's **"File responses"** folder in Drive, download it, and
+   put the photos in `images/members/originals/`. iPhone HEIC files are fine.
 3. Run `python3 scripts/build_members.py`.
 
-It crops each person's first photo to a square, writes the cards into `about.html` between
-the `MEMBERS:START` and `MEMBERS:END` markers, and tells you who was left off for not
+It crops each person's photo to a square, writes the cards into `about.html` between the
+`MEMBERS:START` and `MEMBERS:END` markers, and tells you who was left off for not
 consenting. Don't edit between those markers by hand; the script overwrites them.
+
+**Picking a better photo or crop.** Everyone gets their "Photo 1", cropped around the middle.
+If their second photo is better, or the crop cuts them off, add them to
+`data/member-photos.json` under the full name they typed in the form:
+
+```json
+"Jane Doe": { "photo": 2, "focus": [0.45, 0.6], "zoom": 1.3 }
+```
+
+`photo` is 1 or 2. `focus` is where the middle of the square should sit, as fractions across
+and down the photo (0.5, 0.5 is dead centre). `zoom` above 1 crops in closer. Run the script
+again to see the result.
 
 **To remove someone:** delete their row from `data/members.csv` and their photo from the
 `originals` folder, run the script again, and push. Do this the same day someone asks.

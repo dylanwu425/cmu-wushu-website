@@ -9,16 +9,31 @@ semester, or whenever new people sign up:
   1. In the Sheet: File -> Download -> Comma-separated values (.csv).
      Save it as   data/members.csv   (this file is never published: it holds
      email addresses).
-  2. In Drive, open the form's "File responses" folder, download it, and put
-     the photos in   images/members/originals/   (any names, HEIC fine).
-     Google names each upload "<original name> - <Their name>.<ext>", which
-     is how this script knows whose photo is whose.
+  2. Photos. If Google Drive for Desktop is installed and signed in to the
+     account that owns the form, there is nothing to do: the script reads the
+     uploads straight from the form's "File responses" folder. Otherwise
+     download that folder from Drive and put the photos in
+     images/members/originals/   (HEIC fine). Google names each upload
+     "<original name> - <Their name>.<ext>", which is how this script knows
+     whose photo is whose.
   3. Run:   python3 scripts/build_members.py
+
+Choosing and framing a photo: by default each person gets their "Photo 1",
+cropped square around the middle (towards the top for tall photos). To use
+their second photo, or to frame it differently, add them to
+data/member-photos.json, keyed by the Full name they typed in the form:
+
+    { "Jane Doe": { "photo": 2, "focus": [0.45, 0.6], "zoom": 1.3 } }
+
+  photo   1 or 2: which upload to use
+  focus   where the middle of the square should sit, as fractions of the
+          photo's width and height (0,0 is the top left, 1,1 the bottom right)
+  zoom    1 keeps as much as fits; 1.5 crops in by half again
 
 It then:
   * keeps only people whose "Photo consent" answer says they consent,
-  * crops each person's first photo to a 480 x 480 square in images/members/
-    (the originals stay on your computer only),
+  * crops each person's photo to a 480 x 480 square in images/members/
+    (the originals are never published),
   * rewrites the list in about.html between the MEMBERS:START / MEMBERS:END
     markers. Everything outside those markers is left alone.
 
@@ -27,7 +42,9 @@ without consent), delete their photo, run this again.
 """
 
 import csv
+import glob
 import html
+import json
 import os
 import re
 import subprocess
@@ -39,6 +56,12 @@ CSV = os.path.join(HERE, "data", "members.csv")
 ORIGINALS = os.path.join(HERE, "images", "members", "originals")
 OUT = os.path.join(HERE, "images", "members")
 ABOUT = os.path.join(HERE, "about.html")
+FRAMING = os.path.join(HERE, "data", "member-photos.json")
+# Where Google Drive for Desktop shows the form's uploads, one folder per
+# upload question ("Photo 1! (File responses)", "Photo 2! ...").
+DRIVE_UPLOADS = os.path.join(
+    os.path.expanduser("~"), "Library", "CloudStorage", "GoogleDrive-*", "My Drive",
+    "CMU Wushu Club* Member Profile (File responses)", "Photo * (File responses)")
 START, END = "<!-- MEMBERS:START -->", "<!-- MEMBERS:END -->"
 SIZE = 480
 PHOTO_EXT = {".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp"}
@@ -108,40 +131,70 @@ def heic_to_jpeg(src, dst):
         return False
 
 
-def square(im):
+def square(im, focus=None, zoom=1.0):
+    """Crop to a square. With no focus, tall photos keep the top (faces live
+    there) and wide photos keep the middle. With a focus, the square is
+    centred there, as close as the photo's edges allow."""
     w, h = im.size
-    side = min(w, h)
-    if h > w:
-        top = int((h - side) * 0.18)   # keep the top: faces live there
-        return im.crop((0, top, side, top + side))
-    left = (w - side) // 2
-    return im.crop((left, 0, left + side, side))
+    side = int(min(w, h) / max(zoom, 1.0))
+    if focus:
+        cx, cy = focus[0] * w, focus[1] * h
+    elif h > w:
+        cx, cy = w / 2, (h - side) * 0.18 + side / 2
+    else:
+        cx, cy = w / 2, h / 2
+    left = int(min(max(cx - side / 2, 0), w - side))
+    top = int(min(max(cy - side / 2, 0), h - side))
+    return im.crop((left, top, left + side, top + side))
 
 
-def find_photo(full_name):
-    """The first upload whose file name ends in ' - <name>', where the name's
-    first and last words match the person's. Google names uploads after the
-    uploader's Google account, which may drop a middle name."""
-    if not os.path.isdir(ORIGINALS):
-        return None
+def upload_folders():
+    """Folders to look for uploads in, in order: the form's own folders in
+    Drive ("Photo 1!" before "Photo 2!"), then images/members/originals/."""
+    folders = sorted(glob.glob(DRIVE_UPLOADS))
+    if os.path.isdir(ORIGINALS):
+        folders.append(ORIGINALS)
+    return folders
+
+
+def find_photos(full_name):
+    """Every upload whose file name ends in ' - <name>', where the name's
+    first and last words match the person's, in upload order. Google names
+    uploads after the uploader's Google account, which may drop a middle
+    name."""
     want = [w for w in re.split(r"\s+", full_name.strip().lower()) if w]
     if not want:
-        return None
-    for f in sorted(os.listdir(ORIGINALS)):
-        stem, ext = os.path.splitext(f)
-        if ext.lower() not in PHOTO_EXT:
-            continue
-        m = re.search(r" - (.+)$", stem)
-        if not m:
-            continue
-        got = [w for w in re.split(r"\s+", m.group(1).strip().lower()) if w]
-        if got and got[0] == want[0] and got[-1] == want[-1]:
-            return os.path.join(ORIGINALS, f)
-    return None
+        return []
+    found = []
+    for folder in upload_folders():
+        for f in sorted(os.listdir(folder)):
+            stem, ext = os.path.splitext(f)
+            if ext.lower() not in PHOTO_EXT:
+                continue
+            m = re.search(r" - (.+)$", stem)
+            if not m:
+                continue
+            got = [w for w in re.split(r"\s+", m.group(1).strip().lower()) if w]
+            if got and got[0] == want[0] and got[-1] == want[-1]:
+                found.append(os.path.join(folder, f))
+    return found
 
 
-def make_square(src, dst):
-    if os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
+def load_framing():
+    if not os.path.exists(FRAMING):
+        return {}
+    try:
+        data = json.load(open(FRAMING, encoding="utf-8"))
+    except ValueError as e:
+        sys.exit(f"data/member-photos.json is not valid JSON: {e}")
+    return {k.strip().lower(): v for k, v in data.items() if not k.startswith("_")}
+
+
+def make_square(src, dst, focus=None, zoom=1.0):
+    # Framed photos are always redone, so a change to member-photos.json
+    # shows up; plain ones are skipped when the copy is already newer.
+    plain = focus is None and zoom == 1.0
+    if plain and os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
         return True
     tmp = None
     if os.path.splitext(src)[1].lower() in (".heic", ".heif"):
@@ -151,7 +204,7 @@ def make_square(src, dst):
         src = tmp
     try:
         im = ImageOps.exif_transpose(Image.open(src)).convert("RGB")
-        square(im).resize((SIZE, SIZE), Image.LANCZOS).save(
+        square(im, focus, zoom).resize((SIZE, SIZE), Image.LANCZOS).save(
             dst, "JPEG", quality=84, optimize=True, progressive=True)
         return True
     except Exception as e:
@@ -191,7 +244,6 @@ def card(person):
 def main():
     if not os.path.exists(CSV):
         sys.exit(f"No {CSV}. Download the responses sheet as CSV and save it there first.")
-    os.makedirs(ORIGINALS, exist_ok=True)
 
     with open(CSV, newline="", encoding="utf-8-sig") as fh:
         rows = list(csv.DictReader(fh))
@@ -202,6 +254,7 @@ def main():
         if need not in cols:
             sys.exit(f"Could not find the '{COLUMNS[need][0]}' column in the CSV.")
 
+    framing = load_framing()
     people, skipped = [], []
     seen = set()
     for row in reversed(rows):           # newest answer wins if someone resubmits
@@ -223,10 +276,12 @@ def main():
             "bio": (row.get(cols.get("bio", ""), "") or "").strip(),
             "insta": (row.get(cols.get("insta", ""), "") or "").strip(),
         }
-        src = find_photo(full)
-        if src:
+        photos = find_photos(full)
+        if photos:
+            frame = framing.get(full.lower(), {})
+            pick = min(max(int(frame.get("photo", 1)), 1), len(photos)) - 1
             dst = os.path.join(OUT, slug(name) + ".jpg")
-            if make_square(src, dst):
+            if make_square(photos[pick], dst, frame.get("focus"), float(frame.get("zoom", 1.0))):
                 person["photo"] = os.path.basename(dst)
         people.append(person)
     people.sort(key=lambda p: p["name"].lower())

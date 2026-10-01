@@ -1,0 +1,11 @@
+{
+  "_comment": "Which upload to use for a member's card and how to crop it. Keyed by the Full name they typed in the form. photo: 1 or 2. focus: where the middle of the square sits, as fractions of the photo's width and height. zoom: 1 keeps as much as fits, higher crops in. Anyone not listed gets their Photo 1, cropped around the middle.",
+  "Kaden Dan Wong": {
+    "photo": 2,
+    "focus": [
+      0.455,
+      0.6
+    ],
+    "zoom": 1.3
+  }
+}
