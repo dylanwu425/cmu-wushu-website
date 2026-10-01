@@ -537,6 +537,22 @@ here if they've said yes to being on a public website** — there's no consent b
 so you're vouching for them. If they later fill the form in, their own answers win and you
 can delete them from this file.
 
+**Hiding a photo behind a word.** A member's bio can have one word that opens a photo when
+you click it, the way "beans" works on Preston's officer card. Add a `secret` block to their
+entry in `data/members-extra.json`:
+
+```json
+"secret": {
+  "word": "vision",
+  "photo": "petrina-preston.png",
+  "alt": "Petrina and Preston as children at a wushu competition"
+}
+```
+
+The word must appear in their bio, and the photo goes in `images/members/originals/`. The
+word is styled to look like ordinary text, so finding it is the point; the `alt` is the
+caption shown under the photo.
+
 **To remove someone:** delete their row from `data/members.csv`, or their entry from
 `data/members-extra.json`, run the script again, and push. Do this the same day someone asks.
 

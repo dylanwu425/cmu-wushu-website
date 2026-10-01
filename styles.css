@@ -77,6 +77,11 @@ a:hover { color: var(--cardinal-dark); text-decoration: underline; }
 
 img { max-width: 100%; display: block; }
 
+/* The hidden attribute must win over any display rule below, or an element
+   that sets its own display (every img, the lightbox arrows) stays on screen
+   when the HTML says it is hidden. */
+[hidden] { display: none !important; }
+
 /* Visible keyboard focus everywhere — important for accessibility. */
 a:focus-visible,
 button:focus-visible {
@@ -464,7 +469,8 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
 /* "beans" has to read as plain body text — no underline, no pointer cursor —
    or it stops being a secret. It stays a real <button> so a keyboard can still
    reach it, and only then does it show a focus ring. */
-.bean-trigger {
+.bean-trigger,
+.secret-trigger {
   font: inherit;
   color: inherit;
   background: none;
@@ -486,7 +492,8 @@ a.nav__join:hover { background: var(--cardinal-dark); color: var(--white); }
      a dead giveaway. */
   -webkit-tap-highlight-color: transparent;
 }
-.bean-trigger:focus-visible {
+.bean-trigger:focus-visible,
+.secret-trigger:focus-visible {
   outline: 2px solid var(--cardinal);
   outline-offset: 2px;
   border-radius: 2px;
@@ -1984,7 +1991,8 @@ html[data-page="home"] main > .hero + .section .card:hover {
   font-style: italic;
   font-size: 1.3rem;
 }
-.bean-trigger:focus-visible { outline-color: var(--seal); }
+.bean-trigger:focus-visible,
+.secret-trigger:focus-visible { outline-color: var(--seal); }
 
 /* --- Members: the same cards as the officers, under them ---
    Each <li> carries the officer classes too, so size, paper, type and

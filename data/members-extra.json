@@ -1,5 +1,5 @@
 {
-  "_comment": "Members who did not fill in the sign-up form, but told an officer their details and said yes to being listed. scripts/build_members.py merges these with the form's answers. Fields: name (as they want it shown), year, major, school (leave out if CMU), since (the year they joined), bio, insta, and photos: the file names of their pictures in images/members/originals/. If someone here later fills in the form, their own answers win and you can delete them from this file.",
+  "_comment": "Members who did not fill in the sign-up form, but told an officer their details and said yes to being listed. scripts/build_members.py merges these with the form's answers. Fields: name (as they want it shown), year, major, school (leave out if CMU), since (the year they joined), bio, insta, and photos: the file names of their pictures in images/members/originals/. 'secret' is optional: it turns one word of their bio into a quiet link that opens a photo full-size, the way the word \"beans\" works on Preston's card. If someone here later fills in the form, their own answers win and you can delete them from this file.",
   "members": [
     {
       "name": "Petrina Steimel",
@@ -10,6 +10,11 @@
       "photos": {
         "informal": "petrina-steimel-informal.jpg",
         "formal": "petrina-steimel-formal.png"
+      },
+      "secret": {
+        "word": "vision",
+        "photo": "petrina-preston.png",
+        "alt": "Petrina and Preston as children at a wushu competition, in the same green and purple uniforms"
       }
     }
   ]

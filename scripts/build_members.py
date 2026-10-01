@@ -37,6 +37,11 @@ formal photo is their "Photo 1" and the informal one their "Photo 2"; someone
 with one upload just gets the one photo, and someone with none gets a red
 seal with their initials.
 
+A member can also hide a photo behind one word of their bio, the way the
+word "beans" works on Preston's officer card: give them a "secret" block in
+members-extra.json with the word, the photo's file name in
+images/members/originals/, and its description.
+
 To swap the two, or frame either one differently, add the person to
 data/member-photos.json, keyed by the Full name they typed in the form:
 
@@ -251,6 +256,29 @@ def make_portrait(src, dst, focus=None, zoom=1.0):
             os.remove(tmp)
 
 
+def make_web(src, dst, max_side=1200):
+    """A photo kept whole, only made small enough for the web. Used for the
+    secret photo behind a word in someone's bio, which is shown full-size in
+    the viewer rather than cropped to a card."""
+    tmp = None
+    if os.path.splitext(src)[1].lower() in (".heic", ".heif"):
+        tmp = dst + ".tmp.jpg"
+        if not heic_to_jpeg(src, tmp):
+            return False
+        src = tmp
+    try:
+        im = ImageOps.exif_transpose(Image.open(src)).convert("RGB")
+        im.thumbnail((max_side, max_side), Image.LANCZOS)
+        im.save(dst, "JPEG", quality=84, optimize=True, progressive=True)
+        return True
+    except Exception as e:
+        print(f"   could not read {os.path.basename(src)}: {e}")
+        return False
+    finally:
+        if tmp and os.path.exists(tmp):
+            os.remove(tmp)
+
+
 def officer_names(page):
     """Names on the officer cards, so officers aren't listed twice."""
     head = page[:page.index(START)] if START in page else page
@@ -259,6 +287,25 @@ def officer_names(page):
 
 def esc(s):
     return html.escape((s or "").strip(), quote=True)
+
+
+def bio_html(person):
+    """Their bio, escaped, with the secret word (if they have one) turned into
+    a button. The button is styled to read as ordinary text, so the only way
+    to find it is to click the word."""
+    bio = esc(person["bio"])
+    secret = person.get("secret") or {}
+    word = (secret.get("word") or "").strip()
+    if not word or not secret.get("file"):
+        return bio
+    pattern = re.compile(r"\b(" + re.escape(esc(word)) + r")\b", re.I)
+    swapped, hits = pattern.subn(
+        '<button class="secret-trigger" type="button">\\1</button>', bio, count=1)
+    if not hits:
+        print(f"   {person['name']}: \"{word}\" is not in their bio, so nothing is hidden there")
+        return bio
+    secret["found"] = True
+    return swapped
 
 
 def card(person):
@@ -288,7 +335,11 @@ def card(person):
     if person.get("meta"):
         out.append(f'            <p class="card__meta">{esc(person["meta"])}</p>')
     if person.get("bio"):
-        out.append(f'            <p>{esc(person["bio"])}</p>')
+        out.append(f'            <p>{bio_html(person)}</p>')
+        secret = person.get("secret")
+        if secret and secret.get("file") and secret.get("found"):
+            out.append(f'            <img class="secret-photo" src="images/members/{secret["file"]}"')
+            out.append(f'                 alt="{esc(secret.get("alt", ""))}" loading="lazy" hidden>')
     if person.get("insta"):
         handle = esc(person["insta"].lstrip("@"))
         out.append(f'            <p class="member__insta"><a href="https://www.instagram.com/{handle}/" target="_blank" rel="noopener">@{handle}</a></p>')
@@ -376,6 +427,17 @@ def main():
             "bio": (entry.get("bio") or "").strip(),
             "insta": (entry.get("insta") or "").strip(),
         }
+        secret = entry.get("secret") or {}
+        if secret.get("word") and secret.get("photo"):
+            src = os.path.join(ORIGINALS, secret["photo"])
+            if os.path.exists(src):
+                dst = os.path.join(OUT, f"{slug(name)}-secret.jpg")
+                if make_web(src, dst):
+                    person["secret"] = {"word": secret["word"],
+                                        "alt": secret.get("alt", ""),
+                                        "file": os.path.basename(dst)}
+            else:
+                print(f"   {full}: no secret photo at images/members/originals/{secret['photo']}")
         frame = framing.get(full.lower(), {})
         for kind, filename in (entry.get("photos") or {}).items():
             if kind not in ("formal", "informal") or not filename:

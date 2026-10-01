@@ -397,6 +397,30 @@
 })();
 
 /* ==========================================================================
+   A photo hidden behind a word (About page)
+   Someone's bio can turn one word into a quiet trigger, the way "beans"
+   works on Preston's card: clicking it opens a photo full-size in the same
+   viewer the galleries use. The word is a real button, so a keyboard reaches
+   it too, and it is styled to read as ordinary text so finding it is the
+   point. With JavaScript off it is just a word, and the photo stays hidden.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  document.addEventListener("click", function (event) {
+    var word = event.target.closest && event.target.closest(".secret-trigger");
+    if (!word) return;
+    var card = word.closest("li, article");
+    var photo = card && card.querySelector(".secret-photo");
+    // The viewer is listening for clicks on photos, so handing it one is all
+    // this has to do.
+    if (photo) photo.click();
+  });
+})();
+
+
+/* ==========================================================================
    Cards with two photos (About page: members, and officers who have one)
    Hovering swaps the first photo for the second in CSS alone. Phones have
    no hover, so tapping the photo (or pressing Enter or Space on it) flips it
@@ -645,11 +669,13 @@
     return node;
   }
 
-  var PHOTO = ".carousel__slide img, .officer:not([data-birthday]) .officer__photo";
+  var PHOTO = ".carousel__slide img, .officer:not([data-birthday]) .officer__photo, .secret-photo";
 
   // Every photo that opens the lightbox. Officer photos on the About page
-  // form one group; each carousel is its own group.
+  // form one group; each carousel is its own group; a secret photo is shown
+  // on its own, with no arrows to anywhere else.
   function groupFor(img) {
+    if (img.classList.contains("secret-photo")) return [img];
     var track = img.closest(".carousel__track");
     if (track) return Array.prototype.slice.call(track.querySelectorAll(".carousel__slide img"));
     return Array.prototype.slice.call(document.querySelectorAll(".officer:not([data-birthday]) .officer__photo"));
@@ -729,7 +755,14 @@
           var slide = current.closest(".carousel__slide");
           if (slide) slide.scrollIntoView({ inline: "center", block: "nearest", behavior: "instant" });
         }
-        current.focus({ preventScroll: true });
+        // A secret photo is hidden and cannot hold focus, so it goes back to
+        // the word in the bio that opened it.
+        var back = current;
+        if (current.classList.contains("secret-photo")) {
+          var card = current.closest("li, article");
+          back = (card && card.querySelector(".secret-trigger")) || document.body;
+        }
+        back.focus({ preventScroll: true });
       }
       image.removeAttribute("src");
       group = [];
@@ -756,6 +789,10 @@
 
     prev.disabled = i === 0;
     next.disabled = i === group.length - 1;
+    // A photo shown on its own has nowhere to page to.
+    var alone = group.length < 2;
+    prev.hidden = alone;
+    next.hidden = alone;
 
     // Fetch the neighbours so the next turn shows no gap.
     [i - 1, i + 1].forEach(function (n) {
@@ -780,6 +817,7 @@
 
     // Photos become real controls: focusable, and Enter / Space opens them.
     Array.prototype.forEach.call(document.querySelectorAll(PHOTO), function (img) {
+      if (img.classList.contains("secret-photo")) return; // reached by its word
       img.setAttribute("tabindex", "0");
       img.setAttribute("role", "button");
       img.setAttribute("aria-haspopup", "dialog");
