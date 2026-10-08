@@ -7,7 +7,7 @@ These are the three cards near the top of `booking.html`. They are the first thi
 organizer reads, so they mostly need to answer "what would we actually be booking, and how
 long does it run".
 
-Live page: https://dylanwu425.github.io/cmu-wushu-website/booking.html
+Live page: https://cmuwushu.org/booking
 
 Edit the text below and send this file back. Write **KEEP** to leave one as-is, or **DELETE**
 to remove a card entirely.

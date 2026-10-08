@@ -109,7 +109,12 @@ Read these once before you edit anything. They prevent 95% of mistakes.
    or footer, you must make the same change in **all six `.html` files**. Look for the
    `<!-- ===== SHARED HEADER ===== -->` and `<!-- ===== SHARED FOOTER ===== -->` markers.
 
-7. **Search for the word "Placeholder"** across the site to find everything that still needs
+7. **Links leave the `.html` off.** The files are still named `about.html` and so on, but
+   every link to them says `/about`, because that is what shows in the visitor's address
+   bar. GitHub Pages serves the file either way. When you add a link to another page, write
+   it the short way: `href="/schedule"`, and `href="/"` for the home page.
+
+8. **Search for the word "Placeholder"** across the site to find everything that still needs
    real content. In VS Code, press `Shift` + `Command` + `F` to search all files at once.
 
 ---

@@ -41,7 +41,7 @@ them off. Say the word if you want them back and I'll add the real characters.
 
 Exactly as you asked, but flagging it because **this is live and public right now**:
 
-> https://dylanwu425.github.io/cmu-wushu-website/about.html
+> https://cmuwushu.org/about
 
 Happy to leave it. If you'd rather it read as deliberate rather than unfinished, say the word
 and I'll swap it for something neutral like *"Our history is being written — check back soon."*
