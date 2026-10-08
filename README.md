@@ -478,9 +478,13 @@ single `<img>` is replaced by a `<button class="photo-swap">` holding two images
 block onto another officer's card and point the second image at a 600 x 800 photo saved in
 `images/officers/`.
 
-Members are listed **longest-standing first**, by the year they joined, and alphabetically
-within a year. Nearly everyone is at CMU, so CMU is left off the cards; anyone from another
-school keeps theirs.
+Members are listed **longest-standing first**, by the year they joined. Among people who
+joined the same year, the most senior at school comes first (master's, then senior, junior,
+sophomore, freshman), and anyone at the same point is listed alphabetically.
+
+Every card reads **year first** — "Freshman · Social Work · University of Pittsburgh" — no
+matter what order someone typed it in, so the cards match the officers' above them. Nearly
+everyone is at CMU, so CMU is left off; anyone from another school keeps theirs.
 
 The list is **built from the sign-up form**, "CMU Wushu Club — Member Profile". People fill
 it in themselves, and only those who tick the consent box are shown. Anyone who already has

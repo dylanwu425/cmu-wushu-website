@@ -145,6 +145,31 @@ def slug(name):
 # from anywhere else keeps their school.
 HOME_SCHOOL = re.compile(r"^(cmu|carnegie\s*mellon(\s+university)?)$", re.I)
 
+# How far through school someone is. The officer cards all read year first
+# ("Sophomore · ECE"), so members match them, and the list puts the most
+# senior first among people who joined the club in the same year. The
+# patterns are tried in this order, so "1st year master's" counts as a
+# master's rather than a first year.
+SCHOOL_YEARS = [
+    (re.compile(r"\balum(ni|nus|na)?\b", re.I), 8),
+    (re.compile(r"\b(phd|doctoral)\b", re.I), 7),
+    (re.compile(r"\b(master'?s?|grad(uate)?)\b", re.I), 6),
+    (re.compile(r"\b(fifth|5th)[\s-]*year\b", re.I), 5),
+    (re.compile(r"\b(senior|fourth[\s-]*year|4th[\s-]*year)\b", re.I), 4),
+    (re.compile(r"\b(junior|third[\s-]*year|3rd[\s-]*year)\b", re.I), 3),
+    (re.compile(r"\b(sophomore|second[\s-]*year|2nd[\s-]*year)\b", re.I), 2),
+    (re.compile(r"\b(freshman|frosh|first[\s-]*year|1st[\s-]*year)\b", re.I), 1),
+]
+
+
+def school_year(text):
+    """How far through school a line like 'Freshman · Social Work' says they
+    are, as a number. 0 when it does not say."""
+    for pattern, rank in SCHOOL_YEARS:
+        if pattern.search(text or ""):
+            return rank
+    return 0
+
 
 def tidy_meta(*parts):
     """Join whatever the form or members-extra.json gives into one line:
@@ -175,6 +200,12 @@ def tidy_meta(*parts):
             if bit and not HOME_SCHOOL.match(bit) and \
                bit.lower() not in [b.lower() for b in bits]:
                 bits.append(bit)
+    # Year first, whatever order they wrote it in, so every card reads the
+    # same way: "Freshman · Social Work · University of Pittsburgh".
+    for i, bit in enumerate(bits):
+        if school_year(bit):
+            bits.insert(0, bits.pop(i))
+            break
     return " · ".join(bits)
 
 
@@ -470,8 +501,10 @@ def main():
         people.append(person)
 
     # Longest-standing members first; anyone without a joining year goes
-    # last, and people who joined the same year are listed alphabetically.
+    # last. Within a year the most senior at school comes first, and people
+    # at the same point are listed alphabetically.
     people.sort(key=lambda p: (int(p["since"]) if p["since"] else 9999,
+                               -school_year(p["meta"]),
                                p["name"].lower()))
 
     body = "\n".join(card(p) for p in people) if people else \
