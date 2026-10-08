@@ -154,7 +154,23 @@ def tidy_meta(*parts):
     reordered, because the free-text field can hold anything."""
     bits = []
     for part in parts:
-        for bit in re.split(r"\s*[/·|,]\s*", (part or "").strip()):
+        text = (part or "").strip()
+        if not text:
+            continue
+        if re.search(r"[/·|,]", text):
+            pieces = re.split(r"\s*[/·|,]\s*", text)
+        else:
+            # Written as a sentence: "Senior in Electrical and Computer
+            # Engineering at Carnegie Mellon University".
+            school = None
+            at = re.search(r"\s+at\s+(.+)$", text, re.I)
+            if at:
+                school, text = at.group(1).strip(), text[:at.start()].strip()
+            isin = re.match(r"^(.+?)\s+in\s+(.+)$", text, re.I)
+            pieces = [isin.group(1), isin.group(2)] if isin else [text]
+            if school:
+                pieces.append(school)
+        for bit in pieces:
             bit = bit.strip()
             if bit and not HOME_SCHOOL.match(bit) and \
                bit.lower() not in [b.lower() for b in bits]:
@@ -395,7 +411,8 @@ def main():
         }
         photos = find_photos(full)
         frame = framing.get(full.lower(), {})
-        defaults = {"formal": 1, "informal": 2}
+        # The card shows the informal photo, and people upload that one first.
+        defaults = {"informal": 1, "formal": 2}
         used = set()
         for kind in ("formal", "informal"):
             want = frame.get(kind, {})

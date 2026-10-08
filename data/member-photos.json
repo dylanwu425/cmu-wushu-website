@@ -33,5 +33,21 @@
       ],
       "zoom": 1.1
     }
+  },
+  "Kashvi Verma": {
+    "informal": {
+      "focus": [
+        0.5,
+        0.44
+      ],
+      "zoom": 1.25
+    },
+    "formal": {
+      "focus": [
+        0.5,
+        0.42
+      ],
+      "zoom": 1.15
+    }
   }
 }
