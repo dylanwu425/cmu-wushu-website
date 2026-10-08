@@ -115,9 +115,18 @@ def words(name):
 
 
 def same_person(a, b):
-    """First and last words match: 'Kaden Dan Wong' is 'Kaden Wong'."""
+    """First and last words match: 'Kaden Dan Wong' is 'Kaden Wong'. A surname
+    given as an initial counts too, because Google names an upload after the
+    account that sent it: 'Austin L.' is 'Austin Lin'."""
     a, b = words(a), words(b)
-    return bool(a and b and a[0] == b[0] and a[-1] == b[-1])
+    if not a or not b or a[0] != b[0]:
+        return False
+    last_a, last_b = a[-1].rstrip("."), b[-1].rstrip(".")
+    if last_a == last_b:
+        return True
+    if len(last_a) == 1 or len(last_b) == 1:
+        return last_a[:1] == last_b[:1]
+    return False
 
 
 def clean_name(nick, full):
@@ -162,6 +171,13 @@ SCHOOL_YEARS = [
 ]
 
 
+# A year said first and then the rest, with nothing between them:
+# "Freshman Lion dance" is a freshman who does lion dance.
+LEADING_YEAR = re.compile(
+    r"^((?:first|second|third|fourth|fifth|1st|2nd|3rd|4th|5th)[\s-]*year(?:\s+master'?s?)?"
+    r"|freshman|frosh|sophomore|junior|senior|master'?s?|grad(?:uate)?|phd)\s+(.+)$", re.I)
+
+
 def school_year(text):
     """How far through school a line like 'Freshman · Social Work' says they
     are, as a number. 0 when it does not say."""
@@ -192,7 +208,11 @@ def tidy_meta(*parts):
             if at:
                 school, text = at.group(1).strip(), text[:at.start()].strip()
             isin = re.match(r"^(.+?)\s+in\s+(.+)$", text, re.I)
-            pieces = [isin.group(1), isin.group(2)] if isin else [text]
+            if isin:
+                pieces = [isin.group(1), isin.group(2)]
+            else:
+                lead = LEADING_YEAR.match(text)
+                pieces = [lead.group(1), lead.group(2)] if lead else [text]
             if school:
                 pieces.append(school)
         for bit in pieces:
