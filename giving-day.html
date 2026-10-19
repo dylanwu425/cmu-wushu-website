@@ -125,22 +125,24 @@
         </div>
 
         <!-- ============================================================
-             THE FILM. Nothing loads from YouTube until someone clicks it,
-             so this page stays as quick as the rest of the site and sets
-             no third-party cookies on arrival.
+             THE FILM. Two ways to play, both of them polite: a file in the
+             repo, which starts itself muted and loops, or a YouTube ID,
+             which loads nothing from Google until somebody clicks. Either
+             way nothing downloads for a visitor who has asked for reduced
+             motion or whose phone is in data-saver mode — see giving-day.js.
              ============================================================ -->
         <div class="gd-hero__film">
           <!-- GD:VIDEO start -->
           <div class="gd-film">
             <div class="gd-film__frame">
-              <video class="gd-film__video" controls playsinline preload="none"
+              <video class="gd-film__video" controls playsinline preload="none" muted loop data-gd-autoplay
                      poster="images/ds-2026/web/dscf6345.jpg" title="Giving Day film" width="1920" height="1080">
                 <source src="images/giving-day-film.mp4" type="video/mp4">
                 <p class="gd-cta-note"><a href="images/giving-day-film.mp4">Download the film</a></p>
               </video>
             </div>
           </div>
-          <p class="gd-film__caption">Watch the film &middot; 34 sec</p>
+          <p class="gd-film__caption">Playing silently &middot; press for sound &middot; 34 sec</p>
           <!-- GD:VIDEO end -->
           <!-- GD:CTA-VIDEO start -->
           <div class="gd-film-cta">
@@ -157,17 +159,18 @@
     <!-- ============================================================
          THE COUNT. Dollars lead, people follow underneath. CMU scores
          the day on donor count, but hundreds of orgs are chasing that
-         prize, so the honest headline is the money. Update 'raised'
-         and 'donors' in data/giving-day.json through the day and
-         re-stamp.
+         prize, so the honest headline is the money. It is on the page
+         from the start — before the day it reads $0 of the goal, which
+         is the point of a goal. Update 'raised' and 'donors' in
+         data/giving-day.json through the day and re-stamp.
          ============================================================ -->
     <!-- GD:BAR start -->
-    <section class="gd-bar-band" hidden>
+    <section class="gd-bar-band">
       <div class="container">
         <div class="gd-bar" data-gd-bar style="--gd-pct: 0.0%">
-          <p class="gd-bar__heading"><b>$0</b> of <span>$2,000</span></p>
+          <p class="gd-bar__heading"><b data-gd-count="0">$0</b> of <span>$2,000</span></p>
           <div class="gd-bar__track"><span class="gd-bar__fill"></span></div>
-          <p class="gd-bar__read">Every gift counts once, whatever its size.</p>
+          <p class="gd-bar__read">Giving opens December 1, 2026</p>
         </div>
       </div>
     </section>
@@ -205,39 +208,93 @@
 
 
     <!-- ============================================================
-         TIERS. Concrete things, not abstractions. Each deep-links to
-         the donation page with the amount already filled in.
+         TIERS. Four weapons, each drawn behind its own card. Each one
+         deep-links to the donation page with the amount filled in.
          ============================================================ -->
     <section class="section gd-tiers-section">
       <div class="container">
         <div class="section-header">
-          <span class="eyebrow">What a gift buys</span>
-          <h2>Pick a thing, not a number</h2>
+          <span class="eyebrow">The tiers</span>
+          <h2>Choose your weapon</h2>
           <hr class="accent-rule">
-          <p>Every amount below is something we will actually go out and buy.</p>
+          <p>Named for what we train with. Every gift goes into the same pot: gear, costumes, and getting the club to a stage.</p>
         </div>
 
         <!-- GD:TIERS start -->
         <ul class="gd-tiers">
           <li class="gd-tier gd-tier--flagged">
             <span class="gd-tier__flag">Most people give this</span>
+            <svg class="gd-tier__art" viewBox="0 0 100 100" fill="currentColor"
+                 aria-hidden="true" focusable="false">
+              <path d="M6.8 72.3 A46 46 0 0 1 93.2 72.3 L63.2 83.2 A14 14 0 0 0 36.8 83.2 Z"/>
+              <g stroke="currentColor" stroke-width="1.6" fill="none">
+                <path d="M40.6 77.6 19.2 53.8M46.6 74.4 38.9 43.4M53.4 74.4 61.1 43.4M59.4 77.6 80.8 53.8"/>
+              </g>
+              <circle cx="50" cy="88" r="3"/>
+            </svg>
             <span class="gd-tier__amount">$10</span>
-            <p class="gd-tier__label">Tape, grips and chalk for a month of practices</p>
+            <div class="gd-tier__body">
+              <p class="gd-tier__weapon"><span class="gd-tier__hanzi" lang="zh-Hans" aria-hidden="true">扇</span>Fan</p>
+            </div>
             <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
           </li>
           <li class="gd-tier">
+            <svg class="gd-tier__art" viewBox="0 0 100 100" fill="currentColor"
+                 aria-hidden="true" focusable="false">
+              <g fill="none" stroke="currentColor" stroke-linecap="round">
+                <path d="M18 90C36 78 18 62 36 52 54 42 36 28 54 20c10-5 20-2 26 6" stroke-width="2.2"/>
+                <path d="M9 97 19 89" stroke-width="6"/>
+              </g>
+              <g>
+                <circle cx="27" cy="82" r="2.6"/><circle cx="26" cy="66" r="2.6"/>
+                <circle cx="36" cy="52" r="2.6"/><circle cx="45" cy="46" r="2.6"/>
+                <circle cx="40" cy="32" r="2.6"/><circle cx="54" cy="20" r="2.6"/>
+                <circle cx="64" cy="17" r="2.6"/><circle cx="73" cy="21" r="2.6"/>
+              </g>
+              <path d="M79 25 93 14 87 29Z"/>
+            </svg>
             <span class="gd-tier__amount">$25</span>
-            <p class="gd-tier__label">Props and costume pieces for one showcase routine</p>
+            <div class="gd-tier__body">
+              <p class="gd-tier__weapon"><span class="gd-tier__hanzi" lang="zh-Hans" aria-hidden="true">鞭</span>Chain whip</p>
+            </div>
             <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
           </li>
           <li class="gd-tier">
+            <svg class="gd-tier__art" viewBox="0 0 100 100" fill="currentColor"
+                 aria-hidden="true" focusable="false">
+              <g stroke="currentColor" stroke-linecap="round" fill="none">
+                <path d="M14 94 70 38" stroke-width="4"/>
+                <path d="M69 41 60 53M71 43 66 56M73 41 73 55" stroke-width="1.6"/>
+              </g>
+              <path d="M72 37 Q86 22 92 11 Q79 28 75 40 Z"/>
+              <rect x="66" y="35" width="9" height="4" rx="1.6" transform="rotate(-45 70.5 37)"/>
+            </svg>
             <span class="gd-tier__amount">$50</span>
-            <p class="gd-tier__label">Transport for the club and its weapons to one off-campus performance</p>
+            <div class="gd-tier__body">
+              <p class="gd-tier__weapon"><span class="gd-tier__hanzi" lang="zh-Hans" aria-hidden="true">枪</span>Spear</p>
+            </div>
             <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
           </li>
           <li class="gd-tier">
+            <svg class="gd-tier__art" viewBox="0 0 100 100" fill="currentColor"
+                 aria-hidden="true" focusable="false">
+              <g>
+                <path d="M25 83 78 16 72 29 31 88Z"/>
+                <path d="M17.9 77.5 32.1 88.5 29.6 91.7 15.4 80.7Z"/>
+                <path d="M15.5 86 23 80 26 84 18.5 90Z"/>
+                <circle cx="15" cy="92" r="3.4"/>
+              </g>
+              <g>
+                <path d="M72 80 C58 60 41 34 24 13 40 39 57 64 67 85Z"/>
+                <path d="M65.5 75.5 79.5 84.5 77 88 63 79Z"/>
+                <path d="M75 84 82 89 79 93 72 88Z"/>
+                <circle cx="81" cy="93" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/>
+              </g>
+            </svg>
             <span class="gd-tier__amount">$100</span>
-            <p class="gd-tier__label">A new broadsword or staff for the loaner rack</p>
+            <div class="gd-tier__body">
+              <p class="gd-tier__weapon"><span class="gd-tier__hanzi" lang="zh-Hans" aria-hidden="true">剑刀</span>Jian and dao</p>
+            </div>
             <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
           </li>
         </ul>

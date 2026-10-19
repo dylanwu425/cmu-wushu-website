@@ -145,6 +145,66 @@ def indent(body, spaces):
     return "\n" + pad(body.strip("\n"), spaces) + "\n" + " " * spaces
 
 
+# ---------------------------------------------------------------- the weapons
+
+# One drawing per tier, sitting behind the card like a watermark. They are
+# hand-built paths rather than photographs so they take the page's ink colour,
+# cost nothing to load, and stay sharp at any size. viewBox is 0 0 100 100 for
+# all four, so the CSS can place them identically. fill/stroke are
+# currentColor, which the stylesheet sets per card.
+WEAPON_ART = {
+    # A folding fan, open: the sector, the ribs, the rivet.
+    "fan": """<path d="M6.8 72.3 A46 46 0 0 1 93.2 72.3 L63.2 83.2 A14 14 0 0 0 36.8 83.2 Z"/>
+<g stroke="currentColor" stroke-width="1.6" fill="none">
+  <path d="M40.6 77.6 19.2 53.8M46.6 74.4 38.9 43.4M53.4 74.4 61.1 43.4M59.4 77.6 80.8 53.8"/>
+</g>
+<circle cx="50" cy="88" r="3"/>""",
+
+    # A nine-section chain whip, mid-swing: handle, links, dart.
+    "chainwhip": """<g fill="none" stroke="currentColor" stroke-linecap="round">
+  <path d="M18 90C36 78 18 62 36 52 54 42 36 28 54 20c10-5 20-2 26 6" stroke-width="2.2"/>
+  <path d="M9 97 19 89" stroke-width="6"/>
+</g>
+<g>
+  <circle cx="27" cy="82" r="2.6"/><circle cx="26" cy="66" r="2.6"/>
+  <circle cx="36" cy="52" r="2.6"/><circle cx="45" cy="46" r="2.6"/>
+  <circle cx="40" cy="32" r="2.6"/><circle cx="54" cy="20" r="2.6"/>
+  <circle cx="64" cy="17" r="2.6"/><circle cx="73" cy="21" r="2.6"/>
+</g>
+<path d="M79 25 93 14 87 29Z"/>""",
+
+    # A tasselled spear: shaft, leaf blade, horsehair.
+    "spear": """<g stroke="currentColor" stroke-linecap="round" fill="none">
+  <path d="M14 94 70 38" stroke-width="4"/>
+  <path d="M69 41 60 53M71 43 66 56M73 41 73 55" stroke-width="1.6"/>
+</g>
+<path d="M72 37 Q86 22 92 11 Q79 28 75 40 Z"/>
+<rect x="66" y="35" width="9" height="4" rx="1.6" transform="rotate(-45 70.5 37)"/>""",
+
+    # Jian and dao, crossed: straight sword left, curved sabre right.
+    "swords": """<g>
+  <path d="M25 83 78 16 72 29 31 88Z"/>
+  <path d="M17.9 77.5 32.1 88.5 29.6 91.7 15.4 80.7Z"/>
+  <path d="M15.5 86 23 80 26 84 18.5 90Z"/>
+  <circle cx="15" cy="92" r="3.4"/>
+</g>
+<g>
+  <path d="M72 80 C58 60 41 34 24 13 40 39 57 64 67 85Z"/>
+  <path d="M65.5 75.5 79.5 84.5 77 88 63 79Z"/>
+  <path d="M75 84 82 89 79 93 72 88Z"/>
+  <circle cx="81" cy="93" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/>
+</g>""",
+}
+
+
+def weapon_svg(key):
+    """The watermark behind a tier card. Unknown key -> nothing at all."""
+    body = WEAPON_ART.get((key or "").strip())
+    if not body:
+        return ""
+    return ('<svg class="gd-tier__art" viewBox="0 0 100 100" fill="currentColor"\n'
+            '     aria-hidden="true" focusable="false">\n%s\n</svg>' % pad(body, 2))
+
 # ---------------------------------------------------------------- the regions
 
 def build(cfg):
@@ -253,7 +313,15 @@ def build(cfg):
     poster = attr(video.get("poster") or "images/ds-2026/web/dscf6345.jpg")
     vtitle = attr(video.get("title") or "%s film" % name)
     vlen = (video.get("length") or "").strip()
+    autoplay = bool(video.get("autoplay"))
+    loop = bool(video.get("loop"))
     play_label = "Watch the film" + (" &middot; %s" % esc(vlen) if vlen else "")
+    if autoplay:
+        # It can only autoplay muted — every browser requires that — so the
+        # caption has to tell people there is sound to turn on.
+        play_label = "Playing silently &middot; press for sound"
+        if vlen:
+            play_label += " &middot; %s" % esc(vlen)
 
     if vid:
         page = put(page, "GD:VIDEO", indent("""
@@ -275,17 +343,24 @@ def build(cfg):
 </noscript>""" % (poster, attr(vid), vtitle, vtitle, play_label, attr(vid)), 10))
     elif vfile:
         # preload="none" so the file is not pulled down until it is asked for.
+        # preload="none" even when it autoplays: the script turns preloading
+        # on only once it has checked that autoplay is wanted here, so a
+        # visitor on a metered connection is never handed 14 MB unasked.
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film">
   <div class="gd-film__frame">
-    <video class="gd-film__video" controls playsinline preload="none"
+    <video class="gd-film__video" controls playsinline preload="none"%s%s%s
            poster="%s" title="%s" width="1920" height="1080">
       <source src="%s" type="video/mp4">
       <p class="gd-cta-note"><a href="%s">Download the film</a></p>
     </video>
   </div>
 </div>
-<p class="gd-film__caption">%s</p>""" % (poster, vtitle, attr(vfile), attr(vfile), play_label), 10))
+<p class="gd-film__caption">%s</p>""" % (
+            " muted" if autoplay else "",
+            " loop" if loop else "",
+            " data-gd-autoplay" if autoplay else "",
+            poster, vtitle, attr(vfile), attr(vfile), play_label), 10))
     else:
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film gd-film--pending">
@@ -314,28 +389,35 @@ def build(cfg):
     donors = int(cfg.get("donors") or 0)
     goal_dollars = int(cfg.get("goalDollars") or 0)
     raised = int(cfg.get("raised") or 0)
-    show_bar = cfg["status"] in ("live", "closed") and (goal_dollars > 0 or goal_donors > 0)
+    # The counter is on the page from the start: before the day it reads
+    # "$0 of $2,000", which is the point of a goal.
+    show_bar = goal_dollars > 0 or goal_donors > 0
 
     # Dollars lead and people follow. The challenge is scored on people, but
     # we are not going to win it, so the honest headline is the money.
     if goal_dollars:
         pct = min(100.0, raised / goal_dollars * 100.0)
-        heading = "<b>%s</b> of <span>%s</span>" % (money(raised), money(goal_dollars))
+        heading = ('<b data-gd-count="%d">%s</b> of <span>%s</span>'
+                   % (raised, money(raised), money(goal_dollars)))
     else:
         pct = min(100.0, (donors / goal_donors * 100.0) if goal_donors else 0.0)
-        heading = "<b>%d</b> of <span>%d</span> donors" % (donors, goal_donors)
+        heading = ('<b data-gd-count="%d">%d</b> of <span>%d</span> donors'
+                   % (donors, donors, goal_donors))
 
-    people_line = ""
-    if goal_donors and donors:
-        people_line = '\n      <p class="gd-bar__read">from %d %s</p>' % (
-            donors, "person" if donors == 1 else "people")
-    elif goal_donors:
-        people_line = '\n      <p class="gd-bar__read">Every gift counts once, whatever its size.</p>'
+    def people(n):
+        return "from %d %s" % (n, "person" if n == 1 else "people")
 
     if closed:
-        heading = "<b>%s</b> raised" % money(raised)
-        people_line = ('\n      <p class="gd-bar__read">from %d %s</p>'
-                       % (donors, "person" if donors == 1 else "people")) if donors else ""
+        heading = '<b data-gd-count="%d">%s</b> raised' % (raised, money(raised))
+        read = people(donors) if donors else ""
+    elif donors:
+        read = people(donors)
+    elif raised:
+        read = ""
+    else:
+        read = "Giving opens %s" % esc(date_text)
+
+    people_line = ('\n      <p class="gd-bar__read">%s</p>' % read) if read else ""
 
     page = put(page, "GD:BAR", indent("""
 <section class="gd-bar-band"%s>
@@ -385,22 +467,40 @@ def build(cfg):
     else:
         page = put(page, "GD:CHALLENGE", "\n    ")
 
-    # ---- the tiers
+    # ---- the tiers. Each one is named for a weapon and carries that weapon
+    #      drawn behind it; the name does the work the old "what this buys"
+    #      line used to do, and the sub-line is optional.
     rows = []
     for tier in (cfg.get("tiers") or []):
         amount = int(tier["amount"])
         flagged = bool(tier.get("flag")) and on
+        art = weapon_svg(tier.get("art"))
+        hanzi = (tier.get("hanzi") or "").strip()
+        weapon = (tier.get("weapon") or "").strip()
+        label = (tier.get("label") or "").strip()
+
+        body = ""
+        if weapon:
+            body += ('  <p class="gd-tier__weapon">%s%s</p>\n' % (
+                ('<span class="gd-tier__hanzi" lang="zh-Hans" aria-hidden="true">%s</span>'
+                 % esc(hanzi)) if hanzi else "",
+                esc(weapon)))
+        if label:
+            body += '  <p class="gd-tier__label">%s</p>\n' % esc(label)
+
         rows.append(
             '<li class="gd-tier%s">\n'
             '%s'
+            '%s'
             '  <span class="gd-tier__amount">%s</span>\n'
-            '  <p class="gd-tier__label">%s</p>\n'
+            '  <div class="gd-tier__body">\n%s  </div>\n'
             '  %s\n'
             '</li>' % (
                 " gd-tier--flagged" if flagged else "",
                 ('  <span class="gd-tier__flag">%s</span>\n' % esc(tier["flag"])) if flagged else "",
+                (pad(art, 2) + "\n") if art else "",
                 money(amount),
-                esc(tier.get("label") or ""),
+                pad(body, 2),
                 cta("tier-%d" % amount, "Give %s" % money(amount), amount, cls="gd-tier__btn"),
             ))
     page = put(page, "GD:TIERS",

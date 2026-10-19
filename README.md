@@ -729,6 +729,14 @@ The page can play the film two ways, and it picks the first one that is filled i
 Fill in `youtubeId` and it takes over automatically; empty both and the player goes back to
 a "film lands here" panel. `video.length` is the running time printed under the player.
 
+The file version **starts by itself and loops**, which is what `autoplay` and `loop` in the
+JSON do. Browsers only ever allow that with the sound off, so it starts muted and the line
+under the player says to press it for sound. Three kinds of visitor get the poster and a play
+button instead, and download nothing at all: anyone who has asked their system for reduced
+motion, anyone whose phone is in data-saver mode, and anyone on a connection the browser
+calls slow. It also only starts once it is actually on screen. Set `autoplay` to `false` and
+everybody gets the poster.
+
 **The cut you send to CMU is a different file from the one on this page.** Their rules, from
 the training deck: `.mp4`, `.mov`, `.avi`, `.mpeg` or `.mpg`, **no longer than 30 seconds**,
 15–20 preferred. The draft runs 34 seconds, so it needs a trim before it goes to them. They
@@ -782,10 +790,29 @@ removes all of that and puts the six pages back byte-for-byte as they were. `--c
 the day after: the page stays up for anyone following an old link, but the donate buttons
 become a thank-you with the final number.
 
+### The tiers are weapons
+
+Each tier card is named for a weapon and has that weapon drawn behind it — $10 a fan, $25 a
+chain whip, $50 a spear, $100 the jian and dao. The drawings are hand-built SVG, so they take
+the page's own ink colour and cost nothing to load. They live in `WEAPON_ART` in
+`scripts/giving_day.py` and the `art` field in each tier picks one: `fan`, `chainwhip`,
+`spear` or `swords`. Any other value and the card is simply plain.
+
+To change a tier, edit `weapon` (the name), `hanzi` (the character above it) and `art`. Add
+`"label": "..."` to any tier for a line of small print underneath, or drop `weapon` and
+`hanzi` entirely and let the drawing speak for itself.
+
+### The counter
+
+The dollar figure counts up from zero when the bar scrolls into view and the stroke fills
+underneath it, both of which stop happening for a visitor who has asked for reduced motion —
+they just get the final number. The bar is on the page from the start, reading **$0 of
+$2,000** until there is something to show; `goalDollars` is that target. Set `goalDollars` to
+`0` and the bar counts donors instead; set both goals to `0` and it disappears.
+
 ### During the day
 
-Update `donors` and `raised` in the JSON and re-run the script to move the bar. The bar only
-appears once the status is `live`.
+Update `donors` and `raised` in the JSON and re-run the script to move the bar.
 
 ### The links are tagged
 
