@@ -634,10 +634,12 @@
   height: 100%;
   z-index: 0;
   color: var(--ink);
-  opacity: 0.12;
-  transform: scale(1.1) rotate(-6deg);
   pointer-events: none;
 }
+/* No blanket rotation: three of the four are already drawn on a diagonal,
+   and the fan is symmetric, so a few degrees on it reads as crooked rather
+   than as styled. Each drawing carries its own opacity, set in
+   scripts/giving_day.py, because they cover very different amounts of ink. */
 
 /* Positioned elements paint over static ones, so the card's own content has
    to be positioned too or the drawing would sit on top of the words. */
@@ -646,11 +648,10 @@
   z-index: 1;
 }
 
-/* The fan is a solid shape where the other three are mostly line work, so it
-   carries further at the same opacity and is dialled back to match. */
+/* Only the colour changes here. The opacity is set per drawing on the
+   element itself, which an inline style wins outright. */
 .gd-tier--flagged .gd-tier__art {
   color: var(--seal);
-  opacity: 0.1;
 }
 
 .gd-tier__amount {
