@@ -1,0 +1,56 @@
+{
+  "_comment": "The single source of truth for the Giving Day page. Edit ONLY this file, then run `python3 scripts/giving_day.py` to stamp the values into giving-day.html. Never hand-edit the regions marked GD: in the HTML — they get overwritten. See README section 12.",
+
+  "status": "draft",
+  "_status": "draft = built but not linked anywhere and kept off Google. live = linked in the nav, in the sitemap, indexable. closed = page stays up, donate buttons become a thank-you. Use the publish/close commands rather than editing this by hand.",
+
+  "name": "Giving CMU Day",
+  "_name": "CMU's own name for the day. The university has run it every year since 2015, always on GivingTuesday.",
+
+  "opensAt": "2026-12-01T00:00:00-05:00",
+  "closesAt": "2026-12-01T23:59:59-05:00",
+  "_dates": "UNCONFIRMED FOR 2026. CMU had not announced the date as of Oct 2026; the page above assumes GivingTuesday, Dec 1 2026, which is the pattern every prior year followed (Nov 28 2023, Dec 3 2024, Dec 2 2025). Confirm at cmu.edu/givingcmuday and re-stamp if it moves. Keep the -05:00 offset (Pittsburgh in December) so the countdown is correct for visitors in any timezone.",
+
+  "donateUrl": "",
+  "_donateUrl": "TBD — the 2026 campaign page does not exist until CMU builds it. CMU runs the day on GiveCampus, and each club gets a page under this pattern: https://www.givecampus.com/schools/CarnegieMellonUniversity/giving-cmu-day-2026/pages/student-organizations/<club-slug> . The club was on the 2025 edition (10 donors, $1,090). When the 2026 page exists, paste its full URL here and re-stamp. While this is empty, every donate button renders as a disabled 'coming soon' chip, so the page can never ship a dead link.",
+
+  "amountParam": "amount",
+  "_amountParam": "Query parameter the donation platform uses to preset a gift amount, so the tier buttons can jump straight to it. Set to \"\" if the platform doesn't support one, and the tier buttons will just link to the base page.",
+
+  "challenge": {
+    "on": true,
+    "minGift": 10,
+    "prizes": [6000, 4000, 2000],
+    "_note": "CMU's Student Organization Challenge: the orgs with the MOST INDIVIDUAL DONORS giving at least minGift win these prizes on top of what they raise. 2025 had 1st $6,000, 2nd $4,000, 3rd $2,000. This is why the page counts people, not dollars — a $10 gift counts exactly as much toward the prize as a $500 one. Set on=false if CMU does not run the challenge in 2026, and the page stops talking about donor counts."
+  },
+
+  "video": {
+    "youtubeId": "",
+    "title": "",
+    "poster": "images/ds-2026/web/dscf6345.jpg",
+    "_youtubeId": "TBD. The 11-character ID from the YouTube URL (the v= part), not the whole URL. Empty = the player shows a 'film coming soon' panel instead. The film's donate button carries ?utm_content=video so the platform's referral stats show what the video actually drove."
+  },
+
+  "goalDonors": 120,
+  "donors": 0,
+  "_goalDonors": "The number that wins the challenge. 2025: the club had 10 donors. Across all CMU orgs in 2025 there were 2,916 donors and the winners were well into the hundreds, so 120 is a real stretch but not absurd for a club this size. 'donors' is updated by hand during the day.",
+
+  "goalDollars": 2000,
+  "raised": 0,
+  "_goalDollars": "Secondary. Shown under the donor count, not instead of it. Set to 0 to hide the dollar figure entirely.",
+
+  "tiers": [
+    { "amount": 10,  "label": "Counts as a full donor for the challenge", "flag": "This is the one that matters" },
+    { "amount": 25,  "label": "Weapons tape and grips for a semester" },
+    { "amount": 50,  "label": "One competitor's registration fee" },
+    { "amount": 100, "label": "A new broadsword or staff for the loaner rack" }
+  ],
+  "_tiers": "Keep these concrete. 'A broadsword for the loaner rack' raises more than 'equipment'. The $10 tier leads because of the challenge; 'flag' puts a seal on that card.",
+
+  "whereItGoes": [
+    "Weapons and mats the club lends out, so nobody has to buy gear before their first practice.",
+    "Registration and travel for the collegiate competition season.",
+    "Costumes and props for Lunar New Year and the spring showcase.",
+    "Keeping practice free. We have never charged dues and want to keep it that way."
+  ]
+}
