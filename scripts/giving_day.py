@@ -157,7 +157,11 @@ def build(cfg):
     closed = cfg["status"] == "closed"
     challenge = cfg.get("challenge") or {}
     on = bool(challenge.get("on")) and not closed
-    min_gift = int(challenge.get("minGift") or 10)
+    # Two different numbers, and the page is careful about which is which:
+    # min_gift is CMU's floor for a gift to be counted at all ($5), ask is what
+    # the buttons actually ask for ($10).
+    min_gift = int(challenge.get("minGift") or 5)
+    ask = int(cfg.get("askAmount") or min_gift)
 
     # ---- the date, in the three places it appears
     # GD:DATE is the only standalone date marker. The countdown and the closing
@@ -166,25 +170,29 @@ def build(cfg):
     page = put(page, "GD:DATE",
                '<span class="gd-date">%s &middot; %s</span>' % (name, esc(date_text)))
 
-    # ---- the opening paragraph: the challenge is the whole argument, so it
-    #      leads when the challenge is running and vanishes when it is not
+    # ---- the opening paragraph. The argument is the free practice, not the
+    #      university's prize pool: there are hundreds of clubs in that race
+    #      and we are not going to win it. The challenge gets one clause at
+    #      the end, and only to explain why a small gift is a real gift.
     if closed:
         lede = (
-            "Thank you. Every sword on the loaner rack and every entry fee this season "
-            "came from the people who gave on %s. Practice stays free because of you."
+            "Thank you. The weapons on the loaner rack, the mats, the costumes "
+            "&mdash; this year they came from the people who gave on %s. Practice "
+            "stays free because of you."
             % esc(date_text))
     elif on:
         lede = (
-            "Nobody has ever paid dues to train with us, and we want to keep it that way. "
-            "On %s the university hands prizes to the clubs with the most "
-            "<em>individual donors</em> &mdash; so a %s gift counts for exactly as much "
-            "as a $500 one. %s and two minutes is the whole ask."
-            % (name, money(min_gift), money(min_gift)))
+            "Anyone can walk into our practice without paying a cent, and we have never "
+            "wanted that to change. The mats, the loaner weapons, the costumes: it all "
+            "comes from gifts the size of the ones on this page. Anything from %s up is a "
+            "real contribution here &mdash; CMU scores the day by how many people give, "
+            "not how much, so a %s gift counts for every bit as much as a $500 one."
+            % (money(min_gift), money(ask)))
     else:
         lede = (
-            "Nobody has ever paid dues to train with us, and we want to keep it that way. "
-            "Every broadsword on the loaner rack, every mat, every competition entry has "
-            "come from somewhere. For one day in %s, it comes from you."
+            "Anyone can walk into our practice without paying a cent, and we have never "
+            "wanted that to change. Every broadsword on the loaner rack, every mat, every "
+            "costume has come from somewhere. For one day in %s, it comes from you."
             % opens.strftime("%B"))
     page = put(page, "GD:LEDE",
                indent('<p class="gd-lede">\n  %s\n</p>' % lede, 10))
@@ -227,18 +235,25 @@ def build(cfg):
         hero_cta = ('<span class="gd-cta-note">%s %d is over. Thank you to everyone '
                     'who gave.</span>' % (name, opens.year))
     elif have_url:
-        hero_cta = (cta("hero", "Give %s" % money(min_gift) if on else "Donate", min_gift if on else None) +
+        hero_cta = (cta("hero", "Give %s" % money(ask), ask) +
                     '\n  <span class="gd-cta-note">Takes about two minutes.</span>')
     else:
         hero_cta = cta("hero", "")
     page = put(page, "GD:CTA-HERO",
                indent('<p class="gd-cta-row">\n  %s\n</p>' % hero_cta, 10))
 
-    # ---- the film
+    # ---- the film. Three states: a YouTube ID (lazy facade, nothing loads
+    #      from Google until someone clicks), a file in the repo (played
+    #      straight from the site), or neither (a "coming soon" panel).
+    #      YouTube wins when both are set, because it is shareable and it is
+    #      not 14 MB down somebody's phone data.
     video = cfg.get("video") or {}
     vid = (video.get("youtubeId") or "").strip()
+    vfile = (video.get("file") or "").strip()
     poster = attr(video.get("poster") or "images/ds-2026/web/dscf6345.jpg")
     vtitle = attr(video.get("title") or "%s film" % name)
+    vlen = (video.get("length") or "").strip()
+    play_label = "Watch the film" + (" &middot; %s" % esc(vlen) if vlen else "")
 
     if vid:
         page = put(page, "GD:VIDEO", indent("""
@@ -249,7 +264,7 @@ def build(cfg):
             data-gd-play="%s" data-gd-title="%s"
             aria-label="Play the %s">
       <span class="gd-film__play-mark" aria-hidden="true"></span>
-      <span class="gd-film__play-label">Watch the film &middot; 2 min</span>
+      <span class="gd-film__play-label">%s</span>
     </button>
   </div>
 </div>
@@ -257,7 +272,20 @@ def build(cfg):
   <p class="gd-cta-note">
     <a href="https://www.youtube.com/watch?v=%s" target="_blank" rel="noopener">Watch the film on YouTube</a>
   </p>
-</noscript>""" % (poster, attr(vid), vtitle, vtitle, attr(vid)), 10))
+</noscript>""" % (poster, attr(vid), vtitle, vtitle, play_label, attr(vid)), 10))
+    elif vfile:
+        # preload="none" so the file is not pulled down until it is asked for.
+        page = put(page, "GD:VIDEO", indent("""
+<div class="gd-film">
+  <div class="gd-film__frame">
+    <video class="gd-film__video" controls playsinline preload="none"
+           poster="%s" title="%s" width="1920" height="1080">
+      <source src="%s" type="video/mp4">
+      <p class="gd-cta-note"><a href="%s">Download the film</a></p>
+    </video>
+  </div>
+</div>
+<p class="gd-film__caption">%s</p>""" % (poster, vtitle, attr(vfile), attr(vfile), play_label), 10))
     else:
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film gd-film--pending">
@@ -272,13 +300,12 @@ def build(cfg):
 
     # ---- the donate line under the film, which only exists once both the
     #      film and the donation page do
-    if vid and have_url and not closed:
+    if (vid or vfile) and not closed:
         page = put(page, "GD:CTA-VIDEO", indent("""
 <div class="gd-film-cta">
   %s
-  <p>Watched it? That is the whole pitch.</p>
-</div>""" % cta("video", "Give %s" % money(min_gift) if on else "Donate",
-                min_gift if on else None), 10))
+  <p>That is the pitch. The rest is up to you.</p>
+</div>""" % cta("video", "Give %s" % money(ask), ask), 10))
     else:
         page = put(page, "GD:CTA-VIDEO", "\n          ")
 
@@ -287,19 +314,28 @@ def build(cfg):
     donors = int(cfg.get("donors") or 0)
     goal_dollars = int(cfg.get("goalDollars") or 0)
     raised = int(cfg.get("raised") or 0)
-    show_bar = cfg["status"] in ("live", "closed") and goal_donors > 0
+    show_bar = cfg["status"] in ("live", "closed") and (goal_dollars > 0 or goal_donors > 0)
 
-    pct = min(100.0, (donors / goal_donors * 100.0) if goal_donors else 0.0)
-    dollars_line = ""
+    # Dollars lead and people follow. The challenge is scored on people, but
+    # we are not going to win it, so the honest headline is the money.
     if goal_dollars:
-        dollars_line = '\n      <p class="gd-bar__read">%s raised of a %s goal</p>' % (
-            money(raised), money(goal_dollars))
-    elif raised:
-        dollars_line = '\n      <p class="gd-bar__read">%s raised so far</p>' % money(raised)
+        pct = min(100.0, raised / goal_dollars * 100.0)
+        heading = "<b>%s</b> of <span>%s</span>" % (money(raised), money(goal_dollars))
+    else:
+        pct = min(100.0, (donors / goal_donors * 100.0) if goal_donors else 0.0)
+        heading = "<b>%d</b> of <span>%d</span> donors" % (donors, goal_donors)
 
-    heading = ("<b>%d</b> of <span>%d</span> donors" % (donors, goal_donors))
+    people_line = ""
+    if goal_donors and donors:
+        people_line = '\n      <p class="gd-bar__read">from %d %s</p>' % (
+            donors, "person" if donors == 1 else "people")
+    elif goal_donors:
+        people_line = '\n      <p class="gd-bar__read">Every gift counts once, whatever its size.</p>'
+
     if closed:
-        heading = "<b>%d</b> people gave" % donors
+        heading = "<b>%s</b> raised" % money(raised)
+        people_line = ('\n      <p class="gd-bar__read">from %d %s</p>'
+                       % (donors, "person" if donors == 1 else "people")) if donors else ""
 
     page = put(page, "GD:BAR", indent("""
 <section class="gd-bar-band"%s>
@@ -309,35 +345,43 @@ def build(cfg):
       <div class="gd-bar__track"><span class="gd-bar__fill"></span></div>%s
     </div>
   </div>
-</section>""" % ("" if show_bar else " hidden", pct, heading, dollars_line), 4))
+</section>""" % ("" if show_bar else " hidden", pct, heading, people_line), 4))
 
     # ---- the challenge
     if on:
         prizes = [money(p) for p in (challenge.get("prizes") or [])]
-        prize_text = ""
-        if prizes:
-            if len(prizes) > 1:
-                prize_text = (" take home <b>" + "</b>, <b>".join(prizes[:-1]) +
-                              "</b> and <b>" + prizes[-1] + "</b> on top of whatever they raise")
-            else:
-                prize_text = " take home <b>%s</b> on top of whatever they raise" % prizes[0]
+        if len(prizes) > 1:
+            prize_text = (" win <b>" + "</b>, <b>".join(prizes[:-1]) +
+                          "</b> and <b>" + prizes[-1] + "</b> on top of whatever they raise")
+        elif prizes:
+            prize_text = " win <b>%s</b> on top of whatever they raise" % prizes[0]
+        else:
+            # CMU does not tell the clubs the amounts until mid-November, so
+            # until then the page describes the rule without naming a figure.
+            prize_text = " win a share of a prize pool on top of whatever they raise"
 
         page = put(page, "GD:CHALLENGE", indent("""
 <section class="section gd-challenge-section">
   <div class="container">
     <div class="gd-challenge">
-      <p class="gd-challenge__kicker">Why %s is the magic number</p>
+      <p class="gd-challenge__kicker">Why a small gift is not a token gift</p>
       <p class="gd-challenge__body">
-        CMU runs a Student Organization Challenge alongside %s. The clubs that bring in
-        the most <em>individual donors</em> giving %s or more%s. It is counted by heads,
-        not by dollars.
+        Alongside %s, CMU runs matches and challenges for student organizations: the clubs
+        that bring in the most <em>individual donors</em> giving %s or more%s. Hundreds of
+        orgs are in that race and we are not counting on winning it. We mention it for what
+        it says about the scoring &mdash; the day is counted by people, not by dollars.
       </p>
       <p class="gd-challenge__punch">
-        A hundred people giving %s beats one person giving $1,000 &mdash; twice over.
+        So your %s lands on the board exactly as hard as somebody else&rsquo;s $500.
+      </p>
+      <p class="gd-challenge__fine">
+        One gift per person: CMU counts donors by card and email address, and audits them
+        afterwards. Please don&rsquo;t give on somebody else&rsquo;s behalf &mdash; ask them
+        to give instead, which is worth more to us anyway.
       </p>
     </div>
   </div>
-</section>""" % (money(min_gift), name, money(min_gift), prize_text, money(min_gift)), 4))
+</section>""" % (name, money(min_gift), prize_text, money(ask)), 4))
     else:
         page = put(page, "GD:CHALLENGE", "\n    ")
 
@@ -386,9 +430,8 @@ def build(cfg):
     <p>Two minutes, %s, and practice stays free for everybody who walks in.</p>
     %s
   </div>
-</section>""" % (name, esc(date_text), money(min_gift),
-                 cta("footer", "Give %s" % money(min_gift) if on else "Donate",
-                     min_gift if on else None)))
+</section>""" % (name, esc(date_text), money(ask),
+                 cta("footer", "Give %s" % money(ask), ask)))
     else:
         foot = ("""
 <section class="cta-band gd-cta-band">
@@ -407,8 +450,7 @@ def build(cfg):
   <p class="gd-sticky__read">%s</p>
   %s
 </div>""" % ("Giving CMU Day &middot; %s" % esc(date_text),
-             cta("sticky", "Give %s" % money(min_gift) if on else "Donate",
-                 min_gift if on else None)), 2))
+             cta("sticky", "Give %s" % money(ask), ask)), 2))
     else:
         page = put(page, "GD:STICKY", "\n  ")
 
@@ -439,12 +481,12 @@ def strip_markup(cfg):
     name = esc(cfg.get("name") or "Giving Day")
     date_text = esc(long_date(cfg["opensAt_dt"]))
     challenge = cfg.get("challenge") or {}
-    min_gift = money(int(challenge.get("minGift") or 10))
+    ask = money(int(cfg.get("askAmount") or challenge.get("minGift") or 5))
     if cfg["status"] == "closed":
         line = "Thank you to everyone who gave on %s." % date_text
         action = "See where it went"
     elif challenge.get("on"):
-        line = "%s is %s. %s counts as much as $500." % (name, date_text, min_gift)
+        line = "%s is %s. %s counts as much as $500." % (name, date_text, ask)
         action = "Here's why"
     else:
         line = "%s is %s." % (name, date_text)
@@ -598,8 +640,21 @@ def main():
     print("date        %s" % long_date(cfg["opensAt_dt"]))
     url = donate_url(cfg, "hero")
     print("donate url  %s" % (url if url else "NOT SET — buttons show 'coming soon'"))
-    vid = ((cfg.get("video") or {}).get("youtubeId") or "").strip()
-    print("film        %s" % (vid if vid else "NOT SET — player shows a placeholder"))
+    video = cfg.get("video") or {}
+    vid = (video.get("youtubeId") or "").strip()
+    vfile = (video.get("file") or "").strip()
+    if vid:
+        print("film        YouTube %s" % vid)
+    elif vfile:
+        size = ""
+        path = os.path.join(ROOT, vfile)
+        if os.path.exists(path):
+            size = " (%.1f MB)" % (os.path.getsize(path) / 1048576.0)
+        else:
+            size = "  *** MISSING — check the path in data/giving-day.json ***"
+        print("film        %s%s" % (vfile, size))
+    else:
+        print("film        NOT SET — player shows a placeholder")
     if cfg["status"] == "draft":
         print("\nThis page is not linked from anywhere and carries noindex.")
         print("When you are ready:  python3 scripts/giving_day.py --publish")

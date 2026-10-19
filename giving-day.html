@@ -93,11 +93,11 @@
             <!-- GD:DATE start --><span class="gd-date">Giving CMU Day &middot; December 1, 2026</span><!-- GD:DATE end -->
           </p>
 
-          <h1>We don&rsquo;t need big gifts. We need a lot of you.</h1>
+          <h1>Practice here has always been free. Keeping it that way costs something.</h1>
 
           <!-- GD:LEDE start -->
           <p class="gd-lede">
-            Nobody has ever paid dues to train with us, and we want to keep it that way. On Giving CMU Day the university hands prizes to the clubs with the most <em>individual donors</em> &mdash; so a $10 gift counts for exactly as much as a $500 one. $10 and two minutes is the whole ask.
+            Anyone can walk into our practice without paying a cent, and we have never wanted that to change. The mats, the loaner weapons, the costumes: it all comes from gifts the size of the ones on this page. Anything from $5 up is a real contribution here &mdash; CMU scores the day by how many people give, not how much, so a $10 gift counts for every bit as much as a $500 one.
           </p>
           <!-- GD:LEDE end -->
 
@@ -131,17 +131,22 @@
              ============================================================ -->
         <div class="gd-hero__film">
           <!-- GD:VIDEO start -->
-          <div class="gd-film gd-film--pending">
+          <div class="gd-film">
             <div class="gd-film__frame">
-              <img class="gd-film__poster" src="images/ds-2026/web/dscf6345.jpg" alt="" width="1200" height="675">
-              <div class="gd-film__pending-note">
-                <span class="gd-film__pending-mark" aria-hidden="true">片</span>
-                <p>The Giving Day film lands here.</p>
-              </div>
+              <video class="gd-film__video" controls playsinline preload="none"
+                     poster="images/ds-2026/web/dscf6345.jpg" title="Giving Day film" width="1920" height="1080">
+                <source src="images/giving-day-film.mp4" type="video/mp4">
+                <p class="gd-cta-note"><a href="images/giving-day-film.mp4">Download the film</a></p>
+              </video>
             </div>
           </div>
+          <p class="gd-film__caption">Watch the film &middot; 34 sec</p>
           <!-- GD:VIDEO end -->
           <!-- GD:CTA-VIDEO start -->
+          <div class="gd-film-cta">
+            <span class="gd-btn gd-btn--pending" aria-disabled="true">Donation page coming soon</span>
+            <p>That is the pitch. The rest is up to you.</p>
+          </div>
           <!-- GD:CTA-VIDEO end -->
         </div>
 
@@ -150,17 +155,19 @@
 
 
     <!-- ============================================================
-         THE COUNT. Donors first, dollars second, because donors are
-         what the challenge is scored on. Update 'donors' and 'raised'
-         in data/giving-day.json through the day and re-stamp.
+         THE COUNT. Dollars lead, people follow underneath. CMU scores
+         the day on donor count, but hundreds of orgs are chasing that
+         prize, so the honest headline is the money. Update 'raised'
+         and 'donors' in data/giving-day.json through the day and
+         re-stamp.
          ============================================================ -->
     <!-- GD:BAR start -->
     <section class="gd-bar-band" hidden>
       <div class="container">
         <div class="gd-bar" data-gd-bar style="--gd-pct: 0.0%">
-          <p class="gd-bar__heading"><b>0</b> of <span>120</span> donors</p>
+          <p class="gd-bar__heading"><b>$0</b> of <span>$2,000</span></p>
           <div class="gd-bar__track"><span class="gd-bar__fill"></span></div>
-          <p class="gd-bar__read">$0 raised of a $2,000 goal</p>
+          <p class="gd-bar__read">Every gift counts once, whatever its size.</p>
         </div>
       </div>
     </section>
@@ -168,21 +175,28 @@
 
 
     <!-- ============================================================
-         THE CHALLENGE. The reason the page counts people, not money.
+         THE CHALLENGE. One small aside, there to explain why $10 is a
+         real gift here &mdash; not a pitch about winning a prize.
          Stamped out entirely when challenge.on is false.
          ============================================================ -->
     <!-- GD:CHALLENGE start -->
     <section class="section gd-challenge-section">
       <div class="container">
         <div class="gd-challenge">
-          <p class="gd-challenge__kicker">Why $10 is the magic number</p>
+          <p class="gd-challenge__kicker">Why a small gift is not a token gift</p>
           <p class="gd-challenge__body">
-            CMU runs a Student Organization Challenge alongside Giving CMU Day. The clubs that bring in
-            the most <em>individual donors</em> giving $10 or more take home <b>$6,000</b>, <b>$4,000</b> and <b>$2,000</b> on top of whatever they raise. It is counted by heads,
-            not by dollars.
+            Alongside Giving CMU Day, CMU runs matches and challenges for student organizations: the clubs
+            that bring in the most <em>individual donors</em> giving $5 or more win a share of a prize pool on top of whatever they raise. Hundreds of
+            orgs are in that race and we are not counting on winning it. We mention it for what
+            it says about the scoring &mdash; the day is counted by people, not by dollars.
           </p>
           <p class="gd-challenge__punch">
-            A hundred people giving $10 beats one person giving $1,000 &mdash; twice over.
+            So your $10 lands on the board exactly as hard as somebody else&rsquo;s $500.
+          </p>
+          <p class="gd-challenge__fine">
+            One gift per person: CMU counts donors by card and email address, and audits them
+            afterwards. Please don&rsquo;t give on somebody else&rsquo;s behalf &mdash; ask them
+            to give instead, which is worth more to us anyway.
           </p>
         </div>
       </div>
@@ -206,19 +220,19 @@
         <!-- GD:TIERS start -->
         <ul class="gd-tiers">
           <li class="gd-tier gd-tier--flagged">
-            <span class="gd-tier__flag">This is the one that matters</span>
+            <span class="gd-tier__flag">Most people give this</span>
             <span class="gd-tier__amount">$10</span>
-            <p class="gd-tier__label">Counts as a full donor for the challenge</p>
+            <p class="gd-tier__label">Tape, grips and chalk for a month of practices</p>
             <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
           </li>
           <li class="gd-tier">
             <span class="gd-tier__amount">$25</span>
-            <p class="gd-tier__label">Weapons tape and grips for a semester</p>
+            <p class="gd-tier__label">Props and costume pieces for one showcase routine</p>
             <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
           </li>
           <li class="gd-tier">
             <span class="gd-tier__amount">$50</span>
-            <p class="gd-tier__label">One competitor&rsquo;s registration fee</p>
+            <p class="gd-tier__label">Transport for the club and its weapons to one off-campus performance</p>
             <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
           </li>
           <li class="gd-tier">
@@ -239,15 +253,15 @@
           <span class="eyebrow">Where it goes</span>
           <h2>No overhead, no mystery</h2>
           <hr class="accent-rule">
-          <p>We are students. The money buys equipment and pays entry fees.</p>
+          <p>We are students. It buys equipment, costumes, and the cost of getting us to a stage.</p>
         </div>
 
         <!-- GD:WHERE start -->
         <ul class="gd-where">
           <li>Weapons and mats the club lends out, so nobody has to buy gear before their first practice.</li>
-          <li>Registration and travel for the collegiate competition season.</li>
+          <li>Getting people and weapons across Pittsburgh to the festivals and showcases we perform at.</li>
           <li>Costumes and props for Lunar New Year and the spring showcase.</li>
-          <li>Keeping practice free. We have never charged dues and want to keep it that way.</li>
+          <li>Keeping the barrier at zero. No dues, no equipment list, no tryout — which only works if the gear is already on the floor when someone walks in.</li>
         </ul>
         <!-- GD:WHERE end -->
       </div>
@@ -267,8 +281,9 @@
           <article class="gd-help__card">
             <h3>Send this to one person</h3>
             <p>
-              Because the challenge counts heads, one more person who gives $10 is worth
-              more to us than one more $100. Send this page to somebody.
+              Most of what we raise comes from people who have never watched a wushu
+              routine in their life &mdash; somebody&rsquo;s parent, somebody&rsquo;s
+              roommate. Send them this page.
             </p>
             <p class="gd-help__action" data-gd-share hidden>
               <button class="btn btn--ghost" type="button" data-gd-share-btn>Share this page</button>

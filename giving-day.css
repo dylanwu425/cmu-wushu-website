@@ -312,6 +312,7 @@
 }
 
 .gd-film__poster,
+.gd-film__video,
 .gd-film__frame iframe {
   position: absolute;
   inset: 0;
@@ -322,6 +323,26 @@
 }
 
 .gd-film__poster { filter: sepia(0.14) saturate(0.9) brightness(0.82); }
+
+/* The self-hosted player. Native controls, so there is nothing to style but
+   the box. object-fit applies to the poster image as well as the film, and
+   the film is already 16:9 in a 16:9 frame, so cover crops nothing off it
+   while saving the poster photo from being letterboxed. Swap to contain if a
+   future cut is not 16:9. */
+.gd-film__video {
+  object-fit: cover;
+  background: var(--night);
+}
+
+/* Sits outside the paper mount, on the hero's dark ground. */
+.gd-film__caption {
+  margin: 0.9rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--moon-soft);
+}
 
 /* The play button. A seal, pressed in the middle of the picture. */
 .gd-film__play {
@@ -540,6 +561,13 @@
   font-weight: 600;
   line-height: 1.35;
   color: var(--ink);
+}
+
+.gd-challenge__fine {
+  margin: 1.3rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
 }
 
 /* --------------------------------------------------------------------------
