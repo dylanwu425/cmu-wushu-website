@@ -649,11 +649,11 @@
   z-index: 1;
 }
 
-/* Only the colour changes here. The opacity is set per drawing on the
-   element itself, which an inline style wins outright. */
-.gd-tier--flagged .gd-tier__art {
-  color: var(--seal);
-}
+/* The flagged card's drawing used to be seal red. Two reviewers, three
+   rounds apart, both said the same thing: one red drawing among three ink
+   ones stops the four reading as a set, and red type over a red watermark
+   made the $10 the hardest of the four prices to read. The ribbon and the
+   border are flag enough. Set `color: var(--seal)` here to put it back. */
 
 .gd-tier__amount {
   font-family: var(--font-display);
