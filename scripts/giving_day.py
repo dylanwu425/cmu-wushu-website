@@ -198,53 +198,53 @@ WEAPON_ART = {
 </g>""",
 
     # A nine-section chain whip, mid-swing: handle, links, dart.
-    "chainwhip": """<g transform="translate(7 5.43) scale(0.92)">
+    "chainwhip": """<g transform="translate(7 -4.85) scale(0.9)">
   <g fill="none" stroke="currentColor" stroke-linecap="round">
-    <path d="M5.9 58.59 L10.57 67.78" stroke-width="5"/>
-    <path d="M10.57 67.78 L20.31 77" stroke-width="2.8"/>
-    <path d="M20.31 77 L33.35 79.43" stroke-width="2.8"/>
-    <path d="M33.35 79.43 L45.34 73.48" stroke-width="2.8"/>
-    <path d="M45.34 73.48 L51.61 66.04" stroke-width="2.8"/>
-    <path d="M51.61 66.04 L52.76 52.6" stroke-width="2.8"/>
-    <path d="M52.76 52.6 L51.82 39.1" stroke-width="2.8"/>
-    <path d="M51.82 39.1 L57.02 26.94" stroke-width="2.8"/>
-    <path d="M57.02 26.94 L68.71 20.42" stroke-width="2.8"/>
-    <path d="M68.71 20.42 L81.9 17.28" stroke-width="2.8"/>
+    <path d="M5.91 72.72 L13.24 80.61" stroke-width="5.4"/>
+    <path d="M13.24 80.61 L21.96 85.89" stroke-width="3.4"/>
+    <path d="M21.96 85.89 L32.12 87.48" stroke-width="3.29"/>
+    <path d="M32.12 87.48 L42 84.65" stroke-width="3.17"/>
+    <path d="M42 84.65 L50.29 78.48" stroke-width="3.06"/>
+    <path d="M50.29 78.48 L56.63 70.36" stroke-width="2.95"/>
+    <path d="M56.63 70.36 L61.86 61.48" stroke-width="2.83"/>
+    <path d="M61.86 61.48 L68.36 53.4" stroke-width="2.72"/>
+    <path d="M68.36 53.4 L76.03 46.48" stroke-width="2.61"/>
+    <path d="M76.03 46.48 L84.18 40.16" stroke-width="2.49"/>
   </g>
   <g>
-    <circle cx="10.57" cy="67.78" r="3.3"/>
-    <circle cx="20.31" cy="77" r="3.3"/>
-    <circle cx="33.35" cy="79.43" r="3.3"/>
-    <circle cx="45.34" cy="73.48" r="3.3"/>
-    <circle cx="51.61" cy="66.04" r="3.3"/>
-    <circle cx="52.76" cy="52.6" r="3.3"/>
-    <circle cx="51.82" cy="39.1" r="3.3"/>
-    <circle cx="57.02" cy="26.94" r="3.3"/>
-    <circle cx="68.71" cy="20.42" r="3.3"/>
-    <circle cx="81.9" cy="17.28" r="3.3"/>
+    <circle cx="13.24" cy="80.61" r="3.9"/>
+    <circle cx="21.96" cy="85.89" r="3.77"/>
+    <circle cx="32.12" cy="87.48" r="3.64"/>
+    <circle cx="42" cy="84.65" r="3.51"/>
+    <circle cx="50.29" cy="78.48" r="3.38"/>
+    <circle cx="56.63" cy="70.36" r="3.25"/>
+    <circle cx="61.86" cy="61.48" r="3.12"/>
+    <circle cx="68.36" cy="53.4" r="2.99"/>
+    <circle cx="76.03" cy="46.48" r="2.86"/>
+    <circle cx="84.18" cy="40.16" r="2.73"/>
   </g>
-  <circle cx="4.63" cy="54.86" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/>
-  <path d="M81.9 17.28 L86.45 18.76 L93.56 14.47 L85.28 13.9 Z"/>
-  <path d="M78.71 19.42 L79.29 21.04 L79.78 22.57 L80.16 24.05 L80.4 25.53 L80.48 27.07 L80.41 28.7 L80.16 30.46 L79.77 32.32 L79.27 34.28 L78.71 36.31 L78.16 38.39 L77.69 40.49 L77.36 42.6 L77.2 44.65 L80.78 45.02 L81.15 43.29 L81.68 41.53 L82.34 39.7 L83.1 37.8 L83.9 35.84 L84.69 33.83 L85.4 31.77 L85.98 29.66 L86.38 27.52 L86.57 25.38 L86.54 23.27 L86.33 21.23 L86.01 19.29 L85.65 17.48 Z"/>
+  <circle cx="2.33" cy="67.51" r="2.9" fill="none" stroke="currentColor" stroke-width="1.7"/>
+  <path d="M82.99 41.06 L89.95 40.3 L96.13 31.08 L85.59 34.57 Z"/>
+  <path d="M83.18 42.67 L84.03 43.24 L84.86 43.8 L85.69 44.36 L86.5 44.93 L87.29 45.5 L88.07 46.08 L88.83 46.68 L89.57 47.29 L90.31 47.92 L91.03 48.56 L91.74 49.22 L92.44 49.9 L93.14 50.59 L93.83 51.29 L95.68 49.75 L95.1 48.93 L94.52 48.11 L93.92 47.29 L93.3 46.48 L92.66 45.67 L92 44.87 L91.32 44.08 L90.62 43.3 L89.9 42.54 L89.16 41.79 L88.42 41.06 L87.66 40.33 L86.91 39.62 L86.16 38.91 Z"/>
 </g>""",
 
     # A tasselled spear: shaft, leaf blade, horsehair.
-    "spear": """<g transform="translate(3.85 -0.64) scale(0.96)">
-  <path d="M10.33 98.2 L71.58 32.09 L68.09 28.79 L5.67 93.8 Z"/>
-  <path d="M72.31 32.77 L75.37 27.34 L72.6 24.74 L67.36 28.11 Z"/>
-  <ellipse cx="70.18" cy="30.08" rx="3.12" ry="2.28" transform="rotate(-46.67 70.18 30.08)"/>
-  <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-    <path d="M68.78 28.76 Q62.64 33.13 55.14 38.46"/>
-    <path d="M69.48 29.42 Q62.89 35.33 54.84 42.56"/>
-    <path d="M70.18 30.08 Q63.14 37.54 54.53 46.66"/>
-    <path d="M70.88 30.73 Q65.36 37.66 58.61 46.12"/>
-    <path d="M71.57 31.39 Q67.57 37.78 62.69 45.58"/>
+    "spear": """<g transform="translate(4.3 1.4) scale(0.93)">
+  <path d="M29.84 98.47 L64.15 30.31 L59.88 28.1 L24.16 95.53 Z"/>
+  <path d="M65.04 30.77 L66.05 25.53 L62.68 23.78 L58.99 27.64 Z"/>
+  <ellipse cx="62.24" cy="28.76" rx="2.99" ry="2.18" transform="rotate(27.32 62.24 28.76)"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.72" stroke-linecap="round">
+    <path d="M60 27.6 Q54.9 31.26 48.68 35.73"/>
+    <path d="M61.12 28.18 Q56.79 33.46 51.5 39.91"/>
+    <path d="M62.24 28.76 Q58.68 35.66 54.33 44.09"/>
+    <path d="M63.37 29.34 Q61.57 35.93 59.37 43.97"/>
+    <path d="M64.49 29.92 Q64.46 36.19 64.41 43.86"/>
   </g>
-  <path d="M73.64 26.4 C78.56 27.39 86.68 17.14 91 8 C82.13 12.85 74.72 19.07 73.64 26.4 Z"/>
+  <path d="M64.14 25.1 C68.95 25.04 73.03 14.69 74 6 C67.47 11.82 62.73 18.57 64.14 25.1 Z"/>
 </g>""",
 
     # Jian and dao, crossed: straight sword left, curved sabre right.
-    "swords": """<g transform="translate(4.34 -4.24) scale(0.99)">
+    "swords": """<g transform="translate(5.44 -4.09) scale(0.97)">
   <mask id="gd-dao-m">
     <rect width="100" height="100" fill="#fff"/>
     <path stroke="#000" stroke-width="0.8" fill="none" d="M71.78 66.75 L70.16 62.53 L68.32 58.4 L66.27 54.37 L64 50.45 L61.54 46.66 L58.87 42.99 L56.01 39.47 L52.98 36.1 L49.76 32.9 L46.38 29.86 L42.85 27.01 L39.17 24.34"/>
@@ -256,20 +256,20 @@ WEAPON_ART = {
   </mask>
   <g mask="url(#gd-dao-m)">
     <path d="M75.81 72.87 L73.88 66.54 L71.53 60.35 L68.73 54.33 L65.51 48.51 L61.86 42.93 L57.81 37.62 L53.37 32.6 L48.57 27.91 L43.41 23.57 L37.94 19.62 L31.44 17.48 L24 18 L23.88 18.28 L28.77 22.69 L33.71 26.53 L38.78 30 L43.58 33.84 L48.06 38.03 L52.22 42.53 L56.02 47.33 L59.45 52.4 L62.48 57.71 L65.1 63.22 L67.3 68.91 L69.07 74.74 Z"/>
-    <ellipse cx="74" cy="78" rx="8" ry="2.6" transform="rotate(-103.55 74 78)"/>
+    <ellipse cx="74" cy="78" rx="7.5" ry="2.5" transform="rotate(-13.55 74 78)"/>
     <path d="M71.76 78.54 L74.87 90.13 L78.76 89.2 L76.24 77.46 Z"/>
     <circle cx="77.56" cy="92.78" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/>
   </g>
   <g mask="url(#gd-jian-m)">
-    <ellipse cx="18" cy="90" rx="4" ry="2.4" transform="rotate(-53.71 18 90)"/>
+    <ellipse cx="18" cy="90" rx="4.6" ry="2.5" transform="rotate(36.29 18 90)"/>
     <path d="M20.5 89.97 L29.08 78.29 L25.86 75.92 L17.28 87.61 Z"/>
     <path d="M34.72 82.43 Q32.9 79.1 29.01 75.01 Q23.94 72.52 20.21 71.78 Q22.04 75.11 25.93 79.2 Q31 81.69 34.72 82.43 Z"/>
     <path d="M31.9 76.64 L35.69 71.25 L39.48 65.86 L43.26 60.47 L47.05 55.08 L50.83 49.69 L54.61 44.3 L58.38 38.9 L62.12 33.48 L65.81 28.02 L69.4 22.49 L72.83 16.84 L76 11 L76 11 L71.38 15.78 L67.02 20.74 L62.81 25.82 L58.71 30.98 L54.66 36.17 L50.63 41.38 L46.62 46.6 L42.61 51.83 L38.61 57.05 L34.6 62.28 L30.59 67.51 L26.58 72.73 Z"/>
-    <ellipse cx="16.82" cy="91.61" rx="2.21" ry="1.61" transform="rotate(-53.71 16.82 91.61)"/>
-    <g fill="none" stroke="currentColor" stroke-width="1.27" stroke-linecap="round">
-      <path d="M16.13 91.11 Q14.09 92.86 11.59 94.99"/>
-      <path d="M16.82 91.61 Q14.67 94.54 12.04 98.12"/>
-      <path d="M17.5 92.12 Q16.45 94.59 15.16 97.61"/>
+    <ellipse cx="16.58" cy="91.93" rx="2.08" ry="1.52" transform="rotate(36.29 16.58 91.93)"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+      <path d="M16.1 91.58 Q13.86 94.12 11.13 97.22"/>
+      <path d="M16.58 91.93 Q13.81 95.71 10.42 100.32"/>
+      <path d="M17.06 92.29 Q15.31 95.18 13.16 98.72"/>
     </g>
   </g>
 </g>""",
@@ -277,12 +277,11 @@ WEAPON_ART = {
 
 
 # Measured ink coverage of each drawing, inverted, so that coverage times
-# opacity comes out the same for all four: the solid fan must not shout while
-# the thin chain whip looks like art that failed to load.
-#   fan 22.7%   chain whip 6.4%   spear 6.4%   jian+dao 9.7%
-# The fan is nudged up from the 0.052 the arithmetic gives, because it is the
-# one drawn in seal red, and red on paper reads lighter than ink.
-WEAPON_WEIGHT = {"fan": 0.065, "chainwhip": 0.185, "spear": 0.185, "swords": 0.122}
+# opacity comes out roughly the same for all four: a solid fan and a thin
+# chain cover very different amounts of a card, and at one shared opacity the
+# $10 card shouted while the $25 card looked like art that had failed to
+# load.   fan 22.7%   chain whip 5.1%   spear 5.3%   jian+dao 9.7%
+WEAPON_WEIGHT = {"fan": 0.058, "chainwhip": 0.2, "spear": 0.2, "swords": 0.125}
 
 
 def weapon_svg(key):
