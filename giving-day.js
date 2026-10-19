@@ -16,6 +16,21 @@
 
   if (!document.querySelector(".gd-hero")) return;
 
+  function reducedMotion() {
+    return !!(window.matchMedia &&
+              matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  /* Someone on a metered or slow connection should not be handed a 14 MB
+     film they did not ask for. Both properties are optional and only Chrome
+     and friends have them, so an undefined answer means "go ahead". */
+  function dataSaver() {
+    var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (!c) return false;
+    if (c.saveData) return true;
+    return /^(slow-2g|2g)$/.test(c.effectiveType || "");
+  }
+
   function ready(fn) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", fn);
@@ -131,8 +146,7 @@
 
   function bar(el) {
     var target = el.style.getPropertyValue("--gd-pct").trim() || "0%";
-    if (!("IntersectionObserver" in window) ||
-        matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!("IntersectionObserver" in window) || reducedMotion()) {
       return;                                // leave it at its final width
     }
 
@@ -144,6 +158,100 @@
         io.disconnect();
       });
     }, { threshold: 0.4 });
+    io.observe(el);
+  }
+
+  /* ------------------------------------------------------------------
+     3b. The film that starts itself
+
+     The markup ships with preload="none" and no autoplay attribute, so
+     nothing downloads until this function decides it should. A browser
+     will only ever autoplay a muted video, so the caption under the
+     player says there is sound to turn on; the moment somebody uses the
+     controls we stop managing it and leave it to them.
+     ------------------------------------------------------------------ */
+
+  function autoplayFilm(video) {
+    if (reducedMotion() || dataSaver()) return;   // poster and a play button
+
+    video.muted = true;                            // required, and belt-and-braces
+    video.setAttribute("muted", "");
+    video.preload = "auto";
+
+    var started = false;
+    function go() {
+      if (started) return;
+      started = true;
+      var p = video.play();
+      if (p && p.catch) {
+        p.catch(function () {
+          // Autoplay refused anyway. The poster and the controls are
+          // already there, so there is nothing to put right.
+        });
+      }
+    }
+
+    // Only once it is actually on screen, so a visitor who never scrolls
+    // past the hero on a phone does not pay for the download twice over.
+    if (!("IntersectionObserver" in window)) { go(); return; }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          go();
+        } else if (started && !video.paused && video.dataset.gdTouched !== "1") {
+          video.pause();                           // out of sight, out of mind
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(video);
+
+    // Hands off once the viewer takes over.
+    ["play", "pause", "volumechange", "seeking"].forEach(function (ev) {
+      video.addEventListener(ev, function (e) {
+        if (e.isTrusted) video.dataset.gdTouched = "1";
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     3c. The money counter
+
+     Counts from zero up to the stamped figure when the bar scrolls in,
+     in step with the stroke filling underneath it. The element already
+     holds the final text, so if any of this fails the right number is
+     what stays on screen.
+     ------------------------------------------------------------------ */
+
+  function counter(el) {
+    var target = parseInt(el.getAttribute("data-gd-count"), 10);
+    if (!(target > 0) || reducedMotion() || !("IntersectionObserver" in window)) return;
+
+    var text = el.textContent;                     // "$1,090" or "31"
+    var money = text.indexOf("$") === 0;
+
+    function render(n) {
+      el.textContent = (money ? "$" : "") + n.toLocaleString("en-US");
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        var started = null;
+        var span = 1100;                           // the bar's own fill time
+        (function step(now) {
+          if (started === null) started = now;
+          var t = Math.min(1, (now - started) / span);
+          var eased = 1 - Math.pow(1 - t, 3);      // same ease as the stroke
+          render(Math.round(target * eased));
+          if (t < 1) requestAnimationFrame(step);
+          else el.textContent = text;              // land on the stamped text
+        })(performance.now());
+      });
+    }, { threshold: 0.6 });
+
+    render(0);
     io.observe(el);
   }
 
@@ -220,8 +328,16 @@
       }
     });
 
+    // Not named `film`: that is the YouTube facade function, and the click
+    // handler just below calls it from inside this same scope.
+    var selfHosted = document.querySelector("[data-gd-autoplay]");
+    if (selfHosted) autoplayFilm(selfHosted);
+
     var b = document.querySelector("[data-gd-bar]");
     if (b) bar(b);
+
+    var c = document.querySelector("[data-gd-count]");
+    if (c) counter(c);
 
     var s = document.querySelector(".gd-sticky");
     if (s) sticky(s);

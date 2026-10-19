@@ -585,6 +585,9 @@
 
 .gd-tier {
   position: relative;
+  /* The weapon drawing behind the card is scaled past its edges, and on
+     phones the deckle mask that would have clipped it is switched off. */
+  overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 0.7rem;
@@ -620,6 +623,36 @@
   color: var(--paper);
 }
 
+/* The weapon behind the card. It is a watermark, not an illustration: it
+   sits under the text at a tenth of full strength and bleeds off the bottom
+   corner, where the card's own deckle mask crops it. Absolute, so it takes
+   no row in the card's grid. */
+.gd-tier__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  color: var(--ink);
+  opacity: 0.12;
+  transform: scale(1.1) rotate(-6deg);
+  pointer-events: none;
+}
+
+/* Positioned elements paint over static ones, so the card's own content has
+   to be positioned too or the drawing would sit on top of the words. */
+.gd-tier > :not(.gd-tier__art) {
+  position: relative;
+  z-index: 1;
+}
+
+/* The fan is a solid shape where the other three are mostly line work, so it
+   carries further at the same opacity and is dialled back to match. */
+.gd-tier--flagged .gd-tier__art {
+  color: var(--seal);
+  opacity: 0.1;
+}
+
 .gd-tier__amount {
   font-family: var(--font-display);
   font-size: 2.3rem;
@@ -628,11 +661,39 @@
   color: var(--seal);
 }
 
+.gd-tier__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+/* The weapon's name, with its character above it in the brush face. */
+.gd-tier__weapon {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.gd-tier__hanzi {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-family: var(--font-brush);
+  font-size: 1.9rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--seal);
+  opacity: 0.85;
+}
+
 .gd-tier__label {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   line-height: 1.5;
-  color: var(--ink-2);
+  color: var(--ink-soft);
 }
 
 /* The tier's own button, sized down to sit inside the slip. */

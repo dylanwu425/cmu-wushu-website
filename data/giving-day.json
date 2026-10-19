@@ -35,6 +35,10 @@
     "youtubeId": "",
     "title": "Giving Day film",
     "length": "34 sec",
+    "autoplay": true,
+    "loop": true,
+    "_autoplay": "Starts the film by itself. Browsers only allow that with the sound off, so it starts muted and the caption under the player tells people to press it for sound. Three things switch it off on their own: a visitor who has asked their system for reduced motion, a phone in data-saver mode, and a connection the browser reports as slow — they all get the poster and a play button instead. Set to false and everybody gets the poster.",
+    "_loop": "Runs the film again when it reaches the end. Sensible for a 34-second clip; turn it off for anything long.",
     "poster": "images/ds-2026/web/dscf6345.jpg",
     "_file": "A video file in the repo, played straight from the site with no YouTube involved. This is the draft cut (1920x1080, 34 seconds, 14 MB). Fine on this page, but 14 MB is a slow load on phone data and a file cannot be shared anywhere but here — so when the final cut is on YouTube, fill in youtubeId below and it takes over automatically. Set this to \"\" to go back to the 'film coming soon' panel.",
     "_cmuSpec": "The cut SUBMITTED TO CMU for their own fund page is a different thing from this one, and it has rules: .mp4/.mov/.avi/.mpeg/.mpg, no longer than 30 seconds, 15-20 preferred. The draft here runs 34 seconds, so it needs a trim before it goes to them. They also want one still image at 760x430, 600x400 and 600x315.",
@@ -51,12 +55,12 @@
   "_goalDonors": "Secondary — printed as a line under the dollars, not as the headline. 2025: 10 donors. 40 is four times that and still honest; the challenge winners are well into the hundreds and we are not chasing them. Set to 0 to hide the people count entirely.",
 
   "tiers": [
-    { "amount": 10,  "label": "Tape, grips and chalk for a month of practices", "flag": "Most people give this" },
-    { "amount": 25,  "label": "Props and costume pieces for one showcase routine" },
-    { "amount": 50,  "label": "Transport for the club and its weapons to one off-campus performance" },
-    { "amount": 100, "label": "A new broadsword or staff for the loaner rack" }
+    { "amount": 10,  "art": "fan",       "hanzi": "扇", "weapon": "Fan",          "flag": "Most people give this" },
+    { "amount": 25,  "art": "chainwhip", "hanzi": "鞭", "weapon": "Chain whip" },
+    { "amount": 50,  "art": "spear",     "hanzi": "枪", "weapon": "Spear" },
+    { "amount": 100, "art": "swords",    "hanzi": "剑刀", "weapon": "Jian and dao" }
   ],
-  "_tiers": "Keep these concrete. 'A broadsword for the loaner rack' raises more than 'equipment'. The $10 tier leads because it is what most people give; 'flag' puts a seal on that card. Nothing here should mention competitions — the club performs, it does not compete.",
+  "_tiers": "Each tier is named for a weapon and carries that weapon drawn behind the card. 'art' picks the drawing and must be one of: fan, chainwhip, spear, swords — those are the only four in WEAPON_ART in scripts/giving_day.py, and any other value just leaves the card plain. 'weapon' is the name printed on the card, 'hanzi' the character above it, 'flag' the red ribbon (one card only). You can also add \"label\": \"...\" to any tier for a line of small print under the name; none of them use one, because the weapon says enough.",
 
   "whereItGoes": [
     "Weapons and mats the club lends out, so nobody has to buy gear before their first practice.",
