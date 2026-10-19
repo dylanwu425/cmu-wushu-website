@@ -624,9 +624,14 @@
 }
 
 /* The weapon behind the card. It is a watermark, not an illustration: it
-   sits under the text at a tenth of full strength and bleeds off the bottom
-   corner, where the card's own deckle mask crops it. Absolute, so it takes
-   no row in the card's grid. */
+   sits under the text at around a tenth of full strength, centred, with the
+   card's own deckle mask trimming anything that reaches the edge. Absolute,
+   so it takes no row in the card's grid. */
+/* No blanket rotation or scale here: three of the four are already drawn on
+   a diagonal, and the fan is symmetric, so a few degrees on it reads as
+   crooked rather than as styled. Each drawing also carries its own opacity,
+   set in scripts/giving_day.py, because a solid fan and a thin chain cover
+   very different amounts of the card. */
 .gd-tier__art {
   position: absolute;
   inset: 0;
@@ -636,10 +641,6 @@
   color: var(--ink);
   pointer-events: none;
 }
-/* No blanket rotation: three of the four are already drawn on a diagonal,
-   and the fan is symmetric, so a few degrees on it reads as crooked rather
-   than as styled. Each drawing carries its own opacity, set in
-   scripts/giving_day.py, because they cover very different amounts of ink. */
 
 /* Positioned elements paint over static ones, so the card's own content has
    to be positioned too or the drawing would sit on top of the words. */
