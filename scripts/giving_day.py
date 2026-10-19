@@ -154,11 +154,11 @@ def indent(body, spaces):
 # currentColor, which the stylesheet sets per card.
 WEAPON_ART = {
     # A folding fan, open.
-    "fan": """<g transform="translate(-3.51 -17.99) scale(1.07)">
+    "fan": """<g transform="translate(-3.51 -19.38) scale(1.07)">
   <g>
     <mask id="gd-fan-crease">
       <rect width="100" height="100" fill="#fff"/>
-      <g stroke="#000" stroke-width="1.7" fill="none">
+      <g stroke="#000" stroke-width="0.9" fill="none">
       <path d="M33.6 70.1 L14.53 53.93"/>
       <path d="M35.77 67.88 L19.23 49.14"/>
       <path d="M38.25 66 L24.58 45.07"/>
@@ -175,95 +175,84 @@ WEAPON_ART = {
       </g>
     </mask>
     <path mask="url(#gd-fan-crease)" d="M10.99 59.62 A46 46 0 0 1 89.01 59.62 L68.66 72.34 A22 22 0 0 0 31.34 72.34 Z"/>
-    <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
-      <path d="M33.6 70.1 L45.42 80.12"/>
-      <path d="M35.77 67.88 L46.03 79.5"/>
-      <path d="M38.25 66 L46.72 78.98"/>
-      <path d="M40.96 64.49 L47.48 78.56"/>
-      <path d="M43.87 63.39 L48.29 78.25"/>
-      <path d="M46.9 62.72 L49.14 78.06"/>
-      <path d="M50 62.5 L50 78"/>
-      <path d="M53.1 62.72 L50.86 78.06"/>
-      <path d="M56.13 63.39 L51.71 78.25"/>
-      <path d="M59.04 64.49 L52.52 78.56"/>
-      <path d="M61.75 66 L53.28 78.98"/>
-      <path d="M64.23 67.88 L53.97 79.5"/>
-      <path d="M66.4 70.1 L54.58 80.12"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+      <path d="M33.6 70.1 L48.86 83.03"/>
+      <path d="M35.77 67.88 L49.01 82.88"/>
+      <path d="M38.25 66 L49.18 82.74"/>
+      <path d="M40.96 64.49 L49.37 82.64"/>
+      <path d="M43.87 63.39 L49.57 82.56"/>
+      <path d="M46.9 62.72 L49.78 82.52"/>
+      <path d="M50 62.5 L50 82.5"/>
+      <path d="M53.1 62.72 L50.22 82.52"/>
+      <path d="M56.13 63.39 L50.43 82.56"/>
+      <path d="M59.04 64.49 L50.63 82.64"/>
+      <path d="M61.75 66 L50.82 82.74"/>
+      <path d="M64.23 67.88 L50.99 82.88"/>
+      <path d="M66.4 70.1 L51.14 83.03"/>
     </g>
-    <path d="M51.32 81.88 L11.36 58.09 L9.77 60.63 L48.68 86.12 Z"/>
-    <path d="M51.32 86.12 L90.23 60.63 L88.64 58.09 L48.68 81.88 Z"/>
-    <circle cx="50" cy="84" r="2.8"/>
-  <ellipse cx="50" cy="87" rx="2.08" ry="1.52" transform="rotate(90 50 87)"/>
-  <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-    <path d="M48.96 87 Q47.93 84.93 46.67 82.39"/>
-    <path d="M50 87 Q50 84.12 50 80.6"/>
-    <path d="M51.04 87 Q52.07 84.93 53.33 82.39"/>
-  </g>
+    <path d="M51.38 81.8 L12.26 57.59 L9.72 61.66 L48.62 86.2 Z"/>
+    <path d="M51.38 86.2 L90.28 61.66 L87.74 57.59 L48.62 81.8 Z"/>
+    <path d="M46.6 83 L47.6 91.5 L52.4 91.5 L53.4 83 Z"/>
+    <circle cx="50" cy="84" r="2.4" fill="#fff" fill-opacity="0.001"/>
   </g>
 </g>""",
 
     # A nine-section chain whip, mid-swing: handle, links, dart.
-    "chainwhip": """<g transform="translate(7 4.23) scale(0.92)">
+    "chainwhip": """<g transform="translate(7 5.43) scale(0.92)">
   <g fill="none" stroke="currentColor" stroke-linecap="round">
-    <path d="M5 58 L11.11 69.51" stroke-width="5"/>
-    <path d="M11.11 69.51 L20.62 78.87" stroke-width="3.4"/>
-    <path d="M20.62 78.87 L33.31 82.46" stroke-width="3.4"/>
-    <path d="M33.31 82.46 L45.18 76.86" stroke-width="3.4"/>
-    <path d="M45.18 76.86 L51.8 65.41" stroke-width="3.4"/>
-    <path d="M51.8 65.41 L52.72 52.09" stroke-width="3.4"/>
-    <path d="M52.72 52.09 L51.84 38.7" stroke-width="3.4"/>
-    <path d="M51.84 38.7 L57.18 26.79" stroke-width="3.4"/>
-    <path d="M57.18 26.79 L68.84 20.38" stroke-width="3.4"/>
-    <path d="M68.84 20.38 L81.9 17.28" stroke-width="3.4"/>
+    <path d="M5.9 58.59 L10.57 67.78" stroke-width="5"/>
+    <path d="M10.57 67.78 L20.31 77" stroke-width="2.8"/>
+    <path d="M20.31 77 L33.35 79.43" stroke-width="2.8"/>
+    <path d="M33.35 79.43 L45.34 73.48" stroke-width="2.8"/>
+    <path d="M45.34 73.48 L51.61 66.04" stroke-width="2.8"/>
+    <path d="M51.61 66.04 L52.76 52.6" stroke-width="2.8"/>
+    <path d="M52.76 52.6 L51.82 39.1" stroke-width="2.8"/>
+    <path d="M51.82 39.1 L57.02 26.94" stroke-width="2.8"/>
+    <path d="M57.02 26.94 L68.71 20.42" stroke-width="2.8"/>
+    <path d="M68.71 20.42 L81.9 17.28" stroke-width="2.8"/>
   </g>
   <g>
-    <circle cx="11.11" cy="69.51" r="2.9"/>
-    <circle cx="20.62" cy="78.87" r="2.9"/>
-    <circle cx="33.31" cy="82.46" r="2.9"/>
-    <circle cx="45.18" cy="76.86" r="2.9"/>
-    <circle cx="51.8" cy="65.41" r="2.9"/>
-    <circle cx="52.72" cy="52.09" r="2.9"/>
-    <circle cx="51.84" cy="38.7" r="2.9"/>
-    <circle cx="57.18" cy="26.79" r="2.9"/>
-    <circle cx="68.84" cy="20.38" r="2.9"/>
-    <circle cx="81.9" cy="17.28" r="2.9"/>
+    <circle cx="10.57" cy="67.78" r="3.3"/>
+    <circle cx="20.31" cy="77" r="3.3"/>
+    <circle cx="33.35" cy="79.43" r="3.3"/>
+    <circle cx="45.34" cy="73.48" r="3.3"/>
+    <circle cx="51.61" cy="66.04" r="3.3"/>
+    <circle cx="52.76" cy="52.6" r="3.3"/>
+    <circle cx="51.82" cy="39.1" r="3.3"/>
+    <circle cx="57.02" cy="26.94" r="3.3"/>
+    <circle cx="68.71" cy="20.42" r="3.3"/>
+    <circle cx="81.9" cy="17.28" r="3.3"/>
   </g>
-  <circle cx="3.75" cy="54.84" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/>
+  <circle cx="4.63" cy="54.86" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/>
   <path d="M81.9 17.28 L86.45 18.76 L93.56 14.47 L85.28 13.9 Z"/>
-  <path d="M79.15 20.4 L80.26 21.77 L81.11 22.94 L81.7 24.01 L82.04 25.13 L82.11 26.48 L81.82 28.16 L81.19 30.11 L80.29 32.26 L79.28 34.51 L78.33 36.8 L77.62 39.07 L77.28 41.26 L77.4 43.29 L78.07 45.06 L78.07 45.06 L78.28 43.28 L78.76 41.56 L79.58 39.81 L80.7 37.98 L82.03 36.07 L83.46 34.07 L84.87 31.99 L86.11 29.84 L87.05 27.56 L87.54 25.15 L87.49 22.7 L86.94 20.39 L86.1 18.31 L85.2 16.5 Z"/>
+  <path d="M78.71 19.42 L79.29 21.04 L79.78 22.57 L80.16 24.05 L80.4 25.53 L80.48 27.07 L80.41 28.7 L80.16 30.46 L79.77 32.32 L79.27 34.28 L78.71 36.31 L78.16 38.39 L77.69 40.49 L77.36 42.6 L77.2 44.65 L80.78 45.02 L81.15 43.29 L81.68 41.53 L82.34 39.7 L83.1 37.8 L83.9 35.84 L84.69 33.83 L85.4 31.77 L85.98 29.66 L86.38 27.52 L86.57 25.38 L86.54 23.27 L86.33 21.23 L86.01 19.29 L85.65 17.48 Z"/>
 </g>""",
 
     # A tasselled spear: shaft, leaf blade, horsehair.
     "spear": """<g transform="translate(3.85 -0.64) scale(0.96)">
   <path d="M10.33 98.2 L71.58 32.09 L68.09 28.79 L5.67 93.8 Z"/>
   <path d="M72.31 32.77 L75.37 27.34 L72.6 24.74 L67.36 28.11 Z"/>
-  <g fill="none" stroke="currentColor" stroke-width="1.69" stroke-linecap="round" opacity="0.75">
-    <path d="M68.73 28.71 Q61.02 31.91 51.61 35.82"/>
-    <path d="M71.63 31.44 Q68.88 39.32 65.53 48.95"/>
-  </g>
-  <ellipse cx="70.18" cy="30.08" rx="3.38" ry="2.47" transform="rotate(-46.67 70.18 30.08)"/>
-  <g fill="none" stroke="currentColor" stroke-width="1.95" stroke-linecap="round">
-    <path d="M68 28.02 Q59.66 29.42 49.46 31.12"/>
-    <path d="M68.73 28.71 Q61.02 31.91 51.61 35.82"/>
-    <path d="M69.45 29.39 Q62.39 34.4 53.76 40.51"/>
-    <path d="M70.18 30.08 Q63.76 36.89 55.91 45.21"/>
-    <path d="M70.9 30.76 Q66.32 38.1 60.72 47.08"/>
-    <path d="M71.63 31.44 Q68.88 39.32 65.53 48.95"/>
-    <path d="M72.35 32.13 Q71.45 40.54 70.34 50.82"/>
+  <ellipse cx="70.18" cy="30.08" rx="3.12" ry="2.28" transform="rotate(-46.67 70.18 30.08)"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+    <path d="M68.78 28.76 Q62.64 33.13 55.14 38.46"/>
+    <path d="M69.48 29.42 Q62.89 35.33 54.84 42.56"/>
+    <path d="M70.18 30.08 Q63.14 37.54 54.53 46.66"/>
+    <path d="M70.88 30.73 Q65.36 37.66 58.61 46.12"/>
+    <path d="M71.57 31.39 Q67.57 37.78 62.69 45.58"/>
   </g>
   <path d="M73.64 26.4 C78.56 27.39 86.68 17.14 91 8 C82.13 12.85 74.72 19.07 73.64 26.4 Z"/>
 </g>""",
 
     # Jian and dao, crossed: straight sword left, curved sabre right.
-    "swords": """<g transform="translate(5.13 -4.19) scale(0.98)">
+    "swords": """<g transform="translate(4.34 -4.24) scale(0.99)">
   <mask id="gd-dao-m">
     <rect width="100" height="100" fill="#fff"/>
-    <path stroke="#000" stroke-width="1" fill="none" d="M72.31 68.3 L70.47 63.29 L68.32 58.4 L65.87 53.65 L63.13 49.06 L60.11 44.64 L56.81 40.42 L53.26 36.4 L49.46 32.61 L45.44 29.07 L41.19 25.77 L36.75 22.74 L32.13 20"/>
-    <path stroke="#000" stroke-width="3" stroke-linejoin="round" fill="#000" d="M31.9 76.64 L35.69 71.25 L39.48 65.86 L43.26 60.47 L47.05 55.08 L50.83 49.69 L54.61 44.3 L58.38 38.9 L62.12 33.48 L65.81 28.02 L69.4 22.49 L72.83 16.84 L76 11 L76 11 L71.38 15.78 L67.02 20.74 L62.81 25.82 L58.71 30.98 L54.66 36.17 L50.63 41.38 L46.62 46.6 L42.61 51.83 L38.61 57.05 L34.6 62.28 L30.59 67.51 L26.58 72.73 Z"/>
+    <path stroke="#000" stroke-width="0.8" fill="none" d="M71.78 66.75 L70.16 62.53 L68.32 58.4 L66.27 54.37 L64 50.45 L61.54 46.66 L58.87 42.99 L56.01 39.47 L52.98 36.1 L49.76 32.9 L46.38 29.86 L42.85 27.01 L39.17 24.34"/>
+    <path stroke="#000" stroke-width="4" stroke-linejoin="round" fill="#000" d="M31.9 76.64 L35.69 71.25 L39.48 65.86 L43.26 60.47 L47.05 55.08 L50.83 49.69 L54.61 44.3 L58.38 38.9 L62.12 33.48 L65.81 28.02 L69.4 22.49 L72.83 16.84 L76 11 L76 11 L71.38 15.78 L67.02 20.74 L62.81 25.82 L58.71 30.98 L54.66 36.17 L50.63 41.38 L46.62 46.6 L42.61 51.83 L38.61 57.05 L34.6 62.28 L30.59 67.51 L26.58 72.73 Z"/>
   </mask>
   <mask id="gd-jian-m">
     <rect width="100" height="100" fill="#fff"/>
-    <path stroke="#000" stroke-width="1.1" fill="none" d="M30.43 73.07 L70.67 18.25"/>
+    <path stroke="#000" stroke-width="0.8" fill="none" d="M30.43 73.07 L70.67 18.25"/>
   </mask>
   <g mask="url(#gd-dao-m)">
     <path d="M75.81 72.87 L73.88 66.54 L71.53 60.35 L68.73 54.33 L65.51 48.51 L61.86 42.93 L57.81 37.62 L53.37 32.6 L48.57 27.91 L43.41 23.57 L37.94 19.62 L31.44 17.48 L24 18 L23.88 18.28 L28.77 22.69 L33.71 26.53 L38.78 30 L43.58 33.84 L48.06 38.03 L52.22 42.53 L56.02 47.33 L59.45 52.4 L62.48 57.71 L65.1 63.22 L67.3 68.91 L69.07 74.74 Z"/>
@@ -276,25 +265,24 @@ WEAPON_ART = {
     <path d="M20.5 89.97 L29.08 78.29 L25.86 75.92 L17.28 87.61 Z"/>
     <path d="M34.72 82.43 Q32.9 79.1 29.01 75.01 Q23.94 72.52 20.21 71.78 Q22.04 75.11 25.93 79.2 Q31 81.69 34.72 82.43 Z"/>
     <path d="M31.9 76.64 L35.69 71.25 L39.48 65.86 L43.26 60.47 L47.05 55.08 L50.83 49.69 L54.61 44.3 L58.38 38.9 L62.12 33.48 L65.81 28.02 L69.4 22.49 L72.83 16.84 L76 11 L76 11 L71.38 15.78 L67.02 20.74 L62.81 25.82 L58.71 30.98 L54.66 36.17 L50.63 41.38 L46.62 46.6 L42.61 51.83 L38.61 57.05 L34.6 62.28 L30.59 67.51 L26.58 72.73 Z"/>
-    <ellipse cx="16.82" cy="91.61" rx="2.34" ry="1.71" transform="rotate(-53.71 16.82 91.61)"/>
-    <g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round">
-      <path d="M15.87 90.92 Q13.43 92.38 10.44 94.17"/>
-      <path d="M16.5 91.38 Q14.25 93.83 11.5 96.82"/>
-      <path d="M17.13 91.84 Q15.47 94.73 13.44 98.25"/>
-      <path d="M17.76 92.3 Q17.1 95.07 16.29 98.46"/>
+    <ellipse cx="16.82" cy="91.61" rx="2.21" ry="1.61" transform="rotate(-53.71 16.82 91.61)"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.27" stroke-linecap="round">
+      <path d="M16.13 91.11 Q14.09 92.86 11.59 94.99"/>
+      <path d="M16.82 91.61 Q14.67 94.54 12.04 98.12"/>
+      <path d="M17.5 92.12 Q16.45 94.59 15.16 97.61"/>
     </g>
   </g>
 </g>""",
 }
 
 
-# Measured ink coverage of each drawing, inverted: coverage times opacity
-# comes out the same for all four, so the solid fan does not shout while the
-# thin chain whip looks like art that failed to load.
-#   fan 18.7%   chain whip 6.2%   spear 7.6%   jian+dao 9.4%
-# The fan is nudged up from the 0.063 the arithmetic gives, because it is the
+# Measured ink coverage of each drawing, inverted, so that coverage times
+# opacity comes out the same for all four: the solid fan must not shout while
+# the thin chain whip looks like art that failed to load.
+#   fan 22.7%   chain whip 6.4%   spear 6.4%   jian+dao 9.7%
+# The fan is nudged up from the 0.052 the arithmetic gives, because it is the
 # one drawn in seal red, and red on paper reads lighter than ink.
-WEAPON_WEIGHT = {"fan": 0.09, "chainwhip": 0.17, "spear": 0.155, "swords": 0.126}
+WEAPON_WEIGHT = {"fan": 0.065, "chainwhip": 0.185, "spear": 0.185, "swords": 0.122}
 
 
 def weapon_svg(key):
