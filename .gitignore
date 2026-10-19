@@ -34,6 +34,11 @@ images/*/*
 # Source document for the officer bios. Kept locally, not published.
 *.docx
 
+# CMU's own Giving Day training deck. Local reference only: it is not ours to
+# republish and it carries a staff email address. Everything the website needs
+# from it is written down in data/giving-day.json and README section 12.
+*.pptx
+
 # Source photo for the hero, resized copy lives in images/hero-ds.jpg
 ds group photo.jpg
 

@@ -76,7 +76,8 @@ cmu-wushu-website/
 ├── script.js       ← Menu, carousels, easter egg, ink bloom, lightbox, practice line. Leave it be.
 ├── data/           ← live.json (calendar robot), members.csv (local only), members-extra.json,
 │                     giving-day.json (the Giving Day settings — section 11)
-├── images/         ← Logo, plus one folder of photos per event
+├── images/         ← Logo, plus one folder of photos per event, and
+│                     giving-day-film.mp4 (the Giving Day film — section 11)
 ├── event-extras.json ← events not on the Google Calendar (see 5c)
 └── README.md       ← This file
 ```
@@ -704,38 +705,67 @@ python3 scripts/giving_day.py
 Anything in the HTML between a `<!-- GD:... start -->` and `<!-- GD:... end -->` marker is
 generated. If you edit inside those markers, the next run wipes it out.
 
-### Before it can go live, two things are missing
+### Before it can go live, one thing is missing
 
-Both are blank in the JSON on purpose, and the page is built to survive without them:
+`donateUrl` is blank in the JSON on purpose, and the page is built to survive without it:
 
 | Field | What to put there |
 |---|---|
 | `donateUrl` | The club's donation page. CMU runs the day on GiveCampus and gives each club a page at `givecampus.com/schools/CarnegieMellonUniversity/giving-cmu-day-<year>/pages/student-organizations/<club>`. The 2026 one will not exist until CMU builds it. |
-| `video.youtubeId` | Just the ID, the part after `v=` in the YouTube link — not the whole URL. |
 
-While `donateUrl` is empty every donate button renders as a greyed-out "coming soon" chip
-instead of a link, so the page can never go out with a dead donate button. While
-`video.youtubeId` is empty the player shows a "film lands here" panel. `--publish` refuses
-to run at all until there is a donation URL.
+While it is empty every donate button renders as a greyed-out "coming soon" chip instead of
+a link, so the page can never go out with a dead donate button. `--publish` refuses to run
+at all until there is a donation URL.
 
-### Check the date
+### The film
 
-`opensAt` and `closesAt` are **a guess**: CMU had not announced the 2026 date when the page
-was built, so it assumes GivingTuesday, **December 1, 2026**, which is the pattern every
-previous year followed. Confirm it at [cmu.edu/givingcmuday](https://www.cmu.edu/engage/give/givingcmuday.html)
-and fix the JSON if it moved. Keep the `-05:00` on the end — that is Pittsburgh in December,
-and it is what makes the countdown correct for somebody visiting from another timezone.
+The page can play the film two ways, and it picks the first one that is filled in:
 
-### Why the page asks for $10
+| Field | What happens |
+|---|---|
+| `video.youtubeId` | Just the ID, the part after `v=` in the YouTube link — not the whole URL. Nothing loads from YouTube until somebody clicks play, so the page stays fast and sets no Google cookies on arrival. **Prefer this** once the final cut is up: it is shareable, and it is not fifteen megabytes down somebody's phone data. |
+| `video.file` | A video file sitting in the repo, played straight from the site. Currently `images/giving-day-film.mp4`, the draft cut — 1920×1080, 34 seconds, 14 MB. |
 
-CMU runs a **Student Organization Challenge** alongside the day: the clubs with the most
-*individual donors* giving $10 or more win cash prizes on top of what they raise ($6,000 /
-$4,000 / $2,000 in 2025). It is counted by heads, not dollars, so a hundred $10 gifts beat
-one $1,000 gift twice over. That is why the page leads with $10 and why the progress bar
-counts people rather than money. The club had ten donors in 2025.
+Fill in `youtubeId` and it takes over automatically; empty both and the player goes back to
+a "film lands here" panel. `video.length` is the running time printed under the player.
 
-If CMU does not run the challenge in 2026, set `challenge.on` to `false` and the page stops
-talking about donor counts.
+**The cut you send to CMU is a different file from the one on this page.** Their rules, from
+the training deck: `.mp4`, `.mov`, `.avi`, `.mpeg` or `.mpg`, **no longer than 30 seconds**,
+15–20 preferred. The draft runs 34 seconds, so it needs a trim before it goes to them. They
+also want one still image at three sizes: 760×430, 600×400 and 600×315.
+
+### The date is confirmed
+
+**Tuesday, December 1, 2026** — straight from CMU's own FY27 student organization training
+deck, the twelfth year they have run it. Official site:
+[givingcmuday.cmu.edu](https://givingcmuday.cmu.edu). Keep the `-05:00` on the end of the
+dates — that is Pittsburgh in December, and it is what makes the countdown correct for
+somebody visiting from another timezone.
+
+### Why the page asks for $10, and why it does not chase the prize
+
+Two different numbers, and the page is careful about which is which:
+
+- **`challenge.minGift` is $5.** That is CMU's floor: a gift under $5 does not go through the
+  site at all, and does not count toward any match or challenge.
+- **`askAmount` is $10.** That is what every button on the page asks for. CMU's own training
+  advice is to ask for "a small, non-intimidating amount like $5 or $10".
+
+CMU runs matches and challenges for student orgs, scored on the number of *individual
+donors* rather than dollars. The club finished 2025 with ten donors and $1,090; the orgs that win
+those prizes are well into the hundreds, so **the page does not build its pitch around
+winning one**. The challenge gets one small aside, and its only job there is to explain why a
+$10 gift counts for as much as a $500 one. The progress bar leads with dollars and prints the
+number of people underneath.
+
+`challenge.prizes` is **empty on purpose**: CMU does not tell the clubs the 2026 amounts until
+**mid-November**, so the page describes the rule without naming a figure. When the real
+numbers are announced, put them in and re-stamp. Set `challenge.on` to `false` and the aside
+disappears and the page stops mentioning donor counts at all.
+
+Two rules from the training deck that the page already respects: **nothing may be given in
+exchange for a gift** (no "donate and get a T-shirt"), and **gifts are counted one per person**
+by card and email address, which CMU audits afterwards. Never give on somebody else's behalf.
 
 ### Putting it live, and taking it down
 
@@ -763,10 +793,17 @@ Every donate button carries a `utm_content` saying where it was clicked — `her
 `sticky`, `footer`, `tier-25`. The donation platform's own reporting will tell you whether
 the film actually drove gifts.
 
+### Where these facts came from
+
+CMU's *FY27 Giving CMU Day Student Organization Training* deck, October 2026. The file itself
+is **not in the repo** — `.gitignore` keeps `.pptx` out, because it is not ours to republish
+and it carries a staff email address. Keep your copy in Dropbox; everything the website needs
+from it is written down here and in the comments in `data/giving-day.json`.
+
 ### Taking it down for good
 
-Delete `giving-day.html`, `giving-day.css`, `giving-day.js`, `data/giving-day.json` and
-`scripts/giving_day.py`. Run `--unpublish` **first** — otherwise the banner strip stays on
+Delete `giving-day.html`, `giving-day.css`, `giving-day.js`, `data/giving-day.json`,
+`images/giving-day-film.mp4` and `scripts/giving_day.py`. Run `--unpublish` **first** — otherwise the banner strip stays on
 the other six pages with nothing to link to. Nothing else in the site refers to these files;
 `styles.css` was deliberately left untouched.
 
