@@ -25,6 +25,7 @@ thing at a time, and refresh the page in your browser to see the result.
 8. [How to change colors and text everywhere](#8-how-to-change-colors-and-text-everywhere)
 9. [The yearly handoff checklist](#9-the-yearly-handoff-checklist)
 10. [If something breaks](#10-if-something-breaks)
+11. [Giving Day](#11-giving-day)
 
 ---
 
@@ -68,9 +69,13 @@ cmu-wushu-website/
 ├── scripts/        ← calendar sync + the photo shrink script
 ├── .github/        ← the robot that runs it daily
 ├── contact.html    ← Email, Instagram, mailing list, how to join, FAQ
+├── giving-day.html ← Giving Day campaign page. BUILT BUT NOT PUBLISHED (see section 11)
+├── giving-day.css  ← styles for that page only
+├── giving-day.js   ← countdown and video player for that page only
 ├── styles.css      ← ALL the visual styling for every page
 ├── script.js       ← Menu, carousels, easter egg, ink bloom, lightbox, practice line. Leave it be.
-├── data/           ← live.json (calendar robot), members.csv (local only), members-extra.json
+├── data/           ← live.json (calendar robot), members.csv (local only), members-extra.json,
+│                     giving-day.json (the Giving Day settings — section 11)
 ├── images/         ← Logo, plus one folder of photos per event
 ├── event-extras.json ← events not on the Google Calendar (see 5c)
 └── README.md       ← This file
@@ -81,6 +86,7 @@ cmu-wushu-website/
 - Events and photos are now on **one page** (`events.html`).
 - Want to change **colors or spacing**? Edit `styles.css`.
 - `script.js` you can ignore entirely.
+- The three `giving-day.*` files are a campaign page that is **not live**. Section 11.
 
 ---
 
@@ -672,6 +678,97 @@ or close and reopen the tab.
 **Still stuck?**
 Restore from your backup copy. This is why rule #1 says to make one. If the site is on GitHub,
 you can also revert to an earlier version through the site's history.
+
+---
+
+## 11. Giving Day
+
+CMU runs **Giving CMU Day** once a year on GivingTuesday, the Tuesday after Thanksgiving.
+The club has its own page for it, `giving-day.html`, with a countdown, the Giving Day film,
+and donate buttons.
+
+**It is built but not published.** It is not in the navigation, not in the sitemap, and it
+carries a `noindex` tag so search engines leave it alone. Nothing links to it. Putting it
+live is one command, and taking it down again is one command.
+
+### The one file you edit
+
+Everything on the page — the date, the dollar figures, the donor count, the donation link,
+the video — comes from **`data/giving-day.json`**. You never edit `giving-day.html` by hand.
+Change the JSON, then run:
+
+```
+python3 scripts/giving_day.py
+```
+
+Anything in the HTML between a `<!-- GD:... start -->` and `<!-- GD:... end -->` marker is
+generated. If you edit inside those markers, the next run wipes it out.
+
+### Before it can go live, two things are missing
+
+Both are blank in the JSON on purpose, and the page is built to survive without them:
+
+| Field | What to put there |
+|---|---|
+| `donateUrl` | The club's donation page. CMU runs the day on GiveCampus and gives each club a page at `givecampus.com/schools/CarnegieMellonUniversity/giving-cmu-day-<year>/pages/student-organizations/<club>`. The 2026 one will not exist until CMU builds it. |
+| `video.youtubeId` | Just the ID, the part after `v=` in the YouTube link — not the whole URL. |
+
+While `donateUrl` is empty every donate button renders as a greyed-out "coming soon" chip
+instead of a link, so the page can never go out with a dead donate button. While
+`video.youtubeId` is empty the player shows a "film lands here" panel. `--publish` refuses
+to run at all until there is a donation URL.
+
+### Check the date
+
+`opensAt` and `closesAt` are **a guess**: CMU had not announced the 2026 date when the page
+was built, so it assumes GivingTuesday, **December 1, 2026**, which is the pattern every
+previous year followed. Confirm it at [cmu.edu/givingcmuday](https://www.cmu.edu/engage/give/givingcmuday.html)
+and fix the JSON if it moved. Keep the `-05:00` on the end — that is Pittsburgh in December,
+and it is what makes the countdown correct for somebody visiting from another timezone.
+
+### Why the page asks for $10
+
+CMU runs a **Student Organization Challenge** alongside the day: the clubs with the most
+*individual donors* giving $10 or more win cash prizes on top of what they raise ($6,000 /
+$4,000 / $2,000 in 2025). It is counted by heads, not dollars, so a hundred $10 gifts beat
+one $1,000 gift twice over. That is why the page leads with $10 and why the progress bar
+counts people rather than money. The club had ten donors in 2025.
+
+If CMU does not run the challenge in 2026, set `challenge.on` to `false` and the page stops
+talking about donor counts.
+
+### Putting it live, and taking it down
+
+```
+python3 scripts/giving_day.py --publish     # link it from the whole site
+python3 scripts/giving_day.py --unpublish   # remove every trace of it again
+python3 scripts/giving_day.py --close       # keep the page up, stop asking, say thank you
+python3 scripts/giving_day.py --dry-run     # show what would change, change nothing
+```
+
+`--publish` adds a red banner strip across the top of all six other pages, adds a Giving Day
+link to every footer, puts the page in the sitemap and removes the `noindex`. `--unpublish`
+removes all of that and puts the six pages back byte-for-byte as they were. `--close` is for
+the day after: the page stays up for anyone following an old link, but the donate buttons
+become a thank-you with the final number.
+
+### During the day
+
+Update `donors` and `raised` in the JSON and re-run the script to move the bar. The bar only
+appears once the status is `live`.
+
+### The links are tagged
+
+Every donate button carries a `utm_content` saying where it was clicked — `hero`, `video`,
+`sticky`, `footer`, `tier-25`. The donation platform's own reporting will tell you whether
+the film actually drove gifts.
+
+### Taking it down for good
+
+Delete `giving-day.html`, `giving-day.css`, `giving-day.js`, `data/giving-day.json` and
+`scripts/giving_day.py`. Run `--unpublish` **first** — otherwise the banner strip stays on
+the other six pages with nothing to link to. Nothing else in the site refers to these files;
+`styles.css` was deliberately left untouched.
 
 ---
 
