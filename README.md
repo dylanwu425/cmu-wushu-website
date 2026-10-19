@@ -798,6 +798,17 @@ the page's own ink colour and cost nothing to load. They live in `WEAPON_ART` in
 `scripts/giving_day.py` and the `art` field in each tier picks one: `fan`, `chainwhip`,
 `spear` or `swords`. Any other value and the card is simply plain.
 
+Two things in that file are easy to get wrong if you touch it:
+
+- **`WEAPON_WEIGHT` sets a different opacity per drawing.** The fan is a solid sheet of paper
+  and covers about three times as much of the card as the chain whip does, so at one shared
+  opacity the $10 card shouted and the $25 card looked like its art had failed to load. The
+  numbers are measured ink coverage, inverted. If you draw a new weapon, give it an opacity in
+  the same spirit: heavy shape, low number.
+- **The jian and the dao use SVG masks**, which is what knocks the crease out of each blade
+  and opens the gap where one blade crosses in front of the other. The fan uses one too, for
+  its rib creases. The mask `id`s have to stay unique on the page.
+
 To change a tier, edit `weapon` (the name), `hanzi` (the character above it) and `art`. Add
 `"label": "..."` to any tier for a line of small print underneath, or drop `weapon` and
 `hanzi` entirely and let the drawing speak for itself.
