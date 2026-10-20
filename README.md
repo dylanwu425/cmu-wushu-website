@@ -808,9 +808,11 @@ become a thank-you with the final number.
 ### The tiers are photographs
 
 Each tier card carries one of the club's own photographs: a mid-air leap with a sword at $10,
-a costumed turn on stage at $25, a pair of hook swords at $100 — and at $50 a diptych, a
-sister and a brother cut from the same frame of the same group doing the same move, scaled so
-their faces match and laid side by side with a paper seam. They sit at
+a costumed turn on stage at $25, a pair of hook swords at $100 — and at $50 one figure made of
+two people, a sister and her brother joined down the middle of the face, cut from the same
+frame of the same group doing the same move. Her left side, his right, his half scaled until
+the two faces measure the same. The alt text says so: a composite described as "a club member"
+would be a small lie on a page asking for money. They sit at
 the top of the card, bleed through its padding to the torn edge, and dissolve into the paper at
 the bottom so there is no seam. The files are in `images/giving-day/` and each tier names one with `photo`,
 plus an `alt` describing the picture for anyone who cannot see it.
@@ -869,8 +871,9 @@ Things that are easy to get wrong here:
   gradients stack. The $50 card carries two performers and needs two holes, and two stacked
   radial gradients doubled the wash wherever they overlapped — tried, and it nearly erased all
   four photographs. Black painted twice into a mask is still black. A tier with `"pair": true`
-  gets `gd-tier--pair` and the two-hole wash; the lobes are positioned where the performers
-  are, so moving a crop means moving a lobe. All of it is in `giving-day.css` under
+  gets `gd-tier--pair` and a two-hole wash, with the lobes where the two performers are.
+  Nothing uses it today — the $50 was a two-panel diptych before it became a splice, and the
+  mechanism is kept because that is one JSON key away from coming back. All of it is in `giving-day.css` under
   `.gd-tier__shot`, and the flagged card mixes its own copy in `--paper` rather than
   `--paper-card`, because it sits on slightly different paper.
 - **The crop boxes are recorded, not improvised.** Each picture is a named region of a
