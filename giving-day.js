@@ -170,21 +170,37 @@
      player says there is sound to turn on.
 
      The markup also ships WITH the native control bar, because without
-     this script nothing could start the film at all. Once we have decided
-     to run it ourselves, the bar comes off and the two small buttons in
-     the corner come on: one to stop it, one to hear it. Everything else
-     the bar offered — scrubbing, speed, fullscreen, download — is still
-     one right-click away and was only ever chrome across the picture.
+     this script nothing could start the film at all. The bar comes off
+     the moment this runs — unconditionally, in every branch — and the two
+     small buttons in the corner take over: one to stop it, one to hear
+     it. Everything else the bar offered — scrubbing, speed, fullscreen,
+     download — is still one right-click away and was only ever chrome
+     across the picture.
+
+     Unconditionally matters. The bar used to survive three ways: a
+     visitor who asks for reduced motion, a phone in data-saver mode, and
+     a browser that refuses the autoplay anyway. All three are common —
+     "Reduce motion" is a single switch in macOS Accessibility — and all
+     three left the film looking exactly as if the change had never been
+     made. Those visitors now get the same bare picture as everyone else,
+     paused on its poster, with our own play button to start it.
      ------------------------------------------------------------------ */
 
   function autoplayFilm(video) {
-    if (reducedMotion() || dataSaver()) return;   // the control bar stays
+    video.controls = false;                        // the bar comes off, always
+    filmButtons(video);
+
+    // Nothing has been downloaded yet: the markup says preload="none" and
+    // only the branch that actually plays the film changes that. A visitor
+    // who never presses play never pays for 14 MB.
+    if (reducedMotion() || dataSaver()) {
+      quietCaption(video);
+      return;
+    }
 
     video.muted = true;                            // required, and belt-and-braces
     video.setAttribute("muted", "");
     video.preload = "auto";
-    video.controls = false;                        // the bar comes off here
-    filmButtons(video);
 
     var started = false;
     function go() {
@@ -193,12 +209,11 @@
       var p = video.play();
       if (p && p.catch) {
         p.catch(function () {
-          // Autoplay refused anyway — an iOS low-power screen, say.
-          // Hand the control bar back rather than leave a still frame
-          // with a pause button over it and no way to start anything.
-          video.controls = true;
-          var strip = video.parentNode.querySelector("[data-gd-controls]");
-          if (strip) strip.hidden = true;
+          // Autoplay refused anyway — an iOS low-power screen, say. Leave
+          // the picture bare and let our own play button offer the film;
+          // handing back the control bar here is what put it on screen
+          // for a good share of visitors.
+          quietCaption(video);
         });
       }
     }
@@ -232,6 +247,19 @@
   }
 
   /* ------------------------------------------------------------------
+     3b-i. The caption, for a film that is sitting still
+
+     The stamped caption reads "Playing silently · press for sound",
+     which is a lie to anyone whose film never started. The generator
+     leaves the alternative on the element for us to swap in.
+     ------------------------------------------------------------------ */
+
+  function quietCaption(video) {
+    var cap = document.querySelector("[data-gd-caption-quiet]");
+    if (cap) cap.textContent = cap.getAttribute("data-gd-caption-quiet");
+  }
+
+  /* ------------------------------------------------------------------
      3b-ii. The two buttons that stand in for the control bar
      ------------------------------------------------------------------ */
 
@@ -243,41 +271,62 @@
     var playBtn  = strip.querySelector('[data-gd-toggle="play"]');
     var soundBtn = strip.querySelector('[data-gd-toggle="sound"]');
 
+    function paint() {
+      if (playBtn) {
+        var paused = video.paused;
+        playBtn.setAttribute("aria-label", paused ? "Play the film" : "Pause the film");
+        playBtn.firstElementChild.className =
+          "gd-film__icon gd-film__icon--" + (paused ? "play" : "pause");
+      }
+      if (soundBtn) {
+        var off = video.muted;
+        soundBtn.setAttribute("aria-pressed", off ? "false" : "true");
+        soundBtn.setAttribute("aria-label", off ? "Turn the sound on" : "Turn the sound off");
+        soundBtn.firstElementChild.className =
+          "gd-film__icon gd-film__icon--" + (off ? "sound" : "sound-on");
+      }
+    }
+    // The markup is stamped for the autoplaying case, so a film that is
+    // sitting still would otherwise show a pause button over a still frame.
+    paint();
+
     function self(fn) {                  // mark the next event as ours
       video.dataset.gdSelf = "1";
       fn();
       setTimeout(function () { video.dataset.gdSelf = "0"; }, 0);
     }
 
+    // play() hands back a promise that rejects if the browser says no.
+    // Unhandled, that prints a red error in the console of anyone whose
+    // browser declined; there is nothing to do about it but keep the
+    // button showing the truth.
+    function play() {
+      var p = video.play();
+      if (p && p.catch) p.catch(paint);
+    }
+
     if (playBtn) {
       playBtn.addEventListener("click", function () {
+        // For a visitor who never got the autoplay, this press is the
+        // first time the file is wanted at all.
+        if (video.preload === "none") video.preload = "auto";
         self(function () {
-          if (video.paused) { video.play(); } else { video.pause(); }
+          if (video.paused) { play(); } else { video.pause(); }
         });
       });
       ["play", "pause"].forEach(function (ev) {
-        video.addEventListener(ev, function () {
-          var paused = video.paused;
-          playBtn.setAttribute("aria-label", paused ? "Play the film" : "Pause the film");
-          playBtn.firstElementChild.className =
-            "gd-film__icon gd-film__icon--" + (paused ? "play" : "pause");
-        });
+        video.addEventListener(ev, paint);
       });
     }
 
     if (soundBtn) {
       soundBtn.addEventListener("click", function () {
+        if (video.preload === "none") video.preload = "auto";
         self(function () { video.muted = !video.muted; });
         // An unmute is also the moment to make sure it is running.
-        if (!video.muted && video.paused) self(function () { video.play(); });
+        if (!video.muted && video.paused) self(play);
       });
-      video.addEventListener("volumechange", function () {
-        var off = video.muted;
-        soundBtn.setAttribute("aria-pressed", off ? "false" : "true");
-        soundBtn.setAttribute("aria-label", off ? "Turn the sound on" : "Turn the sound off");
-        soundBtn.firstElementChild.className =
-          "gd-film__icon gd-film__icon--" + (off ? "sound" : "sound-on");
-      });
+      video.addEventListener("volumechange", paint);
     }
   }
 

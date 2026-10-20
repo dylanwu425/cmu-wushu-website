@@ -22,6 +22,7 @@ goes back exactly to how it was.
 
 import argparse
 import datetime as dt
+import hashlib
 import html
 import json
 import os
@@ -143,6 +144,35 @@ def indent(body, spaces):
     `spaces`, and the closing marker is left sitting at that same depth.
     """
     return "\n" + pad(body.strip("\n"), spaces) + "\n" + " " * spaces
+
+
+def stamp_assets(page):
+    """Put a content fingerprint on this page's own CSS and JS links.
+
+    Without one, a browser that has `giving-day.css` in its cache keeps
+    using it, and an ordinary reload will not necessarily go back and ask.
+    That is not a theoretical problem: it already produced a page that
+    showed the old stylesheet against the new images — the pictures scaled
+    to fill a box cut for a different ratio, and the film still wearing a
+    control bar the script had been changed to remove.
+
+    The fingerprint is the first eight characters of the file's SHA-1, so
+    it only changes when the file does and a cached copy stays cached for
+    as long as it is still correct. Only the two Giving Day files get one;
+    styles.css and script.js are shared with every other page and are not
+    this script's to rewrite.
+    """
+    for name in ("giving-day.css", "giving-day.js"):
+        full = os.path.join(ROOT, name)
+        try:
+            with open(full, "rb") as fh:
+                tag = hashlib.sha1(fh.read()).hexdigest()[:8]
+        except OSError:
+            continue
+        page = re.sub(r'(href|src)="%s(?:\?v=[0-9a-f]+)?"' % re.escape(name),
+                      lambda m: '%s="%s?v=%s"' % (m.group(1), name, tag),
+                      page)
+    return page
 
 
 def jpeg_size(path):
@@ -473,6 +503,14 @@ def build(cfg):
     autoplay = bool(video.get("autoplay"))
     loop = bool(video.get("loop"))
     play_label = "Watch the film" + (" &middot; %s" % esc(vlen) if vlen else "")
+    # The caption for a film that is sitting still rather than running. The
+    # script swaps it in for the three cases where the film does not start
+    # by itself — reduced motion, data saver, and an outright refusal — so
+    # those visitors are not told to press for sound on a still frame.
+    # A real middle dot, not the HTML entity: this one goes into an
+    # attribute and comes back out through textContent, where "&middot;"
+    # would print as those eight characters rather than as a dot.
+    quiet_label = "Press to play" + (" \u00b7 %s" % vlen if vlen else "")
     if autoplay:
         # It can only autoplay muted — every browser requires that — so the
         # caption has to tell people there is sound to turn on.
@@ -519,12 +557,14 @@ def build(cfg):
     </video>%s
   </div>
 </div>
-<p class="gd-film__caption">%s</p>""" % (
+<p class="gd-film__caption"%s>%s</p>""" % (
             " muted" if autoplay else "",
             " loop" if loop else "",
             " data-gd-autoplay" if autoplay else "",
             poster, vtitle, attr(vfile), attr(vfile),
-            FILM_BUTTONS if autoplay else "", play_label), 10))
+            FILM_BUTTONS if autoplay else "",
+            (' data-gd-caption-quiet="%s"' % attr(quiet_label)) if autoplay else "",
+            play_label), 10))
     else:
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film gd-film--pending">
@@ -902,7 +942,7 @@ def main():
         cfg["status"] = "closed"
 
     # the page itself
-    page = build(cfg)
+    page = stamp_assets(build(cfg))
     with open(PAGE, encoding="utf-8") as fh:
         before = fh.read()
     page_changed = page != before
