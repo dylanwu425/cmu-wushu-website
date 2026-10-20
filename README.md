@@ -731,11 +731,26 @@ a "film lands here" panel. `video.length` is the running time printed under the 
 
 The file version **starts by itself and loops**, which is what `autoplay` and `loop` in the
 JSON do. Browsers only ever allow that with the sound off, so it starts muted and the line
-under the player says to press it for sound. Three kinds of visitor get the poster and a play
-button instead, and download nothing at all: anyone who has asked their system for reduced
-motion, anyone whose phone is in data-saver mode, and anyone on a connection the browser
-calls slow. It also only starts once it is actually on screen. Set `autoplay` to `false` and
-everybody gets the poster.
+under the player says to press it for sound. Three kinds of visitor get the poster instead,
+and download nothing at all: anyone who has asked their system for reduced motion, anyone
+whose phone is in data-saver mode, and anyone on a connection the browser calls slow. It also
+only starts once it is actually on screen. Set `autoplay` to `false` and everybody gets the
+poster.
+
+**There is no control bar.** The film is a 34-second silent clip nobody is going to scrub, so
+the script takes the native bar off and puts two small buttons in the corner instead: one to
+stop it, one to hear it. Both are required rather than decorative — anything that moves by
+itself for more than five seconds has to offer a way to stop it (WCAG 2.2.2), and a film
+forced to start muted has to offer its sound.
+
+The bar is still in the markup, because without JavaScript nothing would start the film and
+nothing could. The script removes it, and removes it in *every* branch — including the three
+above and the case where the browser refuses the autoplay anyway. That last part was learned
+the hard way: those branches used to keep the bar, which meant anyone with "Reduce motion"
+switched on in macOS Accessibility saw the page exactly as if the change had never been made.
+Those visitors now get the same bare picture, paused on its poster, with our own play button
+to start it, and the caption changes from "Playing silently" to "Press to play" so it is not
+promising sound on a still frame.
 
 **The cut you send to CMU is a different file from the one on this page.** Their rules, from
 the training deck: `.mp4`, `.mov`, `.avi`, `.mpeg` or `.mpg`, **no longer than 30 seconds**,
@@ -860,6 +875,24 @@ The practical reasons, in case anyone is tempted later:
 
 One thing left to do before the day: **check that everyone pictured is happy to appear on a
 fundraising page.** That is a message to four people, not a licensing exercise.
+
+### A cached stylesheet can make the page look broken
+
+`giving-day.css` and `giving-day.js` are linked with a `?v=` fingerprint —
+the first eight characters of the file's own SHA-1, written in by
+`scripts/giving_day.py` every time it stamps the page. It changes only when
+the file does, so a cached copy stays cached for as long as it is still right.
+
+It is there because the failure it prevents does not look like a caching
+problem. A browser holding the old stylesheet against the new pictures
+rendered them into a box cut for a different ratio, so the photographs came
+out scaled and cropped wrong, and the old script left the film wearing the
+control bar that had just been taken off it. Two symptoms, both looking like
+fresh bugs, both actually one stale file.
+
+`styles.css` and `script.js` are shared with every other page, so this script
+leaves them alone. If you change one of those and the site looks stale, it is
+an ordinary hard reload.
 
 ### The counter
 
