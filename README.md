@@ -808,7 +808,9 @@ become a thank-you with the final number.
 ### The tiers are photographs
 
 Each tier card carries one of the club's own photographs: a mid-air leap with a sword at $10,
-a costumed turn on stage at $25, a low stance at $50, a pair of hook swords at $100. They sit at
+a costumed turn on stage at $25, a pair of hook swords at $100 — and at $50 a diptych, a
+sister and a brother cut from the same frame of the same group doing the same move, scaled so
+their faces match and laid side by side with a paper seam. They sit at
 the top of the card, bleed through its padding to the torn edge, and dissolve into the paper at
 the bottom so there is no seam. The files are in `images/giving-day/` and each tier names one with `photo`,
 plus an `alt` describing the picture for anyone who cannot see it.
@@ -833,14 +835,20 @@ Things that are easy to get wrong here:
   than the file, so `cover` crops top and bottom and takes the head off. No single
   `object-position` rescues it, because the crouching figures sit halfway down their frames
   while the others are near the top.
-- **Two gradients sit over every photograph, and neither is in the file.** A radial
-  spotlight washes the frame out towards paper away from an ellipse centred at 50% across and
-  34% down, and the bottom 30% fades into the card. The spotlight exists because three of the
-  four pictures were taken in a room with other people in it, and at card size the eye could
-  not tell who the picture was of; washing the background back solves that without retouching
-  a photograph of real people. Its ellipse is centred where the performers' heads sit — move
-  the crops and that number has to move with them. Both gradients are in `giving-day.css`
-  under `.gd-tier__shot`, and the flagged card repeats both in `--paper` rather than
+- **Two washes sit over every photograph, and neither is in the file.** The bottom 30%
+  fades into the card, and over the whole frame lies a sheet of the card's own paper with a
+  soft hole punched where the performer is — then pushed around by the same `feTurbulence`
+  filter that gives the cards their deckled edges, so the sheet's edge wanders instead of
+  drawing a clean ellipse and the photograph reads as a scrap of print lying on the card. It
+  exists because three of the four pictures were taken in a room with other people in it, and
+  at card size the eye could not tell who the picture was of.
+- **The hole is punched through a mask, not painted as a second gradient.** Masks union;
+  gradients stack. The $50 card carries two performers and needs two holes, and two stacked
+  radial gradients doubled the wash wherever they overlapped — tried, and it nearly erased all
+  four photographs. Black painted twice into a mask is still black. A tier with `"pair": true`
+  gets `gd-tier--pair` and the two-hole wash; the lobes are positioned where the performers
+  are, so moving a crop means moving a lobe. All of it is in `giving-day.css` under
+  `.gd-tier__shot`, and the flagged card mixes its own copy in `--paper` rather than
   `--paper-card`, because it sits on slightly different paper.
 - **The crop boxes are recorded, not improvised.** Each picture is a named region of a
   full-resolution original — the smallest is 800px wide against a 720px card, so every one is a

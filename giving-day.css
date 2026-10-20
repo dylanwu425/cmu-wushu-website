@@ -696,31 +696,54 @@
   object-fit: cover;
 }
 
-/* A spotlight on the performer. Three of these four pictures were taken in a
-   room with other people in it — a line of members mid-form, a fist in the
-   air, a window full of trees — and at card size the eye has to work out who
-   the picture is of. This washes the frame out towards paper from an ellipse
-   centred on the performer, so the background recedes instead of competing
-   and the edges of the photograph melt into the card rather than ending on a
-   straight line.
+/* A spotlight on the performer, torn rather than drawn.
 
-   It is a gradient over the photograph, not a change to the file: the files
-   stay honest photographs, and the strength of this is one number to tune.
-   The ellipse is centred at 34% down because that is roughly where the
-   performers' heads sit now; move the crops and this has to move with them.
-   The colour is --paper-card as literal rgba, matching the fade below, which
-   does the same thing for the same reason. */
+   Three of these four pictures were taken in a room with other people in it
+   — a line of members mid-form, a raised fist, a window full of trees — and
+   at card size the eye had to work out who the picture was of. This lays a
+   sheet of the card's own paper over the photograph with a soft hole punched
+   where the performer is, so the background recedes and the picture reads as
+   a scrap of print lying on the card.
+
+   The hole is punched through a mask rather than painted as a second
+   gradient, for one specific reason: masks union, gradients stack. The $50
+   card carries two performers and needs two holes, and two stacked radial
+   gradients would have doubled the wash everywhere they overlap — tried, and
+   it nearly erased all four photographs. Black painted twice into a mask is
+   still black.
+
+   The whole sheet is then pushed around by feTurbulence, the same filter the
+   page already uses for its deckled card edges and its paper mottle, so the
+   wash wanders instead of drawing a clean ellipse. It is a gradient over the
+   photograph, never a change to the file: the files stay honest photographs.
+
+   The lobes are placed where the performers are. Move a crop and the lobe
+   has to move with it. */
+.gd-tier__shot {
+  --gd-wash: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='none'><defs><radialGradient id='h0' gradientUnits='userSpaceOnUse' cx='200' cy='170' r='248'><stop offset='0%' stop-color='%23000' stop-opacity='1'/><stop offset='44%' stop-color='%23000' stop-opacity='1'/><stop offset='74%' stop-color='%23000' stop-opacity='0.52'/><stop offset='100%' stop-color='%23000' stop-opacity='0.07'/></radialGradient><mask id='m'><rect width='100%' height='100%' fill='%23fff'/><rect width='100%' height='100%' fill='url(%23h0)'/></mask><filter id='f' x='-35%' y='-35%' width='170%' height='170%'><feTurbulence type='fractalNoise' baseFrequency='0.007' numOctaves='3' seed='5' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='70' xChannelSelector='R' yChannelSelector='G'/></filter></defs><g filter='url(%23f)'><rect x='-140' y='-175' width='680' height='850' fill='%23F4EEE2' fill-opacity='0.88' mask='url(%23m)'/></g></svg>");
+}
+
+/* The flagged card sits on --paper rather than --paper-card, so its wash is
+   mixed to match. Five units of difference, but it is the difference between
+   a photograph lying on the card and one floating just above it. */
+.gd-tier--flagged .gd-tier__shot {
+  --gd-wash: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='none'><defs><radialGradient id='h0' gradientUnits='userSpaceOnUse' cx='200' cy='170' r='248'><stop offset='0%' stop-color='%23000' stop-opacity='1'/><stop offset='44%' stop-color='%23000' stop-opacity='1'/><stop offset='74%' stop-color='%23000' stop-opacity='0.52'/><stop offset='100%' stop-color='%23000' stop-opacity='0.07'/></radialGradient><mask id='m'><rect width='100%' height='100%' fill='%23fff'/><rect width='100%' height='100%' fill='url(%23h0)'/></mask><filter id='f' x='-35%' y='-35%' width='170%' height='170%'><feTurbulence type='fractalNoise' baseFrequency='0.007' numOctaves='3' seed='5' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='70' xChannelSelector='R' yChannelSelector='G'/></filter></defs><g filter='url(%23f)'><rect x='-140' y='-175' width='680' height='850' fill='%23EFE7D8' fill-opacity='0.88' mask='url(%23m)'/></g></svg>");
+}
+
+/* Two performers, two holes. A card that is both flagged and paired would
+   take this paper colour rather than the flagged one; no card is both, and
+   the two papers differ by five units anyway. */
+.gd-tier--pair .gd-tier__shot {
+  --gd-wash: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='none'><defs><radialGradient id='h0' gradientUnits='userSpaceOnUse' cx='104' cy='160' r='184'><stop offset='0%' stop-color='%23000' stop-opacity='1'/><stop offset='44%' stop-color='%23000' stop-opacity='1'/><stop offset='74%' stop-color='%23000' stop-opacity='0.52'/><stop offset='100%' stop-color='%23000' stop-opacity='0.07'/></radialGradient><radialGradient id='h1' gradientUnits='userSpaceOnUse' cx='296' cy='160' r='184'><stop offset='0%' stop-color='%23000' stop-opacity='1'/><stop offset='44%' stop-color='%23000' stop-opacity='1'/><stop offset='74%' stop-color='%23000' stop-opacity='0.52'/><stop offset='100%' stop-color='%23000' stop-opacity='0.07'/></radialGradient><mask id='m'><rect width='100%' height='100%' fill='%23fff'/><rect width='100%' height='100%' fill='url(%23h0)'/><rect width='100%' height='100%' fill='url(%23h1)'/></mask><filter id='f' x='-35%' y='-35%' width='170%' height='170%'><feTurbulence type='fractalNoise' baseFrequency='0.007' numOctaves='3' seed='5' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='70' xChannelSelector='R' yChannelSelector='G'/></filter></defs><g filter='url(%23f)'><rect x='-140' y='-175' width='680' height='850' fill='%23F4EEE2' fill-opacity='0.88' mask='url(%23m)'/></g></svg>");
+}
+
 .gd-tier__shot::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(ellipse 64% 54% at 50% 34%,
-              rgba(244, 238, 226, 0) 0%,
-              rgba(244, 238, 226, 0) 44%,
-              rgba(244, 238, 226, 0.42) 74%,
-              rgba(244, 238, 226, 0.82) 100%);
+  background: var(--gd-wash) center / 100% 100% no-repeat;
 }
 
 /* The bottom edge dissolves into the card instead of ending on a line, so
@@ -743,13 +766,6 @@
    photograph comes later in the markup. */
 .gd-tier--flagged.gd-tier--shot { padding-top: 0; }
 .gd-tier__flag { z-index: 2; }
-.gd-tier--flagged.gd-tier--shot .gd-tier__shot::before {
-  background: radial-gradient(ellipse 64% 54% at 50% 34%,
-              rgba(239, 231, 216, 0) 0%,
-              rgba(239, 231, 216, 0) 44%,
-              rgba(239, 231, 216, 0.42) 74%,
-              rgba(239, 231, 216, 0.82) 100%);
-}
 .gd-tier--flagged.gd-tier--shot .gd-tier__shot::after {
   background: linear-gradient(to bottom,
               rgba(239, 231, 216, 0) 0%,
