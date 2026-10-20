@@ -17,10 +17,16 @@ Rebuild recipe, if one of these ever has to be made again:
      --ink and --paper.
   5. Save as progressive JPEG, quality 74.
 
-                                                      x     y     w     h   ceiling  sharpen
-  tier-10.jpg    mid-autumn-2025/PXL_20251001_231714393.jpg   850, 1285,  800, 1000   0.86     0.70
-  tier-25.jpg    ds-2026/wushu-31.jpg                        1767,  714,  940, 1175   1.0      0.35
-  tier-100.jpg   penguins-2026/DSCF6131.JPG                   613, 1879, 1680, 2100   1.0      0
+                                                      x     y     w     h   ceiling  sharpen  gamma
+  tier-10.jpg    mid-autumn-2025/PXL_20251001_231714393.jpg   850, 1285,  800, 1000   0.86     0.70     1.0
+  tier-25.jpg    ds-2026/wushu-31.jpg                        1767,  714,  940, 1175   1.0      0.35     1.0
+  tier-100.jpg   penguins-2026/DSCF6131.JPG                   613, 1879, 1680, 2100   1.0      0        0.92
+
+Gamma below 1 lifts the midtones, and it is there to make the four print as
+one run. Measured on the rendered cards, the photo areas sat at 159 / 162 /
+143 / 140 out of 255 and the two right-hand cards read as a darker pair; the
+$50's lift lives in its own builder and the $100's is above, which brings them
+to 151 and 144.
 
 tier-50.jpg is not one crop but two, side by side -- a sister on the left and
 her brother on the right, cut from the same frame of the same group doing the
@@ -34,7 +40,14 @@ Each half is resized so that face lands at 129px in the finished 720x900 file
 -- 14.3% of the card's height, the same share the other three use -- and
 positioned so both faces sit a quarter of the way down. They were photographed
 at different distances, so matching them means two different crop sizes; that
-is the whole trick. The seam is six pixels of paper down the middle.
+is the whole trick. This frame also prints darker than the other cards, so it
+carries a gamma of 0.93.
+
+The seam is six pixels of paper down the middle, and it fades out by 62% of
+the way down the frame. Below the two figures there is no picture left for it
+to divide, and a ruler-straight bright line running on across blank paper
+reads as a divider rule rather than as a join -- the one straight line in
+artwork whose whole language is torn edges.
 
 A tier whose picture holds two people sets "pair": true in data/giving-day.json.
 That puts gd-tier--pair on the card, and the stylesheet gives it a wash with
