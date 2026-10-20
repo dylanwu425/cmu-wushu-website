@@ -167,16 +167,24 @@
      The markup ships with preload="none" and no autoplay attribute, so
      nothing downloads until this function decides it should. A browser
      will only ever autoplay a muted video, so the caption under the
-     player says there is sound to turn on; the moment somebody uses the
-     controls we stop managing it and leave it to them.
+     player says there is sound to turn on.
+
+     The markup also ships WITH the native control bar, because without
+     this script nothing could start the film at all. Once we have decided
+     to run it ourselves, the bar comes off and the two small buttons in
+     the corner come on: one to stop it, one to hear it. Everything else
+     the bar offered — scrubbing, speed, fullscreen, download — is still
+     one right-click away and was only ever chrome across the picture.
      ------------------------------------------------------------------ */
 
   function autoplayFilm(video) {
-    if (reducedMotion() || dataSaver()) return;   // poster and a play button
+    if (reducedMotion() || dataSaver()) return;   // the control bar stays
 
     video.muted = true;                            // required, and belt-and-braces
     video.setAttribute("muted", "");
     video.preload = "auto";
+    video.controls = false;                        // the bar comes off here
+    filmButtons(video);
 
     var started = false;
     function go() {
@@ -185,8 +193,12 @@
       var p = video.play();
       if (p && p.catch) {
         p.catch(function () {
-          // Autoplay refused anyway. The poster and the controls are
-          // already there, so there is nothing to put right.
+          // Autoplay refused anyway — an iOS low-power screen, say.
+          // Hand the control bar back rather than leave a still frame
+          // with a pause button over it and no way to start anything.
+          video.controls = true;
+          var strip = video.parentNode.querySelector("[data-gd-controls]");
+          if (strip) strip.hidden = true;
         });
       }
     }
@@ -206,12 +218,67 @@
     }, { threshold: 0.3 });
     io.observe(video);
 
-    // Hands off once the viewer takes over.
+    // Hands off once the viewer takes over. Our own two buttons do not
+    // count as taking over — they set gdSelf for the one tick it takes the
+    // event to arrive — or pausing the film would also stop it ever
+    // resuming when it scrolls back into view.
     ["play", "pause", "volumechange", "seeking"].forEach(function (ev) {
       video.addEventListener(ev, function (e) {
-        if (e.isTrusted) video.dataset.gdTouched = "1";
+        if (e.isTrusted && video.dataset.gdSelf !== "1") {
+          video.dataset.gdTouched = "1";
+        }
       });
     });
+  }
+
+  /* ------------------------------------------------------------------
+     3b-ii. The two buttons that stand in for the control bar
+     ------------------------------------------------------------------ */
+
+  function filmButtons(video) {
+    var strip = video.parentNode.querySelector("[data-gd-controls]");
+    if (!strip) return;
+    strip.hidden = false;
+
+    var playBtn  = strip.querySelector('[data-gd-toggle="play"]');
+    var soundBtn = strip.querySelector('[data-gd-toggle="sound"]');
+
+    function self(fn) {                  // mark the next event as ours
+      video.dataset.gdSelf = "1";
+      fn();
+      setTimeout(function () { video.dataset.gdSelf = "0"; }, 0);
+    }
+
+    if (playBtn) {
+      playBtn.addEventListener("click", function () {
+        self(function () {
+          if (video.paused) { video.play(); } else { video.pause(); }
+        });
+      });
+      ["play", "pause"].forEach(function (ev) {
+        video.addEventListener(ev, function () {
+          var paused = video.paused;
+          playBtn.setAttribute("aria-label", paused ? "Play the film" : "Pause the film");
+          playBtn.firstElementChild.className =
+            "gd-film__icon gd-film__icon--" + (paused ? "play" : "pause");
+        });
+      });
+    }
+
+    if (soundBtn) {
+      soundBtn.addEventListener("click", function () {
+        self(function () { video.muted = !video.muted; });
+        // An unmute is also the moment to make sure it is running.
+        if (!video.muted && video.paused) self(function () { video.play(); });
+      });
+      video.addEventListener("volumechange", function () {
+        var off = video.muted;
+        soundBtn.setAttribute("aria-pressed", off ? "false" : "true");
+        soundBtn.setAttribute("aria-label", off ? "Turn the sound on" : "Turn the sound off");
+        soundBtn.firstElementChild.className =
+          "gd-film__icon gd-film__icon--" + (off ? "sound" : "sound-on");
+      });
+    }
   }
 
   /* ------------------------------------------------------------------

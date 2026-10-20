@@ -883,3 +883,80 @@
   .gd-film__play:focus-visible .gd-film__play-mark { transform: none; }
   .gd-sticky { transition: none; }
 }
+
+/* ------------------------------------------------------------------
+   The film's two buttons
+
+   They stand in for the native control bar, which the script removes
+   once it has taken over playback. Kept to a corner and kept quiet: the
+   film is the picture, not the player. `hidden` is on them in the
+   markup and only the script takes it off, so a visitor without
+   JavaScript keeps the real control bar and never sees these.
+   ------------------------------------------------------------------ */
+.gd-film__controls {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.45rem;
+}
+.gd-film__controls[hidden] { display: none; }
+
+.gd-film__btn {
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(16, 16, 18, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  color: var(--paper);
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity var(--transition), background-color var(--transition);
+}
+
+/* Faint until wanted — but never invisible, because the pause button is
+   the only way to stop a film that started on its own. */
+.gd-film:hover .gd-film__btn,
+.gd-film__btn:hover,
+.gd-film__btn:focus-visible { opacity: 1; }
+.gd-film__btn:hover { background: rgba(16, 16, 18, 0.8); }
+
+.gd-film__icon {
+  display: block;
+  width: 0.85rem;
+  height: 0.85rem;
+  background: currentColor;
+  -webkit-mask: var(--gd-icon) center / contain no-repeat;
+  mask: var(--gd-icon) center / contain no-repeat;
+}
+
+/* Two bars. */
+.gd-film__icon--pause {
+  --gd-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 2h3.5v12H3zM9.5 2H13v12H9.5z'/%3E%3C/svg%3E");
+}
+/* A triangle, nudged right so it looks centred in a circle. */
+.gd-film__icon--play {
+  --gd-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2l10 6-10 6z'/%3E%3C/svg%3E");
+  margin-left: 0.12rem;
+}
+/* A speaker with a cross: the sound is off, press to turn it on. */
+.gd-film__icon--sound {
+  --gd-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1 6h3l4-3.5v11L4 10H1z'/%3E%3Cpath d='M10.3 5.7l4 4.6M14.3 5.7l-4 4.6' stroke='black' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");
+}
+/* A speaker with waves: the sound is on. */
+.gd-film__icon--sound-on {
+  --gd-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1 6h3l4-3.5v11L4 10H1z'/%3E%3Cpath d='M10.4 5.2a4 4 0 0 1 0 5.6M12.6 3.4a7 7 0 0 1 0 9.2' stroke='black' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");
+}
+
+/* A film that plays itself should not also pulse its buttons at someone
+   who asked for stillness — though that visitor never gets autoplay, so
+   these only appear here if they changed the setting mid-visit. */
+@media (prefers-reduced-motion: reduce) {
+  .gd-film__btn { transition: none; opacity: 1; }
+}
