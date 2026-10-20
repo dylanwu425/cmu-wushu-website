@@ -696,6 +696,33 @@
   object-fit: cover;
 }
 
+/* A spotlight on the performer. Three of these four pictures were taken in a
+   room with other people in it — a line of members mid-form, a fist in the
+   air, a window full of trees — and at card size the eye has to work out who
+   the picture is of. This washes the frame out towards paper from an ellipse
+   centred on the performer, so the background recedes instead of competing
+   and the edges of the photograph melt into the card rather than ending on a
+   straight line.
+
+   It is a gradient over the photograph, not a change to the file: the files
+   stay honest photographs, and the strength of this is one number to tune.
+   The ellipse is centred at 34% down because that is roughly where the
+   performers' heads sit now; move the crops and this has to move with them.
+   The colour is --paper-card as literal rgba, matching the fade below, which
+   does the same thing for the same reason. */
+.gd-tier__shot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 64% 54% at 50% 34%,
+              rgba(244, 238, 226, 0) 0%,
+              rgba(244, 238, 226, 0) 44%,
+              rgba(244, 238, 226, 0.42) 74%,
+              rgba(244, 238, 226, 0.82) 100%);
+}
+
 /* The bottom edge dissolves into the card instead of ending on a line, so
    there is no seam between the photograph and the paper under it. */
 .gd-tier__shot::after {
@@ -716,6 +743,13 @@
    photograph comes later in the markup. */
 .gd-tier--flagged.gd-tier--shot { padding-top: 0; }
 .gd-tier__flag { z-index: 2; }
+.gd-tier--flagged.gd-tier--shot .gd-tier__shot::before {
+  background: radial-gradient(ellipse 64% 54% at 50% 34%,
+              rgba(239, 231, 216, 0) 0%,
+              rgba(239, 231, 216, 0) 44%,
+              rgba(239, 231, 216, 0.42) 74%,
+              rgba(239, 231, 216, 0.82) 100%);
+}
 .gd-tier--flagged.gd-tier--shot .gd-tier__shot::after {
   background: linear-gradient(to bottom,
               rgba(239, 231, 216, 0) 0%,
