@@ -849,6 +849,22 @@ Things that are easy to get wrong here:
   card's height, so that card stopped looking torn. The turbulence still owns everything
   inside the band, which is where the splotch is meant to live. Raising the turbulence without
   that margin makes both faults worse, not better.
+- **The displaced sheet is blurred by half a pixel afterwards**, the same `feGaussianBlur`
+  the page's deckle masks use for the same reason. Without it the sheet's edge is a hard
+  one-pixel step of up to 0.86 in alpha — measured at a median brightness jump of 24-52 out
+  of 255 where it survives inside the frame. A torn edge should be torn, not cut.
+- **It costs about 45ms of raster per card, once.** Measured under Chrome tracing on a
+  phone-sized viewport at 4x CPU throttle: 818ms of raster-worker time for the four cards
+  against 633ms for an equivalent plain gradient, with main-thread paint unchanged. The
+  rasterised sheet is then cached — forced repaints of the tier grid measure the same 33ms
+  with it and without it. On a slow phone the cards appear a little later; nothing janks.
+- **The holes are taller than they are wide, and sit above the faces.** Measured on the
+  rendered page, a round hole centred on each face left both raised arms on the $50 under a
+  0.29-0.31 wash while the faces themselves sat at exactly zero — the one place on any card
+  where the wash was touching a performer. A performer with an arm in the air is a tall shape,
+  so the lobes are stretched vertically and lifted. The arms now measure 0.17-0.26. Pushing
+  them taller still keeps helping the arms and starts hurting the top corners, which is where
+  that card's background window lives; 1.45 is where the two meet.
 - **The hole is punched through a mask, not painted as a second gradient.** Masks union;
   gradients stack. The $50 card carries two performers and needs two holes, and two stacked
   radial gradients doubled the wash wherever they overlapped — tried, and it nearly erased all

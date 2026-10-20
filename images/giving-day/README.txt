@@ -40,8 +40,9 @@ Each half is resized so that face lands at 129px in the finished 720x900 file
 -- 14.3% of the card's height, the same share the other three use -- and
 positioned so both faces sit a quarter of the way down. They were photographed
 at different distances, so matching them means two different crop sizes; that
-is the whole trick. This frame also prints darker than the other cards, so it
-carries a gamma of 0.93.
+is the whole trick. This frame also prints darker than the other cards -- two
+people in dark costume fill both halves, where the other three have room
+around them -- so it carries a gamma of 0.87.
 
 The seam is six pixels of paper down the middle, and it fades out by 62% of
 the way down the frame. Below the two figures there is no picture left for it
