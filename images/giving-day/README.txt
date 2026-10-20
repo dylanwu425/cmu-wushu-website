@@ -17,11 +17,20 @@ Rebuild recipe, if one of these ever has to be made again:
      --ink and --paper.
   5. Save as progressive JPEG, quality 74.
 
-                                                      x     y     w     h   ceiling
-  tier-10.jpg    mid-autumn-2025/PXL_20251001_231714393.jpg   850, 1364,  800, 1000   0.86
-  tier-25.jpg    ds-2026/wushu-31.jpg                        1767,  714,  940, 1175   1.0
-  tier-50.jpg    penguins-2026/DSCF6013.JPG                  1824, 1300, 1103, 1379   1.0
-  tier-100.jpg   penguins-2026/DSCF6131.JPG                   613, 1879, 1680, 2100   1.0
+                                                      x     y     w     h   ceiling  sharpen
+  tier-10.jpg    mid-autumn-2025/PXL_20251001_231714393.jpg   850, 1285,  800, 1000   0.86     0.70
+  tier-25.jpg    ds-2026/wushu-31.jpg                        1767,  714,  940, 1175   1.0      0.35
+  tier-50.jpg    penguins-2026/DSCF6013.JPG                  1824, 1300, 1103, 1379   1.0      0
+  tier-100.jpg   penguins-2026/DSCF6131.JPG                   613, 1879, 1680, 2100   1.0      0
+
+Sharpen is an unsharp mask (radius 1.2) applied to the resized crop before the
+duotone. It is not taste either. The $10 came off a phone and the other three
+off cameras, and a phone screen renders the 720px file at close to 1:1 where a
+desktop downscales it by a third -- so the softest picture is softest exactly
+where it is largest. Measured as the share of spectral energy above
+half-Nyquist, the four sat at 18.4 / 24.8 / 35.1 / 39.4 percent; the two lifts
+above bring the bottom two to 22.6 and 28.7 and leave the cameras' files
+untouched.
 
 The ceiling is step 4's one variable: how close that file's highlights are
 allowed to get to paper. tier-10.jpg was shot against a white wall, and mapped
@@ -51,10 +60,16 @@ this one is framed by tightening from a fixed top edge rather than by sliding
 the box up like the other three.
 
 tier-10.jpg has one extra constraint: it is the flagged card, and the red
-ribbon lies across the top of the picture, covering roughly its top 12%. A
-crop whose subject's head sits near the top edge gets that head cut in half by
-the ribbon. This one starts the face 22% down the frame for exactly that
-reason. If you swap this file, check it on the card, not on its own.
+ribbon lies across the top of the picture, covering its top 9.8% on a desktop
+and 7.3% on a phone. A crop whose subject's head sits near the top edge gets
+that head cut in half by the ribbon. This one puts the face 34% down the
+frame, which is a tenth lower than the other three -- and that is the point:
+measured against the part of the picture the ribbon leaves visible, it sits at
+27%, in line with them. The performer's hair is spiky, so the clearance that
+matters is to the hair and not to the forehead: the first real ink in the
+middle of the frame starts 13.6% down, which leaves 3.8% of the picture
+between the ribbon and the first dreadlock, about 12px on a desktop card.
+If you swap this file, check it on the card, not on its own.
 
 If you replace one, keep it 4:5. The CSS box is 4:5 to match, and if the two
 disagree, object-fit: cover crops the difference out of the middle of the
