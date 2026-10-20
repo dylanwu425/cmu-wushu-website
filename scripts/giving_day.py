@@ -145,6 +145,27 @@ def indent(body, spaces):
     return "\n" + pad(body.strip("\n"), spaces) + "\n" + " " * spaces
 
 
+# ------------------------------------------------------------------ the film
+
+# The two buttons that replace the native control bar. They ship with `hidden`
+# on them and the script takes it off, so a visitor without JavaScript gets the
+# real control bar and never sees a pair of buttons that nothing is listening
+# to. Two is the minimum that is honest: a muted film has to offer its sound,
+# and anything that moves by itself for more than five seconds has to offer a
+# way to stop it (WCAG 2.2.2).
+FILM_BUTTONS = """
+    <div class="gd-film__controls" hidden data-gd-controls>
+      <button class="gd-film__btn" type="button" data-gd-toggle="play"
+              aria-label="Pause the film">
+        <span class="gd-film__icon gd-film__icon--pause" aria-hidden="true"></span>
+      </button>
+      <button class="gd-film__btn" type="button" data-gd-toggle="sound"
+              aria-label="Turn the sound on" aria-pressed="false">
+        <span class="gd-film__icon gd-film__icon--sound" aria-hidden="true"></span>
+      </button>
+    </div>"""
+
+
 # ---------------------------------------------------------------- the weapons
 
 # One drawing per tier, sitting behind the card like a watermark. They are
@@ -442,6 +463,12 @@ def build(cfg):
         # preload="none" even when it autoplays: the script turns preloading
         # on only once it has checked that autoplay is wanted here, so a
         # visitor on a metered connection is never handed 14 MB unasked.
+        #
+        # `controls` IS in the markup even though the film is meant to play
+        # bare. It has to be: without JavaScript nothing starts the film and
+        # nothing could start it, so the control bar is the fallback. The
+        # script takes it off at the moment it decides to run the film
+        # itself, and puts the two small buttons below in its place.
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film">
   <div class="gd-film__frame">
@@ -449,14 +476,15 @@ def build(cfg):
            poster="%s" title="%s" width="1920" height="1080">
       <source src="%s" type="video/mp4">
       <p class="gd-cta-note"><a href="%s">Download the film</a></p>
-    </video>
+    </video>%s
   </div>
 </div>
 <p class="gd-film__caption">%s</p>""" % (
             " muted" if autoplay else "",
             " loop" if loop else "",
             " data-gd-autoplay" if autoplay else "",
-            poster, vtitle, attr(vfile), attr(vfile), play_label), 10))
+            poster, vtitle, attr(vfile), attr(vfile),
+            FILM_BUTTONS if autoplay else "", play_label), 10))
     else:
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film gd-film--pending">
