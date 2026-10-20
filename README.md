@@ -790,28 +790,76 @@ removes all of that and puts the six pages back byte-for-byte as they were. `--c
 the day after: the page stays up for anyone following an old link, but the donate buttons
 become a thank-you with the final number.
 
-### The tiers are weapons
+### The tiers are photographs
 
-Each tier card is named for a weapon and has that weapon drawn behind it — $10 a fan, $25 a
-chain whip, $50 a spear, $100 the jian and dao. The drawings are hand-built SVG, so they take
-the page's own ink colour and cost nothing to load. They live in `WEAPON_ART` in
-`scripts/giving_day.py` and the `art` field in each tier picks one: `fan`, `chainwhip`,
-`spear` or `swords`. Any other value and the card is simply plain.
+Each tier card carries one of the club's own photographs: a low stance at $10, a side kick at
+$25, hook swords at $50, a crouch with a tasselled sword at $100. They sit at the top of the
+card, bleed through its padding to the torn edge, and dissolve into the paper at the bottom so
+there is no seam. The files are in `images/giving-day/` and each tier names one with `photo`,
+plus an `alt` describing the picture for anyone who cannot see it.
 
-Two things in that file are easy to get wrong if you touch it:
+Things that are easy to get wrong here:
 
-- **`WEAPON_WEIGHT` sets a different opacity per drawing.** The fan is a solid sheet of paper
-  and covers about three times as much of the card as the chain whip does, so at one shared
-  opacity the $10 card shouted and the $25 card looked like its art had failed to load. The
-  numbers are measured ink coverage, inverted. If you draw a new weapon, give it an opacity in
-  the same spirit: heavy shape, low number.
-- **The jian and the dao use SVG masks**, which is what knocks the crease out of each blade
-  and opens the gap where one blade crosses in front of the other. The fan uses one too, for
-  its rib creases. The mask `id`s have to stay unique on the page.
+- **The files are cut to 4:5 and the CSS box is 4:5 to match.** If those two ever disagree,
+  `object-fit: cover` silently crops the difference out of the middle of the picture — which
+  is where the person is. The generator reads each file's real pixel size and writes it into
+  the `width`/`height` attributes, so the browser reserves the right space before the image
+  lands; that only works while the files stay 4:5.
+- **They are duotoned before they are saved**, shadows onto `--ink` and highlights onto
+  `--paper`, which is why a photograph reads as part of the page rather than as a picture
+  pasted onto it. A full-colour photograph dropped into one of these slots will look wrong
+  next to the other three. The script that does it lives in the session scratchpad, not the
+  repo; it is about forty lines of Pillow, and the recipe is: greyscale, autocontrast, a
+  contrast nudge, then map 0–255 across the two hex colours.
+- **On phones the picture is capped at `min(46vh, 19rem)`** rather than keeping its ratio.
+  A 4:5 picture on a full-width card is nearly a whole screen, which pushes the amount and the
+  button below the fold — a visitor scrolls past a photograph without ever learning what it
+  costs. The cap trades the bottom of the frame, which is floor in all four pictures, for
+  having the whole card on screen at once.
 
-To change a tier, edit `weapon` (the name), `hanzi` (the character above it) and `art`. Add
-`"label": "..."` to any tier for a line of small print underneath, or drop `weapon` and
-`hanzi` entirely and let the drawing speak for itself.
+No tier names a weapon or says what the money buys. The weapon names went because they were
+decoration that the pictures do better, and there is no "this buys a ___" line because nobody
+has told us what a given amount actually buys — a donation page should not guess. If you learn
+the real figures, `"label": "..."` on a tier prints a line of small print under the amount.
+
+The four hand-drawn weapon SVGs are still in `WEAPON_ART` in `scripts/giving_day.py`, and a
+tier with `"art": "fan"` (or `chainwhip`, `spear`, `swords`) and no `photo` still renders one.
+They were three rounds of work and they are genuinely nice drawings; they lost because a
+watermark behind the text is a losing position — dark enough to see fights the words on top of
+it, faint enough to sit under them is a smudge. `WEAPON_WEIGHT` still sets a per-drawing
+opacity from measured ink coverage, and the jian, dao and fan still use SVG masks whose `id`s
+have to stay unique on the page.
+
+### Why the photographs are ours and not the internet's
+
+This was checked properly rather than assumed. Short version: a donation page is the one page
+where the image *is* the argument, and a stock photograph of an anonymous martial artist
+quietly says there wasn't a real photo worth showing — the exact doubt a donor already has.
+
+The practical reasons, in case anyone is tempted later:
+
+- There is **no non-profit exemption** in US copyright, and fair use does not cover a
+  decorative photo on a page soliciting money. The realistic risk is not a lawsuit but a
+  reverse-image-matching demand letter, and on a CMU-branded campaign page it would land on
+  the university's advancement office.
+- Unsplash, Pexels and Pixabay are legally fine for this use, but none of them warrants a
+  **model release** — and a photograph of an identifiable person in fundraising material
+  reads as that person endorsing the appeal, which is a separate problem from copyright.
+  Pexels' own licence prohibits implying endorsement.
+- Creative Commons attribution is a **licence condition, not a courtesy**; miss it and the
+  licence terminates. BY-SA would also force this page's duotoned crop to be released BY-SA.
+- **Never hotlink.** Giving Day is a single-day traffic spike; a remote host can rate-limit or
+  404 and you get broken images on the page taking money, with no way to fix it mid-event.
+  It also leaks every donor's IP to that host and makes the duotone impossible.
+- Ming-era woodcuts (the *Wubei Zhi*, the *Wujing Zongyao*) are genuinely public domain and
+  would suit the theme, but the usable scans crop out at 300–600 px — fine as a small corner
+  motif, too soft for a 720x900 card.
+- AI-generated images are out on both counts: one generated image among real ones is the one
+  the eye catches, and for a charitable appeal, undisclosed is dishonest while disclosed costs
+  donations.
+
+One thing left to do before the day: **check that everyone pictured is happy to appear on a
+fundraising page.** That is a message to four people, not a licensing exercise.
 
 ### The counter
 

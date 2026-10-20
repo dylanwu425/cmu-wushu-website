@@ -30,6 +30,11 @@ images/*/*
 # originals stay in images/members/originals/ on your computer only.
 !images/members/
 !images/members/*.jpg
+# The Giving Day tier cards. Not camera originals: they are small duotoned
+# crops cut from the web/ copies above, about 50-90 KB each, and the page
+# cannot render without them — so they are published like the rest.
+!images/giving-day/
+!images/giving-day/*.jpg
 
 # Source document for the officer bios. Kept locally, not published.
 *.docx

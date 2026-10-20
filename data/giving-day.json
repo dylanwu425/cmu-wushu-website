@@ -1,25 +1,18 @@
 {
   "_comment": "The single source of truth for the Giving Day page. Edit ONLY this file, then run `python3 scripts/giving_day.py` to stamp the values into giving-day.html. Never hand-edit the regions marked GD: in the HTML — they get overwritten. See README section 12.",
-
   "status": "draft",
   "_status": "draft = built but not linked anywhere and kept off Google. live = linked in the nav, in the sitemap, indexable. closed = page stays up, donate buttons become a thank-you. Use the publish/close commands rather than editing this by hand.",
-
   "name": "Giving CMU Day",
   "_name": "CMU's own name for the day. The university has run it every year since 2015, always on GivingTuesday.",
-
   "opensAt": "2026-12-01T00:00:00-05:00",
   "closesAt": "2026-12-01T23:59:59-05:00",
   "_dates": "CONFIRMED. CMU's own FY27 student organization training deck (Oct 2026) gives the date as Tuesday, December 1, 2026 — the 12th consecutive year. Official site: givingcmuday.cmu.edu. Keep the -05:00 offset (Pittsburgh in December) so the countdown is correct for visitors in any timezone.",
-
   "donateUrl": "",
   "_donateUrl": "TBD — the 2026 campaign page does not exist until CMU builds it. CMU runs the day on GiveCampus, and each club gets a page under this pattern: https://www.givecampus.com/schools/CarnegieMellonUniversity/giving-cmu-day-2026/pages/student-organizations/<club-slug> . The club was on the 2025 edition (10 donors, $1,090). When the 2026 page exists, paste its full URL here and re-stamp. While this is empty, every donate button renders as a disabled 'coming soon' chip, so the page can never ship a dead link.",
-
   "amountParam": "amount",
   "_amountParam": "Query parameter the donation platform uses to preset a gift amount, so the tier buttons can jump straight to it. Set to \"\" if the platform doesn't support one, and the tier buttons will just link to the base page.",
-
   "askAmount": 10,
   "_askAmount": "The amount every donate button on the page asks for. CMU's own training advice is to ask for \"a small, non-intimidating amount like $5 or $10\", and $10 is the top of that range. This is the ask; challenge.minGift below is the floor that actually counts.",
-
   "challenge": {
     "on": true,
     "minGift": 5,
@@ -29,7 +22,6 @@
     "_note": "CMU runs matches and challenges alongside the day, scored on the number of individual donors giving at least minGift. The page mentions this in one small aside and does NOT build its pitch around winning — hundreds of orgs are in that race. Its only job is to explain why a small gift counts as much as a large one. Set on=false and the aside disappears and the page stops mentioning donor counts at all.",
     "_counting": "Gifts are counted by credit card holder and email address. Multiple gifts on the same card count as ONE donor, and CMU audits the email addresses. Do not give on somebody else's behalf — the page says so out loud."
   },
-
   "video": {
     "file": "images/giving-day-film.mp4",
     "youtubeId": "",
@@ -45,23 +37,36 @@
     "_youtubeId": "The 11-character ID from the YouTube URL (the v= part), not the whole URL. Takes precedence over 'file' when both are filled. The film's donate button carries ?utm_content=video so the platform's referral stats show what the video actually drove.",
     "_length": "Printed on the play button, e.g. '2 min'. Leave empty to print no running time."
   },
-
   "goalDollars": 2000,
   "raised": 0,
   "_goalDollars": "The headline number on the progress bar. The club raised $1,090 in 2025, so $2,000 is a real but reachable stretch. 'raised' is updated by hand during the day.",
-
   "goalDonors": 40,
   "donors": 0,
   "_goalDonors": "Secondary — printed as a line under the dollars, not as the headline. 2025: 10 donors. 40 is four times that and still honest; the challenge winners are well into the hundreds and we are not chasing them. Set to 0 to hide the people count entirely.",
-
   "tiers": [
-    { "amount": 10,  "art": "fan",       "hanzi": "扇", "weapon": "Fan",          "flag": "Most people give this" },
-    { "amount": 25,  "art": "chainwhip", "hanzi": "鞭", "weapon": "Chain whip" },
-    { "amount": 50,  "art": "spear",     "hanzi": "枪", "weapon": "Spear" },
-    { "amount": 100, "art": "swords",    "hanzi": "剑刀", "weapon": "Jian and dao" }
+    {
+      "amount": 10,
+      "flag": "Most people give this",
+      "photo": "images/giving-day/tier-10.jpg",
+      "alt": "A club member in a white uniform, holding a low stance"
+    },
+    {
+      "amount": 25,
+      "photo": "images/giving-day/tier-25.jpg",
+      "alt": "A club member in a high side kick, arm extended"
+    },
+    {
+      "amount": 50,
+      "photo": "images/giving-day/tier-50.jpg",
+      "alt": "A club member mid-form with a pair of hook swords"
+    },
+    {
+      "amount": 100,
+      "photo": "images/giving-day/tier-100.jpg",
+      "alt": "A club member crouched low, a tasselled sword arm extended"
+    }
   ],
-  "_tiers": "Each tier is named for a weapon and carries that weapon drawn behind the card. 'art' picks the drawing and must be one of: fan, chainwhip, spear, swords — those are the only four in WEAPON_ART in scripts/giving_day.py, and any other value just leaves the card plain. 'weapon' is the name printed on the card, 'hanzi' the character above it, 'flag' the red ribbon (one card only). You can also add \"label\": \"...\" to any tier for a line of small print under the name; none of them use one, because the weapon says enough.",
-
+  "_tiers": "Each tier carries one of the club's own photographs. 'photo' is the file under images/giving-day/ and 'alt' is what a screen reader says in its place — write it as a description of the picture, not as a caption. The pictures are cut to 4:5 and duotoned into the page's two colours by the script in the session scratchpad; the CSS box is 4:5 to match, and if those two ever disagree the browser crops the difference out of the middle, which is where the person is. 'flag' is the red ribbon and only one card should have one. A tier can also take \"label\": \"...\" for a line of small print under the amount. None of them use one: nobody has told us what a given amount actually buys, and a donation page should not guess. The four hand-drawn weapons are still in WEAPON_ART in scripts/giving_day.py and a tier with \"art\": \"fan\" (or chainwhip, spear, swords) and no \"photo\" still renders one — a photo wins when a tier has both.",
   "whereItGoes": [
     "Weapons and mats the club lends out, so nobody has to buy gear before their first practice.",
     "Getting people and weapons across Pittsburgh to the festivals and showcases we perform at.",

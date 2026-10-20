@@ -145,6 +145,46 @@ def indent(body, spaces):
     return "\n" + pad(body.strip("\n"), spaces) + "\n" + " " * spaces
 
 
+def jpeg_size(path):
+    """Width and height of a JPEG, read from its own markers.
+
+    Saves a Pillow dependency for the one thing the generator needs from an
+    image. Returns None if the file is missing or is not a JPEG we can read,
+    and the caller falls back to the ratio the cards are cut to.
+    """
+    try:
+        with open(os.path.join(ROOT, path), "rb") as fh:
+            if fh.read(2) != b"\xff\xd8":
+                return None
+            while True:
+                b = fh.read(1)
+                while b and b != b"\xff":
+                    b = fh.read(1)
+                marker = fh.read(1)
+                while marker == b"\xff":
+                    marker = fh.read(1)
+                if not marker:
+                    return None
+                m = marker[0]
+                if m in (0xD8, 0xD9) or 0xD0 <= m <= 0xD7:
+                    continue
+                seg = fh.read(2)
+                if len(seg) < 2:
+                    return None
+                length = (seg[0] << 8) | seg[1]
+                # SOF0..SOF15, skipping the four that are not frame headers.
+                if 0xC0 <= m <= 0xCF and m not in (0xC4, 0xC8, 0xCC):
+                    data = fh.read(5)
+                    if len(data) < 5:
+                        return None
+                    h = (data[1] << 8) | data[2]
+                    w = (data[3] << 8) | data[4]
+                    return w, h
+                fh.seek(length - 2, 1)
+    except OSError:
+        return None
+
+
 # ------------------------------------------------------------------ the film
 
 # The two buttons that replace the native control bar. They ship with `hidden`
@@ -603,6 +643,9 @@ def build(cfg):
         weapon = (tier.get("weapon") or "").strip()
         label = (tier.get("label") or "").strip()
 
+        photo = (tier.get("photo") or "").strip()
+        palt = (tier.get("alt") or "").strip()
+
         body = ""
         if weapon:
             body += ('  <p class="gd-tier__weapon">%s%s</p>\n' % (
@@ -612,8 +655,25 @@ def build(cfg):
         if label:
             body += '  <p class="gd-tier__label">%s</p>\n' % esc(label)
 
+        # A photograph wins over a drawing when a tier has both: the photo is
+        # the real thing and the drawing was only ever standing in for it.
+        if photo:
+            # Real pixel dimensions, read off the file. They have to be the
+            # file's own, not the box's: the browser reserves space from
+            # these before the image arrives, and a wrong pair makes the
+            # page jump when it lands.
+            pw, ph = jpeg_size(photo) or (720, 900)
+            figure = ('  <div class="gd-tier__shot">\n'
+                      '    <img src="%s" alt="%s" width="%d" height="%d"\n'
+                      '         loading="lazy" decoding="async">\n'
+                      '  </div>\n' % (attr(photo), attr(palt), pw, ph))
+        elif art:
+            figure = pad(art, 2) + "\n"
+        else:
+            figure = ""
+
         rows.append(
-            '<li class="gd-tier%s">\n'
+            '<li class="gd-tier%s%s">\n'
             '%s'
             '%s'
             '  <span class="gd-tier__amount">%s</span>\n'
@@ -621,8 +681,9 @@ def build(cfg):
             '  %s\n'
             '</li>' % (
                 " gd-tier--flagged" if flagged else "",
+                " gd-tier--shot" if photo else "",
                 ('  <span class="gd-tier__flag">%s</span>\n' % esc(tier["flag"])) if flagged else "",
-                (pad(art, 2) + "\n") if art else "",
+                figure,
                 money(amount),
                 pad(body, 2),
                 cta("tier-%d" % amount, "Give %s" % money(amount), amount, cls="gd-tier__btn"),
