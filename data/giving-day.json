@@ -15,13 +15,20 @@
   "_askAmount": "The amount every donate button on the page asks for. CMU's own training advice is to ask for \"a small, non-intimidating amount like $5 or $10\", and $10 is the top of that range. This is the ask; challenge.minGift below is the floor that actually counts.",
   "challenge": {
     "on": true,
+    "aside": false,
     "minGift": 5,
     "prizes": [],
     "_minGift": "$5 — confirmed in CMU's FY27 training deck, which states a $5 minimum both for the site itself and for being counted toward any match or challenge.",
     "_prizes": "EMPTY ON PURPOSE. CMU does not announce the 2026 matches and challenges to student orgs until mid-November, so the page must not promise last year's numbers (2025 paid 1st $6,000, 2nd $4,000, 3rd $2,000). Fill this in when the real amounts are announced and re-stamp, or leave it empty and the aside simply does not name any figures.",
+    "_aside": "Shows the 'Why a small gift is not a token gift' panel. Off: the club decided the page did not need it. This is a separate switch from 'on' because 'on' also decides whether the $10 card wears its ribbon and which lede the page gets \u2014 turning the scoring off to drop the panel would quietly take those with it.",
     "_note": "CMU runs matches and challenges alongside the day, scored on the number of individual donors giving at least minGift. The page mentions this in one small aside and does NOT build its pitch around winning — hundreds of orgs are in that race. Its only job is to explain why a small gift counts as much as a large one. Set on=false and the aside disappears and the page stops mentioning donor counts at all.",
-    "_counting": "Gifts are counted by credit card holder and email address. Multiple gifts on the same card count as ONE donor, and CMU audits the email addresses. Do not give on somebody else's behalf — the page says so out loud."
+    "_counting": "Gifts are counted by credit card holder and email address. Multiple gifts on the same card count as ONE donor, and CMU audits the email addresses. Do not give on somebody else's behalf. The page used to say this out loud in the challenge aside; with that panel switched off it says it nowhere, so if it matters to you, put it back as a line under the tiers."
   },
+  "legacy": {
+    "on": true,
+    "pageName": "Giving Day 2026"
+  },
+  "_legacy": "A short panel between the tiers and 'where it goes' promising that everyone who gives is named on a page here afterwards, and the same panel in the past tense once the day is closed. 'pageName' is what that page will be called; leave it empty and it falls back to the campaign name and the year. Set on=false and the panel disappears. THIS IS A PROMISE TO PUBLISH PEOPLE'S NAMES: the panel says names only, and that anyone who asks is left off. Keep both of those true, and build the page afterwards \u2014 a promise on a donation page that nobody keeps is worse than never making it.",
   "video": {
     "file": "images/giving-day-film.mp4",
     "youtubeId": "",

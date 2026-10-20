@@ -855,9 +855,14 @@
    7. Where it goes, and other ways to help
    -------------------------------------------------------------------------- */
 
+/* Lined up under the heading rather than centred in the container. The list
+   used to sit below a paragraph that filled the header's width, which hid the
+   fact that the two were on different axes; with the paragraph gone the list
+   was floating in the middle of the section with the heading off to one
+   side. */
 .gd-where {
   max-width: 62ch;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   list-style: none;
 }

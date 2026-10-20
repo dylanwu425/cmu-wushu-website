@@ -633,8 +633,12 @@ def build(cfg):
   </div>
 </section>""" % ("" if show_bar else " hidden", pct, heading, people_line), 4))
 
-    # ---- the challenge
-    if on:
+    # ---- the challenge aside
+    #
+    # Its own switch, separate from challenge.on. 'on' also decides whether the
+    # $10 card wears its ribbon and which lede the page gets, so turning the
+    # scoring off to drop this panel would quietly take those with it.
+    if on and challenge.get("aside", True):
         prizes = [money(p) for p in (challenge.get("prizes") or [])]
         if len(prizes) > 1:
             prize_text = (" win <b>" + "</b>, <b>".join(prizes[:-1]) +
@@ -670,6 +674,32 @@ def build(cfg):
 </section>""" % (name, money(min_gift), prize_text, money(ask)), 4))
     else:
         page = put(page, "GD:CHALLENGE", "\n    ")
+
+    # ---- after the day, the people who gave get a page of their own
+    legacy = cfg.get("legacy") or {}
+    if legacy.get("on"):
+        title = esc(legacy.get("pageName") or "%s %d" % (name, opens.year))
+        if closed:
+            body = ("Everyone who gave is named on <b>%s</b>. Thank you &mdash; that page "
+                    "stays up." % title)
+        else:
+            body = ("Everyone who gives goes on <b>%s</b>, a page that stays up here after "
+                    "the day is over." % title)
+        page = put(page, "GD:LEGACY", indent("""
+<section class="section gd-challenge-section">
+  <div class="container">
+    <div class="gd-challenge">
+      <p class="gd-challenge__kicker">After the day</p>
+      <p class="gd-challenge__body">%s</p>
+      <p class="gd-challenge__fine">
+        Names only, nothing else, and nobody goes on it who would rather not &mdash;
+        tell us and we will leave you off.
+      </p>
+    </div>
+  </div>
+</section>""" % body, 4))
+    else:
+        page = put(page, "GD:LEGACY", "\n    ")
 
     # ---- the tiers. Each one is named for a weapon and carries that weapon
     #      drawn behind it; the name does the work the old "what this buys"

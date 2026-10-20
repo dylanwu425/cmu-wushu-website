@@ -777,18 +777,35 @@ Two different numbers, and the page is careful about which is which:
 CMU runs matches and challenges for student orgs, scored on the number of *individual
 donors* rather than dollars. The club finished 2025 with ten donors and $1,090; the orgs that win
 those prizes are well into the hundreds, so **the page does not build its pitch around
-winning one**. The challenge gets one small aside, and its only job there is to explain why a
-$10 gift counts for as much as a $500 one. The progress bar leads with dollars and prints the
-number of people underneath.
+winning one**. The progress bar leads with dollars and prints the number of people underneath,
+and the lede says in one line that the day is counted by people, so a $10 gift lands as hard as
+a $500 one.
+
+There used to be a whole panel making that argument — "Why a small gift is not a token gift" —
+and the club cut it as unnecessary. **`challenge.aside` is the switch**, and it is deliberately
+separate from `challenge.on`: `on` also decides whether the $10 card wears its ribbon and which
+of the three ledes the page gets, so turning the scoring off to drop one panel would quietly
+take those with it. Set `aside` back to `true` and the panel returns, prize figures and all.
 
 `challenge.prizes` is **empty on purpose**: CMU does not tell the clubs the 2026 amounts until
-**mid-November**, so the page describes the rule without naming a figure. When the real
-numbers are announced, put them in and re-stamp. Set `challenge.on` to `false` and the aside
-disappears and the page stops mentioning donor counts at all.
+**mid-November**, so the panel describes the rule without naming a figure. When the real
+numbers are announced, put them in and re-stamp.
 
 Two rules from the training deck that the page already respects: **nothing may be given in
 exchange for a gift** (no "donate and get a T-shirt"), and **gifts are counted one per person**
 by card and email address, which CMU audits afterwards. Never give on somebody else's behalf.
+That second one used to be printed on the page in the panel's fine print; with the panel off it
+is written down here and nowhere else, so put it back as a line under the tiers if it matters.
+
+### The page promises to name the people who gave
+
+`legacy` renders a short paper aside between the tiers and "where it goes": everyone who gives
+goes on a page named by `legacy.pageName`, which stays up afterwards. Once the day is closed it
+says the same thing in the past tense. `legacy.on` turns it off.
+
+**It is a promise to publish people's names, so it has to stay true.** The aside says names
+only, and that anyone who asks is left off — keep both of those honest, and actually build the
+page afterwards. A promise on a donation page that nobody keeps is worse than never making it.
 
 ### Putting it live, and taking it down
 
