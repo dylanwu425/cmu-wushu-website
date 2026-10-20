@@ -712,8 +712,13 @@ def build(cfg):
         else:
             figure = ""
 
+        # A tier whose picture holds two performers side by side says so, and
+        # the stylesheet gives that card a wash with two clear patches instead
+        # of one in the middle — which on a diptych would be the seam.
+        pair = bool(tier.get("pair")) and bool(photo)
+
         rows.append(
-            '<li class="gd-tier%s%s">\n'
+            '<li class="gd-tier%s%s%s">\n'
             '%s'
             '%s'
             '  <span class="gd-tier__amount">%s</span>\n'
@@ -722,6 +727,7 @@ def build(cfg):
             '</li>' % (
                 " gd-tier--flagged" if flagged else "",
                 " gd-tier--shot" if photo else "",
+                " gd-tier--pair" if pair else "",
                 ('  <span class="gd-tier__flag">%s</span>\n' % esc(tier["flag"])) if flagged else "",
                 figure,
                 money(amount),
