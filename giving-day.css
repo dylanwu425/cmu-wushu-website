@@ -944,18 +944,15 @@
   }
   .gd-tier--flagged { border-color: var(--seal); }
 
-  /* On a phone a card is nearly the full width, so a 4:5 picture is almost
-     an entire screen of it and the amount and the button land below the
-     fold — a visitor scrolls past a photograph without ever seeing what it
-     costs. Capping the height trades the bottom of the frame, which is
-     floor in all four pictures, for having the whole card visible at once.
-     object-position keeps the crop anchored near the top, where the
-     person is. */
-  .gd-tier__shot {
-    aspect-ratio: auto;
-    height: min(46vh, 19rem);
-  }
-  .gd-tier__shot img { object-position: 50% 28%; }
+  /* The picture keeps its 4:5 here rather than being capped to a band.
+     A cap was tried — the worry was that a near-full-width 4:5 picture
+     pushes the amount and the button below the fold — and it was wrong
+     twice over: the whole card already fits (443-574px against the 640px
+     of the smallest phone worth testing), and capping the height makes
+     the box wider than the file, so `cover` crops top and bottom and
+     takes the head off three of the four pictures. No one object-position
+     suits all four, because the crouching figure's head is halfway down
+     the frame while the other three are near the top. Leave it alone. */
 }
 
 /* --------------------------------------------------------------------------
