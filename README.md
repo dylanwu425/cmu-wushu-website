@@ -842,6 +842,13 @@ Things that are easy to get wrong here:
   drawing a clean ellipse and the photograph reads as a scrap of print lying on the card. It
   exists because three of the four pictures were taken in a room with other people in it, and
   at card size the eye could not tell who the picture was of.
+- **The wash keeps a guaranteed pale margin inside the left, right and top edges**, drawn
+  outside the turbulence so it cannot be dragged off the edge. Without it the wandering hole
+  reached the sides of the cards: on the $25 a bystander's face sat half-sliced by the torn
+  edge, and on the $50 the picture's own dark corner swallowed the deckle for nearly half the
+  card's height, so that card stopped looking torn. The turbulence still owns everything
+  inside the band, which is where the splotch is meant to live. Raising the turbulence without
+  that margin makes both faults worse, not better.
 - **The hole is punched through a mask, not painted as a second gradient.** Masks union;
   gradients stack. The $50 card carries two performers and needs two holes, and two stacked
   radial gradients doubled the wash wherever they overlapped — tried, and it nearly erased all
