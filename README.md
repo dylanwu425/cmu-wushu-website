@@ -833,8 +833,17 @@ Things that are easy to get wrong here:
   than the file, so `cover` crops top and bottom and takes the head off. No single
   `object-position` rescues it, because the crouching figures sit halfway down their frames
   while the others are near the top.
+- **Two gradients sit over every photograph, and neither is in the file.** A radial
+  spotlight washes the frame out towards paper away from an ellipse centred at 50% across and
+  34% down, and the bottom 30% fades into the card. The spotlight exists because three of the
+  four pictures were taken in a room with other people in it, and at card size the eye could
+  not tell who the picture was of; washing the background back solves that without retouching
+  a photograph of real people. Its ellipse is centred where the performers' heads sit — move
+  the crops and that number has to move with them. Both gradients are in `giving-day.css`
+  under `.gd-tier__shot`, and the flagged card repeats both in `--paper` rather than
+  `--paper-card`, because it sits on slightly different paper.
 - **The crop boxes are recorded, not improvised.** Each picture is a named region of a
-  full-resolution original — the smallest is 896px wide against a 720px card, so every one is a
+  full-resolution original — the smallest is 800px wide against a 720px card, so every one is a
   downscale — chosen by framing 4:5 around a detected face with headroom above it. Nothing is
   upscaled and nothing is cropped so tight that a head meets an edge. The originals themselves
   are gitignored for size, which is why the boxes are written down beside the files.
