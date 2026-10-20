@@ -423,23 +423,23 @@ def build(cfg):
     #      the end, and only to explain why a small gift is a real gift.
     if closed:
         lede = (
-            "Thank you. The weapons on the loaner rack, the mats, the costumes "
-            "&mdash; this year they came from the people who gave on %s. Practice "
-            "stays free because of you."
+            "Thank you. The weapons on the loaner rack, the silks, the costumes "
+            "&mdash; this year they came from the people who gave on %s."
             % esc(date_text))
     elif on:
         lede = (
-            "Anyone can walk into our practice without paying a cent, and we have never "
-            "wanted that to change. The mats, the loaner weapons, the costumes: it all "
-            "comes from gifts the size of the ones on this page. Anything from %s up is a "
-            "real contribution here &mdash; CMU scores the day by how many people give, "
-            "not how much, so a %s gift counts for every bit as much as a $500 one."
+            "Anyone can walk into our practice without paying a cent, and that is not "
+            "going to change &mdash; we run without dues either way. What a gift buys is "
+            "more: loaner weapons, silks and costumes, the cost of getting us to a stage. "
+            "Anything from %s up is a real contribution here &mdash; CMU scores the day by "
+            "how many people give, not how much, so a %s gift counts for every bit as much "
+            "as a $500 one."
             % (money(min_gift), money(ask)))
     else:
         lede = (
-            "Anyone can walk into our practice without paying a cent, and we have never "
-            "wanted that to change. Every broadsword on the loaner rack, every mat, every "
-            "costume has come from somewhere. For one day in %s, it comes from you."
+            "Anyone can walk into our practice without paying a cent, and that is not "
+            "going to change. Every broadsword on the loaner rack, every silk, every "
+            "costume came from somewhere. For one day in %s, it comes from you."
             % opens.strftime("%B"))
     page = put(page, "GD:LEDE",
                indent('<p class="gd-lede">\n  %s\n</p>' % lede, 10))

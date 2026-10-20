@@ -68,9 +68,9 @@
   ],
   "_tiers": "Each tier carries one of the club's own photographs. 'photo' is the file under images/giving-day/ and 'alt' is what a screen reader says in its place — write it as a description of the picture, not as a caption. The pictures are cut to 4:5 and duotoned into the page's two colours by the script in the session scratchpad; the CSS box is 4:5 to match, and if those two ever disagree the browser crops the difference out of the middle, which is where the person is. 'pair': true says the picture holds two performers side by side; it puts gd-tier--pair on the card, and the stylesheet then washes the background back around two of them instead of one in the middle. 'flag' is the red ribbon and only one card should have one. A tier can also take \"label\": \"...\" for a line of small print under the amount. None of them use one: nobody has told us what a given amount actually buys, and a donation page should not guess. The four hand-drawn weapons are still in WEAPON_ART in scripts/giving_day.py and a tier with \"art\": \"fan\" (or chainwhip, spear, swords) and no \"photo\" still renders one — a photo wins when a tier has both.",
   "whereItGoes": [
-    "Weapons and mats the club lends out, so nobody has to buy gear before their first practice.",
+    "Weapons the club lends out, so nobody has to buy gear before their first practice.",
     "Getting people and weapons across Pittsburgh to the festivals and showcases we perform at.",
-    "Costumes and props for Lunar New Year and the spring showcase.",
-    "Keeping the barrier at zero. No dues, no equipment list, no tryout — which only works if the gear is already on the floor when someone walks in."
+    "Silks, costumes and props for Lunar New Year and the spring showcase.",
+    "Keeping the barrier at zero. No dues, no equipment list, no tryout."
   ]
 }
