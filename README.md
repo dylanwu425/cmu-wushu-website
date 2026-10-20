@@ -807,10 +807,10 @@ become a thank-you with the final number.
 
 ### The tiers are photographs
 
-Each tier card carries one of the club's own photographs: a low stance at $10, a side kick at
-$25, hook swords at $50, a crouch with a tasselled sword at $100. They sit at the top of the
-card, bleed through its padding to the torn edge, and dissolve into the paper at the bottom so
-there is no seam. The files are in `images/giving-day/` and each tier names one with `photo`,
+Each tier card carries one of the club's own photographs: a mid-air leap with a sword at $10,
+a costumed turn on stage at $25, a low stance at $50, a pair of hook swords at $100. They sit at
+the top of the card, bleed through its padding to the torn edge, and dissolve into the paper at
+the bottom so there is no seam. The files are in `images/giving-day/` and each tier names one with `photo`,
 plus an `alt` describing the picture for anyone who cannot see it.
 
 Things that are easy to get wrong here:
@@ -824,13 +824,23 @@ Things that are easy to get wrong here:
   `--paper`, which is why a photograph reads as part of the page rather than as a picture
   pasted onto it. A full-colour photograph dropped into one of these slots will look wrong
   next to the other three. The script that does it lives in the session scratchpad, not the
-  repo; it is about forty lines of Pillow, and the recipe is: greyscale, autocontrast, a
-  contrast nudge, then map 0–255 across the two hex colours.
-- **On phones the picture is capped at `min(46vh, 19rem)`** rather than keeping its ratio.
-  A 4:5 picture on a full-width card is nearly a whole screen, which pushes the amount and the
-  button below the fold — a visitor scrolls past a photograph without ever learning what it
-  costs. The cap trades the bottom of the frame, which is floor in all four pictures, for
-  having the whole card on screen at once.
+  repo, but the recipe and the exact crop box for each of the four are written down in
+  `images/giving-day/README.txt`, so any of them can be rebuilt without it.
+- **On phones the picture keeps its 4:5 too** — do not cap its height. The worry that a
+  near-full-width 4:5 picture pushes the amount and the button below the fold is reasonable and
+  turned out to be wrong twice over: the whole card already fits (measured at 443–574px against
+  the 640px of the smallest phone worth testing), and capping the height makes the box wider
+  than the file, so `cover` crops top and bottom and takes the head off. No single
+  `object-position` rescues it, because the crouching figures sit halfway down their frames
+  while the others are near the top.
+- **The crop boxes are recorded, not improvised.** Each picture is a named region of a
+  full-resolution original — the smallest is 896px wide against a 720px card, so every one is a
+  downscale — chosen by framing 4:5 around a detected face with headroom above it. Nothing is
+  upscaled and nothing is cropped so tight that a head meets an edge. The originals themselves
+  are gitignored for size, which is why the boxes are written down beside the files.
+- **They are photographs of real members.** Before the page goes public, check that the four
+  people in them are happy to appear on a fundraising page. That is a conversation, not a
+  code change.
 
 No tier names a weapon or says what the money buys. The weapon names went because they were
 decoration that the pictures do better, and there is no "this buys a ___" line because nobody

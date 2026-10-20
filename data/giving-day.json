@@ -48,22 +48,22 @@
       "amount": 10,
       "flag": "Most people give this",
       "photo": "images/giving-day/tier-10.jpg",
-      "alt": "A club member in a white uniform, holding a low stance"
+      "alt": "A club member in mid-air, legs split wide, a straight sword held out to one side"
     },
     {
       "amount": 25,
       "photo": "images/giving-day/tier-25.jpg",
-      "alt": "A club member in a high side kick, arm extended"
+      "alt": "A club member on stage in costume, one arm raised overhead at the end of a move"
     },
     {
       "amount": 50,
       "photo": "images/giving-day/tier-50.jpg",
-      "alt": "A club member mid-form with a pair of hook swords"
+      "alt": "A club member in a low stance, fists drawn in, the rest of the practice behind"
     },
     {
       "amount": 100,
       "photo": "images/giving-day/tier-100.jpg",
-      "alt": "A club member crouched low, a tasselled sword arm extended"
+      "alt": "A club member holding a pair of hook swords crossed in front"
     }
   ],
   "_tiers": "Each tier carries one of the club's own photographs. 'photo' is the file under images/giving-day/ and 'alt' is what a screen reader says in its place — write it as a description of the picture, not as a caption. The pictures are cut to 4:5 and duotoned into the page's two colours by the script in the session scratchpad; the CSS box is 4:5 to match, and if those two ever disagree the browser crops the difference out of the middle, which is where the person is. 'flag' is the red ribbon and only one card should have one. A tier can also take \"label\": \"...\" for a line of small print under the amount. None of them use one: nobody has told us what a given amount actually buys, and a donation page should not guess. The four hand-drawn weapons are still in WEAPON_ART in scripts/giving_day.py and a tier with \"art\": \"fan\" (or chainwhip, spear, swords) and no \"photo\" still renders one — a photo wins when a tier has both.",
