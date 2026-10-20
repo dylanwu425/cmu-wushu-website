@@ -28,56 +28,29 @@ one run. Measured on the rendered cards, the photo areas sat at 159 / 162 /
 $50's lift lives in its own builder and the $100's is above, which brings them
 to 151 and 144.
 
-tier-50.jpg is not one crop but two, side by side -- a sister on the left and
-her brother on the right, cut from the same frame of the same group doing the
-same move, which is why their stances mirror each other. Both halves come from
-penguins-2026/DSCF6013.JPG:
+tier-50.jpg is not a crop at all. It is one figure made of two people: a
+sister on the left of the frame and her brother on the right, joined down the
+middle of the face. Both halves come from the same frame of the same group
+doing the same move -- penguins-2026/DSCF6013.JPG -- which is why the join
+reads as one person rather than as two: she has an arm raised and he has an
+arm extended, so the composite comes out as a complete stance.
 
-  left  (sister)    2069, 1266,  608, 1496     face 214px in the source
-  right (brother)   2921,  978,  816, 2006     face 287px in the source
+  half     crop box in the source     eye spacing   scale
+  left     2069, 1266,  608, 1496       31 px        1.000
+  right    2921,  978,  816, 2006       36 px        0.861
 
-Each half is resized so that face lands at 129px in the finished 720x900 file
--- 14.3% of the card's height, the same share the other three use -- and
-positioned so both faces sit a quarter of the way down. They were photographed
-at different distances, so matching them means two different crop sizes; that
-is the whole trick. This frame also prints darker than the other cards -- two
-people in dark costume fill both halves, where the other three have room
-around them -- so it carries a gamma of 0.87.
+He was standing closer to the camera, so his half is scaled by 0.861 until the
+two faces measure the same. The two eye lines are put on the same row, 225px
+down the finished file, and the halves cross-fade over ten pixels at x=360.
+Contrast 1.18, gamma 0.87, no sharpening -- that frame is sharp already.
 
-The seam is six pixels of paper down the middle, and it fades out by 62% of
-the way down the frame. Below the two figures there is no picture left for it
-to divide, and a ruler-straight bright line running on across blank paper
-reads as a divider rule rather than as a join -- the one straight line in
-artwork whose whole language is torn edges.
+Scaling his half to match the faces is a deliberate choice and it has a cost:
+his arm and sleeve come out a little smaller than hers. The alternative, both
+halves at their own scale, gives a better body and a face that is wider on one
+side than the other. The club chose the matched faces.
 
-A tier whose picture holds two people sets "pair": true in data/giving-day.json.
-That puts gd-tier--pair on the card, and the stylesheet gives it a wash with
-two clear patches instead of one in the middle -- which on a diptych would
-land on the seam and leave both faces under the wash.
-
-Sharpen is an unsharp mask (radius 1.2) applied to the resized crop before the
-duotone. It is not taste either. The $10 came off a phone and the other three
-off cameras, and a phone screen renders the 720px file at close to 1:1 where a
-desktop downscales it by a third -- so the softest picture is softest exactly
-where it is largest. Measured as the share of spectral energy above
-half-Nyquist, the four sat at 18.4 / 24.8 / 35.1 / 39.4 percent; the two lifts
-above bring the bottom two to 22.6 and 28.7 and leave the cameras' files
-untouched.
-
-The ceiling is step 4's one variable: how close that file's highlights are
-allowed to get to paper. tier-10.jpg was shot against a white wall, and mapped
-all the way up, its background came out the same colour as the card -- the
-picture read as half-printed rather than as a figure standing on paper.
-Holding its highlights at 0.86 gives the wall its tone back. Measured, the
-near-white share of the band between the subject and the bottom fade went from
-13.4% to 0.4%, in line with the other three.
-
-The four are framed to sit as a set: each performer's face lands a quarter of
-the way down its frame (18% on the $100, which cannot move -- see below) and
-takes up 14-18% of the frame's height, so the four heads line up across the
-row at the same size instead of stepping up and down. Tightening the $25 and
-$50 to reach that also pushed a bystander off the right edge of each, which
-was the other thing making those two read as snapshots.
+The alt text has to say what this is. A composite of two real people described
+as "a club member" would be a small lie on a page asking for money.
 
 Every box is 4:5 to within a tenth of a percent and every one is wider than
 720px, so each file is a genuine downscale -- none of them is upscaled. The
