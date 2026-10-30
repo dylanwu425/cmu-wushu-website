@@ -233,7 +233,7 @@
       "location": "Cohon Center, Activities Room"
     },
     {
-      "title": "Wushu Practice",
+      "title": "Ds Wushu Practice",
       "start": "2026-11-07T17:00:00-05:00",
       "end": "2026-11-07T19:00:00-05:00",
       "allDay": false,
@@ -261,7 +261,7 @@
       "location": "Cohon Center, Activities Room"
     },
     {
-      "title": "Wushu Practice",
+      "title": "Ds Wushu Practice",
       "start": "2026-11-14T17:00:00-05:00",
       "end": "2026-11-14T19:00:00-05:00",
       "allDay": false,
@@ -296,7 +296,7 @@
       "location": "Cohon Center, Activities Room"
     },
     {
-      "title": "Wushu Practice",
+      "title": "Ds Wushu Practice",
       "start": "2026-11-22T16:00:00-05:00",
       "end": "2026-11-22T18:00:00-05:00",
       "allDay": false,
@@ -317,7 +317,7 @@
       "location": "Cohon Center, Activities Room"
     },
     {
-      "title": "Wushu Practice",
+      "title": "Ds Wushu Practice",
       "start": "2026-11-29T16:00:00-05:00",
       "end": "2026-11-29T18:00:00-05:00",
       "allDay": false,
@@ -338,7 +338,15 @@
       "location": "Cohon Center, Activities Room"
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "title": "ASA aKDPhi Performance",
+      "start": "2026-11-15T19:00:00-05:00",
+      "end": "2026-11-15T21:00:00-05:00",
+      "allDay": false,
+      "location": "McConomy Auditorium, 5000 Forbes Ave"
+    }
+  ],
   "stats": {
     "years": 4,
     "performances": 15,
