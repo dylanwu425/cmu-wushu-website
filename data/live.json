@@ -212,7 +212,7 @@
       "location": "Cohon Center, Activities Room"
     },
     {
-      "title": "Wushu Practice",
+      "title": "Ds Wushu Practice",
       "start": "2026-11-01T16:00:00-05:00",
       "end": "2026-11-01T18:00:00-05:00",
       "allDay": false,
@@ -233,14 +233,14 @@
       "location": "Cohon Center, Activities Room"
     },
     {
-      "title": "Ds Wushu Practice",
+      "title": "Wushu Practice",
       "start": "2026-11-07T17:00:00-05:00",
       "end": "2026-11-07T19:00:00-05:00",
       "allDay": false,
       "location": "Cohon Center, Activities Room"
     },
     {
-      "title": "Wushu Practice",
+      "title": "Ds Wushu Practice",
       "start": "2026-11-08T16:00:00-05:00",
       "end": "2026-11-08T18:00:00-05:00",
       "allDay": false,
@@ -262,6 +262,13 @@
     },
     {
       "title": "Ds Wushu Practice",
+      "start": "2026-11-13T17:00:00-05:00",
+      "end": "2026-11-13T19:00:00-05:00",
+      "allDay": false,
+      "location": "dirt"
+    },
+    {
+      "title": "Wushu Practice",
       "start": "2026-11-14T17:00:00-05:00",
       "end": "2026-11-14T19:00:00-05:00",
       "allDay": false,
