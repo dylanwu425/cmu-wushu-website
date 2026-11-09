@@ -1,0 +1,1 @@
+import{t as e}from"./react-CV_VDIQZ.js";var t=e(()=>({id:null,x:0,y:0}));export{t};
