@@ -1,0 +1,1 @@
+import{t as e}from"./react-CV_VDIQZ.js";var t=e(()=>({id:null,x:0,y:0})),n=e(()=>({edit:null}));function r(e){n.setState({edit:e})}function i(){n.setState({edit:null})}export{t as i,r as n,n as r,i as t};
