@@ -1,0 +1,1 @@
+import{E as e,l as t}from"./format-BWRRTppS.js";function n(n,r,i){let a=e(n,r);return`${t(r)} of ${t(i)}${a?`, eight ${a.eight}, count ${a.count}`:``}`}function r(e,t,r){return n(e.audio,t,r)}export{r as n,n as t};
