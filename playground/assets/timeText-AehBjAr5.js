@@ -1,0 +1,1 @@
+import{Nt as e}from"./index-Dui7UZOp.js";import{c as t}from"./format-Dj4aIlmu.js";function n(n,r,i){let a=n.audio?.bpm?e(n,r):null;return`${t(r)} of ${t(i)}${a?`, eight ${a.eight}, count ${a.count}`:``}`}export{n as t};
