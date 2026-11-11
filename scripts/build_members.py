@@ -50,7 +50,8 @@ data/member-photos.json, keyed by the Full name they typed in the form:
         "informal": { "photo": 1 }
     } }
 
-  photo   1 or 2: which upload to use
+  photo   1 or 2: which upload to use. 0 leaves that slot empty, which is
+          how someone keeps a one-photo card after uploading a second photo
   focus   where the middle of the crop should sit, as fractions of the
           photo's width and height (0,0 is the top left, 1,1 the bottom right)
   zoom    1 keeps as much as fits; 1.5 crops in by half again
