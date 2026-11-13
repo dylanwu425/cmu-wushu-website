@@ -1,0 +1,1 @@
+import{n as e}from"./Icon-DbkC4KKy.js";var t={name:`check`,size:24,node:[[`path`,{d:`M20 6 9 17l-5-5`,key:`1gmf2c`}]]};t.node;var n=e(t),r={name:`chevron-down`,size:24,node:[[`path`,{d:`m6 9 6 6 6-6`,key:`qrunsl`}]]};r.node;var i=e(r);export{n,i as t};
