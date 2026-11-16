@@ -338,18 +338,10 @@
       "location": "Cohon Center, Activities Room"
     }
   ],
-  "events": [
-    {
-      "title": "ASA aKDPhi Performance",
-      "start": "2026-11-15T19:00:00-05:00",
-      "end": "2026-11-15T21:00:00-05:00",
-      "allDay": false,
-      "location": "McConomy Auditorium, 5000 Forbes Ave"
-    }
-  ],
+  "events": [],
   "stats": {
     "years": 4,
-    "performances": 15,
+    "performances": 16,
     "members": null
   }
 }
