@@ -66,7 +66,33 @@ def load():
     if cfg["closesAt_dt"] <= cfg["opensAt_dt"]:
         die("closesAt is not after opensAt")
 
+    # Optional: the moment the donation form started taking gifts, which on
+    # GiveCampus is days before the day itself. Absent, giving opens with the
+    # day and nothing below changes.
+    raw = (cfg.get("givingOpensAt") or "").strip()
+    if raw:
+        try:
+            cfg["givingOpensAt_dt"] = dt.datetime.fromisoformat(raw)
+        except ValueError:
+            die("givingOpensAt is not an ISO timestamp like 2026-11-23T00:00:00-05:00")
+        if cfg["givingOpensAt_dt"] > cfg["opensAt_dt"]:
+            die("givingOpensAt is after opensAt. Early giving starts before the day, not after.")
+    else:
+        cfg["givingOpensAt_dt"] = cfg["opensAt_dt"]
+
     return cfg
+
+
+def giving_open(cfg):
+    """
+    True when the donation form is taking gifts right now — which starts
+    before the day itself if CMU opened the campaign early. Says nothing
+    about whether the day has arrived; that is still opensAt.
+    """
+    if not (cfg.get("donateUrl") or "").strip():
+        return False
+    now = dt.datetime.now(cfg["givingOpensAt_dt"].tzinfo)
+    return cfg["givingOpensAt_dt"] <= now <= cfg["closesAt_dt"]
 
 
 def esc(text):
@@ -452,7 +478,7 @@ def build(cfg):
 <div class="gd-countdown" data-gd-countdown
      data-opens="%s"
      data-closes="%s">
-  <p class="gd-countdown__label">%s opens in</p>
+  <p class="gd-countdown__label">%s %s</p>
   <div class="gd-countdown__clock" role="timer">
     <span class="gd-unit"><b data-gd-days>--</b><i>days</i></span>
     <span class="gd-unit"><b data-gd-hours>--</b><i>hours</i></span>
@@ -461,7 +487,9 @@ def build(cfg):
   <p class="gd-countdown__fallback">
     Mark your calendar for %s.
   </p>
-</div>""" % (attr(cfg["opensAt"]), attr(cfg["closesAt"]), name, esc(date_text)), 10))
+</div>""" % (attr(cfg["opensAt"]), attr(cfg["closesAt"]), name,
+         "is in" if giving_open(cfg) else "opens in",
+         esc(date_text)), 10))
 
     # ---- donate buttons. One helper, because the pending state has to look
     #      the same everywhere or the page looks half-finished.
@@ -841,14 +869,14 @@ def strip_markup(cfg):
     """
     name = esc(cfg.get("name") or "Giving Day")
     date_text = esc(long_date(cfg["opensAt_dt"]))
-    challenge = cfg.get("challenge") or {}
-    ask = money(int(cfg.get("askAmount") or challenge.get("minGift") or 5))
     if cfg["status"] == "closed":
         line = "Thank you to everyone who gave on %s." % date_text
         action = "See where it went"
-    elif challenge.get("on"):
-        line = "%s is %s. %s counts as much as $500." % (name, date_text, ask)
-        action = "Here's why"
+    elif giving_open(cfg):
+        # Gifts are being taken right now, so the strip says so and the link
+        # is an instruction rather than an invitation to read.
+        line = "%s is %s. Donating is open now." % (name, date_text)
+        action = "Donate"
     else:
         line = "%s is %s." % (name, date_text)
         action = "Read more"
@@ -936,7 +964,12 @@ def set_status(status, dry_run=False):
         src = fh.read()
     out = re.sub(r'("status":\s*)"[a-z]+"', r'\1"%s"' % status, src, count=1)
     if out == src:
-        die("could not find the status field in data/giving-day.json")
+        # Either the field is missing, or it already says what we are about to
+        # write. The second is not an error: re-running --publish on a page
+        # that is already live is how you refresh the banner copy everywhere.
+        if not re.search(r'"status":\s*"%s"' % status, src):
+            die("could not find the status field in data/giving-day.json")
+        return
     if not dry_run:
         with open(CONFIG, "w", encoding="utf-8") as fh:
             fh.write(out)
