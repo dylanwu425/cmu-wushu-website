@@ -253,6 +253,20 @@
   transform: translateY(-2px);
 }
 
+/* The closing band is already the seal red, so a seal-red button on it was
+   invisible: same colour, contrast 1.00, nothing but floating letters. On
+   that band the button turns over and prints the other way round. */
+.gd-cta-band .gd-btn {
+  background: var(--paper);
+  color: var(--seal);
+}
+
+.gd-cta-band .gd-btn:hover,
+.gd-cta-band .gd-btn:focus-visible {
+  background-color: var(--paper-2);
+  color: var(--seal-dark);
+}
+
 /* The state this page ships in: no donation URL yet, so there is nothing to
    click. Rendered as a chit rather than a button so it never looks broken. */
 .gd-btn--pending {
