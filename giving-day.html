@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="styles.css">
   <!-- This page's own styles. Kept out of styles.css so the campaign can be
        added and removed without touching the stylesheet every other page uses. -->
-  <link rel="stylesheet" href="giving-day.css?v=51e242bf">
+  <link rel="stylesheet" href="giving-day.css?v=e0831db1">
 </head>
 <body>
 
@@ -117,8 +117,7 @@
 
           <!-- GD:CTA-HERO start -->
           <p class="gd-cta-row">
-            <a class="gd-btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=hero&amp;amt=10" target="_blank" rel="noopener">Give $10</a>
-            <span class="gd-cta-note">Takes about two minutes.</span>
+            <a class="gd-btn" href="#give">Give</a>
           </p>
           <!-- GD:CTA-HERO end -->
         </div>
@@ -155,10 +154,6 @@
           <p class="gd-film__caption" data-gd-caption-quiet="Press to play · 34 sec">34 sec</p>
           <!-- GD:VIDEO end -->
           <!-- GD:CTA-VIDEO start -->
-          <div class="gd-film-cta">
-            <a class="gd-btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=video&amp;amt=10" target="_blank" rel="noopener">Give $10</a>
-            <p>That is the pitch. The rest is up to you.</p>
-          </div>
           <!-- GD:CTA-VIDEO end -->
         </div>
 
@@ -202,7 +197,7 @@
          The pictures come from data/giving-day.json; this heading and
          the line under it do not, so edit them here.
          ============================================================ -->
-    <section class="section gd-tiers-section">
+    <section class="section gd-tiers-section" id="give">
       <div class="container">
         <div class="section-header">
           <span class="eyebrow">The tiers</span>
@@ -217,6 +212,8 @@
             <div class="gd-tier__shot">
               <img src="images/giving-day/tier-10.jpg" alt="A club member in mid-air, legs split wide, a straight sword held out to one side" width="720" height="900"
                    loading="lazy" decoding="async">
+              <img class="gd-tier__colour" src="images/giving-day/tier-10-color.jpg" alt=""
+                   width="720" height="900" loading="lazy" decoding="async" aria-hidden="true">
             </div>
             <span class="gd-tier__amount">$10</span>
             <div class="gd-tier__body">
@@ -228,17 +225,20 @@
             <div class="gd-tier__shot">
               <img src="images/giving-day/tier-25.jpg" alt="A club member on stage in costume, one arm raised overhead at the end of a move" width="720" height="900" style="transform:scale(1.140) translateY(7.00%)"
                    loading="lazy" decoding="async">
+              <img class="gd-tier__colour" src="images/giving-day/tier-25-color.jpg" alt=""
+                   width="720" height="900" loading="lazy" decoding="async" aria-hidden="true" style="transform:scale(1.140) translateY(7.00%)">
             </div>
             <span class="gd-tier__amount">$25</span>
             <div class="gd-tier__body">
             </div>
             <a class="gd-tier__btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=tier-25&amp;amt=25" target="_blank" rel="noopener">Give $25</a>
           </li>
-          <li class="gd-tier gd-tier--shot gd-tier--pair">
+          <li class="gd-tier gd-tier--shot">
             <div class="gd-tier__shot">
               <img src="images/giving-day/tier-50.jpg" alt="One figure made of two club members, a sister and a brother, joined down the middle: her left side, his right" width="720" height="900"
                    loading="lazy" decoding="async">
-              <span class="gd-tier__seam" aria-hidden="true"></span>
+              <img class="gd-tier__colour" src="images/giving-day/tier-50-color.jpg" alt=""
+                   width="720" height="900" loading="lazy" decoding="async" aria-hidden="true">
             </div>
             <span class="gd-tier__amount">$50</span>
             <div class="gd-tier__body">
@@ -249,6 +249,8 @@
             <div class="gd-tier__shot">
               <img src="images/giving-day/tier-100.jpg" alt="A club member holding a pair of hook swords crossed in front" width="720" height="900"
                    loading="lazy" decoding="async">
+              <img class="gd-tier__colour" src="images/giving-day/tier-100-color.jpg" alt=""
+                   width="720" height="900" loading="lazy" decoding="async" aria-hidden="true">
             </div>
             <span class="gd-tier__amount">$100</span>
             <div class="gd-tier__body">
@@ -265,34 +267,13 @@
       <div class="container">
         <div class="gd-challenge gd-wall">
           <p class="gd-challenge__kicker">Who gives</p>
-        <p class="gd-wall__empty">No gifts yet. The first name on this wall could be yours.</p>
-          <p class="gd-challenge__fine">Everybody who gives is named here, taken from CMU&rsquo;s own page. Give anonymously there and you are anonymous here.</p>
+          <p class="gd-wall__empty">No gifts yet.</p>
         </div>
       </div>
     </section>
     <!-- GD:LEGACY end -->
 
     <!-- Where it goes -->
-    <section class="section section--gray">
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow">Where it goes</span>
-          <h2>No overhead, no mystery</h2>
-          <hr class="accent-rule">
-        </div>
-
-        <!-- GD:WHERE start -->
-        <ul class="gd-where">
-          <li>Weapons the club lends out, so nobody has to buy gear before their first practice.</li>
-          <li>Getting people and weapons across Pittsburgh to the festivals and showcases we perform at.</li>
-          <li>Silks, costumes and props for Lunar New Year and the spring showcase.</li>
-          <li>Keeping the barrier at zero. No dues, no equipment list, no tryout.</li>
-        </ul>
-        <!-- GD:WHERE end -->
-      </div>
-    </section>
-
-
     <!-- Other ways to help -->
     <section class="section">
       <div class="container">
@@ -400,6 +381,6 @@
   <!-- ===== END SHARED FOOTER ===== -->
 
   <script src="script.js"></script>
-  <script src="giving-day.js?v=79242371"></script>
+  <script src="giving-day.js?v=27b9392a"></script>
 </body>
 </html>

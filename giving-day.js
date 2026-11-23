@@ -219,6 +219,22 @@
       function silently() {
         video.muted = true;
         video.setAttribute("muted", "");
+
+        // The page asked for sound and the browser said no. It says yes to
+        // the same request once the viewer has touched the page, so the
+        // next click anywhere turns it on — once, and never again, so
+        // nobody has to fight the film for the volume afterwards.
+        var once = function () {
+          document.removeEventListener("pointerdown", once, true);
+          if (video.dataset.gdTouched === "1") return;   // they already took over
+          video.dataset.gdSelf = "1";
+          video.muted = false;
+          video.removeAttribute("muted");
+          if (video.paused) { var r = video.play(); if (r && r.catch) r.catch(function () {}); }
+          setTimeout(function () { video.dataset.gdSelf = "0"; }, 0);
+        };
+        document.addEventListener("pointerdown", once, true);
+
         var q = video.play();
         if (q && q.catch) {
           q.catch(function () {

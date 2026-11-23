@@ -57,7 +57,8 @@ SKIP = re.compile(r"rehearsal|stage blocking|pickup and drive|arrive and meet"
 # Word -> tag class + label shown on the card.
 TAGS = [
     (re.compile(r"fair|orientation", re.I),          ("tag--social", "Outreach")),
-    (re.compile(r"movie|avatar night|dinner|social", re.I), ("tag--social", "Social")),
+    (re.compile(r"movie|avatar night|dinner|social|board game|game night", re.I),
+                                                     ("tag--social", "Social")),
     (re.compile(r"belt test|gbm|meeting", re.I),     ("tag--social", "Club")),
     (re.compile(r"sampler|workshop", re.I),          ("tag--social", "Workshop")),
     (re.compile(r"competition|tournament|collegiate", re.I),

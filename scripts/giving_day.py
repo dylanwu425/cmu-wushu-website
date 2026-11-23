@@ -510,8 +510,11 @@ def build(cfg):
         hero_cta = ('<span class="gd-cta-note">%s %d is over. Thank you to everyone '
                     'who gave.</span>' % (name, opens.year))
     elif have_url:
-        hero_cta = (cta("hero", "Give %s" % money(ask), ask) +
-                    '\n  <span class="gd-cta-note">Takes about two minutes.</span>')
+        # Down to the amounts rather than straight out to CMU: the tiers are
+        # where the gift gets chosen, and a visitor who lands on CMU's form
+        # from here has skipped the only part of the page that asks for
+        # anything in particular.
+        hero_cta = '<a class="gd-btn" href="#give">Give</a>' 
     else:
         hero_cta = cta("hero", "")
     page = put(page, "GD:CTA-HERO",
@@ -611,14 +614,10 @@ def build(cfg):
 
     # ---- the donate line under the film, which only exists once both the
     #      film and the donation page do
-    if (vid or vfile) and not closed:
-        page = put(page, "GD:CTA-VIDEO", indent("""
-<div class="gd-film-cta">
-  %s
-  <p>That is the pitch. The rest is up to you.</p>
-</div>""" % cta("video", "Give %s" % money(ask), ask), 10))
-    else:
-        page = put(page, "GD:CTA-VIDEO", "\n          ")
+    # Nothing under the film. The hero button is three inches above it and
+    # the tiers are the next thing down; a third ask in between was the page
+    # talking over itself.
+    page = put(page, "GD:CTA-VIDEO", "\n          ")
 
     # ---- the count
     goal_donors = int(cfg.get("goalDonors") or 0)
@@ -762,11 +761,23 @@ def build(cfg):
             # out at both ends rather than stopping dead.
             seam = ('    <span class="gd-tier__seam" aria-hidden="true"></span>\n'
                     if tier.get("pair") else "")
+            # The colour twin of the same crop, faded up on hover. It is only
+            # written if the file is actually there, so a tier without one
+            # simply stays in the page's two colours. scripts/
+            # giving_day_tier_colour.py makes them, and makes them line up.
+            colour = ""
+            twin = re.sub(r"\.jpg$", "-color.jpg", photo)
+            if os.path.exists(os.path.join(ROOT, twin)):
+                colour = ('    <img class="gd-tier__colour" src="%s" alt=""\n'
+                          '         width="%d" height="%d" loading="lazy" '
+                          'decoding="async" aria-hidden="true"%s>\n'
+                          % (attr(twin), pw, ph, style))
             figure = ('  <div class="gd-tier__shot">\n'
                       '    <img src="%s" alt="%s" width="%d" height="%d"%s\n'
                       '         loading="lazy" decoding="async">\n'
-                      '%s'
-                      '  </div>\n' % (attr(photo), attr(palt), pw, ph, style, seam))
+                      '%s%s'
+                      '  </div>\n' % (attr(photo), attr(palt), pw, ph, style,
+                                       colour, seam))
         elif art:
             figure = pad(art, 2) + "\n"
         else:
@@ -797,11 +808,6 @@ def build(cfg):
     page = put(page, "GD:TIERS",
                indent('<ul class="gd-tiers">\n%s\n</ul>'
                       % pad("\n".join(rows), 2), 8))
-
-    # ---- where it goes
-    items = "\n".join("  <li>%s</li>" % esc(line) for line in (cfg.get("whereItGoes") or []))
-    page = put(page, "GD:WHERE",
-               indent('<ul class="gd-where">\n%s\n</ul>' % items, 8))
 
     # ---- the closing band
     if closed:
@@ -885,34 +891,29 @@ def donor_wall(cfg, closed):
     kicker = "Who gave" if people else "Who gives"
     if people:
         items = "\n".join(
-            '      <li class="gd-wall__name%s">%s%s</li>' % (
+            '        <li class="gd-wall__name%s">%s%s</li>' % (
                 " gd-wall__name--anon" if (d.get("name") or "").strip().lower() == "anonymous" else "",
                 esc(d["name"].strip()),
                 ('<span class="gd-wall__amount">%s</span>' % money(int(d["amount"])))
                 if d.get("amount") else "")
             for d in people)
-        body = '    <ul class="gd-wall__list%s">\n%s\n    </ul>' % (
+        body = '      <ul class="gd-wall__list%s">\n%s\n      </ul>' % (
             " gd-wall__list--ranked" if ranked else "", items)
-        fine = ("Everyone who gave, straight from CMU&rsquo;s own page. "
-                "Anonymous there, anonymous here.")
-        if closed:
-            fine = "Everyone who gave. Thank you &mdash; this stays up."
+        fine = ""
     else:
-        body = ('    <p class="gd-wall__empty">No gifts yet. The first name on this '
-                'wall could be yours.</p>')
-        fine = ("Everybody who gives is named here, taken from CMU&rsquo;s own page. "
-                "Give anonymously there and you are anonymous here.")
+        body = '      <p class="gd-wall__empty">No gifts yet.</p>'
+        fine = ""
 
+    tail = ('\n      <p class="gd-challenge__fine">%s</p>' % fine) if fine else ""
     return """
 <section class="section gd-challenge-section">
   <div class="container">
     <div class="gd-challenge gd-wall">
       <p class="gd-challenge__kicker">%s</p>
-%s
-      <p class="gd-challenge__fine">%s</p>
+%s%s
     </div>
   </div>
-</section>""" % (kicker, body, fine)
+</section>""" % (kicker, body, tail)
 
 
 def strip_markup(cfg):

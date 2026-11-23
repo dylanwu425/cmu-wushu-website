@@ -35,9 +35,22 @@ doing the same move -- penguins-2026/DSCF6013.JPG -- which is why the join
 reads as one person rather than as two: she has an arm raised and he has an
 arm extended, so the composite comes out as a complete stance.
 
-  half     crop box in the source     eye spacing   scale
-  left     2069, 1266,  608, 1496       31 px        1.000
-  right    2921,  978,  816, 2006       36 px        0.861
+  half     crop box in the source      goes to
+  left     1794, 1240,  608, 1520      the left 360 x 900
+  right    3385,  867,  946, 2365      the right 360 x 900
+
+The halves cross-fade over ten pixels at x=360. Contrast 1.18, gamma 0.87, no
+sharpening -- that frame is sharp already.
+
+CORRECTION, 23 Nov 2026. The boxes above replace the ones this file used to
+give (left 2069,1266,608,1496 and right 2921,978,816,2006 with scales of
+1.000 and 0.861). Those were wrong -- the left one by 275px across -- and a
+colour twin cut to them slid sideways under the cursor. The real boxes were
+recovered by matching each half of the shipped card back against the original
+frame: correlation 0.991 on the left half, 0.985 on the right. Scaling his
+half so the two faces measure the same is still what is happening, but it
+falls out of the two box sizes rather than needing a scale column: 608 and
+946 source pixels both land on 360.
 
 He was standing closer to the camera, so his half is scaled by 0.861 until the
 two faces measure the same. The two eye lines are put on the same row, 225px
@@ -82,3 +95,17 @@ picture -- which is where the person is.
 
 These are photographs of real members. Before the page goes public, check that
 the people in them are happy to appear on a fundraising page.
+
+Colour twins
+------------
+
+Each tier-N.jpg has a tier-N-color.jpg beside it: the same region of the same
+original at the same size, left in colour, which the card fades up on hover.
+They have to line up pixel for pixel or the picture jumps under the cursor,
+so both come out of one script:
+
+    /usr/local/bin/python3 scripts/giving_day_tier_colour.py
+
+It prints a drift figure per card -- its own duotone of what it just cut,
+measured against the file that shipped. Under about 10/255 means the geometry
+still matches. Current: 2.1, 2.7, 4.9 and 8.6.
