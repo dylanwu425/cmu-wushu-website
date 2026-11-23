@@ -5,21 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- ===========================================================
-       GIVING DAY  —  NOT PUBLISHED YET
+       GIVING DAY  —  LIVE
 
-       This page is finished but deliberately unlisted: it is not in
-       the navigation, not in the sitemap, and noindex below keeps it
-       out of Google. It lives on the `giving-day` branch, which
-       GitHub Pages does not build, so it is not on cmuwushu.org at
-       all until someone runs the publish command.
+       Published on 23 Nov 2026: linked from the banner strip and the
+       footer on every page, listed in the sitemap, indexable. The
+       donate buttons go to CMU's own GiveCampus form with the club
+       already chosen as the designation. To take it all back down,
+       run:   python3 scripts/giving_day.py --unpublish
 
        DO NOT hand-edit anything between the GD: markers below.
        Everything comes from data/giving-day.json. Change that file,
        then run:   python3 scripts/giving_day.py
        Full instructions in README section 12.
        =========================================================== -->
-  <meta name="robots" content="noindex, nofollow">
-
   <title>Giving Day | CMU Wushu Club</title>
   <meta name="description" content="One day in December. CMU Wushu is free to join either way &mdash; a gift buys the weapons, silks and travel that give our members more to train with.">
   <link rel="canonical" href="https://cmuwushu.org/giving-day">
@@ -104,7 +102,7 @@
           <!-- GD:COUNTDOWN start -->
           <div class="gd-countdown" data-gd-countdown
                data-opens="2026-12-01T00:00:00-05:00"
-               data-closes="2026-12-01T23:59:59-05:00">
+               data-closes="2026-12-02T09:00:00-05:00">
             <p class="gd-countdown__label">Giving CMU Day opens in</p>
             <div class="gd-countdown__clock" role="timer">
               <span class="gd-unit"><b data-gd-days>--</b><i>days</i></span>
@@ -119,7 +117,8 @@
 
           <!-- GD:CTA-HERO start -->
           <p class="gd-cta-row">
-            <span class="gd-btn gd-btn--pending" aria-disabled="true">Donation page coming soon</span>
+            <a class="gd-btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=hero" target="_blank" rel="noopener">Give $10</a>
+            <span class="gd-cta-note">Takes about two minutes.</span>
           </p>
           <!-- GD:CTA-HERO end -->
         </div>
@@ -156,7 +155,7 @@
           <!-- GD:VIDEO end -->
           <!-- GD:CTA-VIDEO start -->
           <div class="gd-film-cta">
-            <span class="gd-btn gd-btn--pending" aria-disabled="true">Donation page coming soon</span>
+            <a class="gd-btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=video" target="_blank" rel="noopener">Give $10</a>
             <p>That is the pitch. The rest is up to you.</p>
           </div>
           <!-- GD:CTA-VIDEO end -->
@@ -222,7 +221,7 @@
             <span class="gd-tier__amount">$10</span>
             <div class="gd-tier__body">
             </div>
-            <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
+            <a class="gd-tier__btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=tier-10" target="_blank" rel="noopener">Give $10</a>
           </li>
           <li class="gd-tier gd-tier--shot">
             <div class="gd-tier__shot">
@@ -232,7 +231,7 @@
             <span class="gd-tier__amount">$25</span>
             <div class="gd-tier__body">
             </div>
-            <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
+            <a class="gd-tier__btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=tier-25" target="_blank" rel="noopener">Give $25</a>
           </li>
           <li class="gd-tier gd-tier--shot">
             <div class="gd-tier__shot">
@@ -242,7 +241,7 @@
             <span class="gd-tier__amount">$50</span>
             <div class="gd-tier__body">
             </div>
-            <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
+            <a class="gd-tier__btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=tier-50" target="_blank" rel="noopener">Give $50</a>
           </li>
           <li class="gd-tier gd-tier--shot">
             <div class="gd-tier__shot">
@@ -252,7 +251,7 @@
             <span class="gd-tier__amount">$100</span>
             <div class="gd-tier__body">
             </div>
-            <span class="gd-tier__btn gd-btn--pending" aria-disabled="true">Soon</span>
+            <a class="gd-tier__btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=tier-100" target="_blank" rel="noopener">Give $100</a>
           </li>
         </ul>
         <!-- GD:TIERS end -->
@@ -343,8 +342,8 @@
     <section class="cta-band gd-cta-band">
       <div class="container">
         <h2>Giving CMU Day is December 1, 2026</h2>
-        <p>The donation page opens that morning. Until then, the best thing you can do is come train with us.</p>
-        <a class="btn btn--ghost" href="/schedule">See Practice Times</a>
+        <p>Two minutes, $10, and practice stays free for everybody who walks in.</p>
+        <a class="gd-btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=footer" target="_blank" rel="noopener">Give $10</a>
       </div>
     </section>
     <!-- GD:CTA-FOOT end -->
@@ -354,6 +353,10 @@
   <!-- A donate bar that follows you on phones once the ask has scrolled by.
        Hidden entirely until there is a real donation URL to point it at. -->
   <!-- GD:STICKY start -->
+  <div class="gd-sticky">
+    <p class="gd-sticky__read">Giving CMU Day &middot; December 1, 2026</p>
+    <a class="gd-btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=sticky" target="_blank" rel="noopener">Give $10</a>
+  </div>
   <!-- GD:STICKY end -->
 
   <!-- ===== SHARED FOOTER: keep this identical on every page ===== -->
