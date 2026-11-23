@@ -224,16 +224,22 @@
         // the same request once the viewer has touched the page, so the
         // next click anywhere turns it on — once, and never again, so
         // nobody has to fight the film for the volume afterwards.
-        var once = function () {
+        var once = function (e) {
+          // A press on the film's own controls is the viewer deciding for
+          // themselves. Step out of the way and stop listening.
+          var inFilm = e && e.target && e.target.closest &&
+                       e.target.closest(".gd-film");
+          if (!inFilm && video.muted && !video.paused) {
+            video.dataset.gdSelf = "1";
+            video.muted = false;
+            video.removeAttribute("muted");
+            setTimeout(function () { video.dataset.gdSelf = "0"; }, 50);
+          }
           document.removeEventListener("pointerdown", once, true);
-          if (video.dataset.gdTouched === "1") return;   // they already took over
-          video.dataset.gdSelf = "1";
-          video.muted = false;
-          video.removeAttribute("muted");
-          if (video.paused) { var r = video.play(); if (r && r.catch) r.catch(function () {}); }
-          setTimeout(function () { video.dataset.gdSelf = "0"; }, 0);
+          document.removeEventListener("keydown", once, true);
         };
         document.addEventListener("pointerdown", once, true);
+        document.addEventListener("keydown", once, true);
 
         var q = video.play();
         if (q && q.catch) {
