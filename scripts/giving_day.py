@@ -532,7 +532,11 @@ def build(cfg):
     video = cfg.get("video") or {}
     vid = (video.get("youtubeId") or "").strip()
     vfile = (video.get("file") or "").strip()
-    poster = attr(video.get("poster") or "images/ds-2026/web/dscf6345.jpg")
+    # Empty means no cover at all: the frame sits black until the film runs.
+    # There is no fallback photograph, because the last one was a still from
+    # a different event and read as a mismatch sitting over the film.
+    poster_file = (video.get("poster") or "").strip()
+    poster = attr(poster_file)
     vtitle = attr(video.get("title") or "%s film" % name)
     vlen = (video.get("length") or "").strip()
     autoplay = bool(video.get("autoplay"))
@@ -588,8 +592,8 @@ def build(cfg):
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film">
   <div class="gd-film__frame">
-    <video class="gd-film__video" controls playsinline preload="none"%s%s%s%s
-           poster="%s" title="%s" width="1920" height="1080">
+    <video class="gd-film__video" controls playsinline preload="none"%s%s%s%s%s
+           title="%s" width="1920" height="1080">
       <source src="%s" type="video/mp4">
       <p class="gd-cta-note"><a href="%s">Download the film</a></p>
     </video>%s
@@ -600,7 +604,8 @@ def build(cfg):
             " loop" if loop else "",
             " data-gd-autoplay" if autoplay else "",
             " data-gd-sound" if sound else "",
-            poster, vtitle, attr(vfile), attr(vfile),
+            (' poster="%s"' % poster) if poster_file else "",
+            vtitle, attr(vfile), attr(vfile),
             FILM_BUTTONS if autoplay else "",
             (' data-gd-caption-quiet="%s"' % attr(quiet_label)) if autoplay else "",
             play_label), 10))
