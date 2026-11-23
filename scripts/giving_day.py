@@ -449,18 +449,15 @@ def build(cfg):
     #      the end, and only to explain why a small gift is a real gift.
     if closed:
         lede = (
-            "Thank you. The weapons on the loaner rack, the silks, the costumes "
-            "&mdash; this year they came from the people who gave on %s."
+            "Thank you. The weapons on the loaner rack, the silks, the costumes, the "
+            "socials: this year they came from the people who gave on %s."
             % esc(date_text))
     elif on:
         lede = (
-            "Anyone can walk into our practice without paying a cent, and that is not "
-            "going to change &mdash; we run without dues either way. What a gift buys is "
-            "more: loaner weapons, silks and costumes, the cost of getting us to a stage. "
-            "Anything from %s up is a real contribution here &mdash; CMU scores the day by "
-            "how many people give, not how much, so a %s gift counts for every bit as much "
-            "as a $500 one."
-            % (money(min_gift), money(ask)))
+            "Practice runs without dues, and it always will. A gift buys loaner "
+            "weapons and training equipment, silks and costumes, the socials that "
+            "keep the club together, and the cost of getting us to a stage. Any "
+            "amount helps.")
     else:
         lede = (
             "Anyone can walk into our practice without paying a cent, and that is not "
@@ -514,7 +511,12 @@ def build(cfg):
         # where the gift gets chosen, and a visitor who lands on CMU's form
         # from here has skipped the only part of the page that asks for
         # anything in particular.
-        hero_cta = '<a class="gd-btn" href="#give">Give</a>' 
+        hero_cta = '<a class="gd-btn" href="#give">Give</a>'
+        if on:
+            # Giving is open now, but CMU only runs the matching on the day
+            # itself, and that is the one reason to wait rather than give now.
+            hero_cta += ('\n  <span class="gd-cta-note">CMU&rsquo;s matches and '
+                         'challenges start on %s.</span>' % esc(date_text)) 
     else:
         hero_cta = cta("hero", "")
     page = put(page, "GD:CTA-HERO",
@@ -803,7 +805,7 @@ def build(cfg):
                 figure,
                 money(amount),
                 pad(body, 2),
-                cta("tier-%d" % amount, "Give %s" % money(amount), amount, cls="gd-tier__btn"),
+                cta("tier-%d" % amount, "Give", amount, cls="gd-tier__btn"),
             ))
     page = put(page, "GD:TIERS",
                indent('<ul class="gd-tiers">\n%s\n</ul>'
@@ -824,11 +826,10 @@ def build(cfg):
 <section class="cta-band gd-cta-band">
   <div class="container">
     <h2>%s is %s</h2>
-    <p>Two minutes, %s, and practice stays free for everybody who walks in.</p>
     %s
   </div>
-</section>""" % (name, esc(date_text), money(ask),
-                 cta("footer", "Give %s" % money(ask), ask)))
+</section>""" % (name, esc(date_text),
+                 cta("footer", "Give", ask)))
     else:
         foot = ("""
 <section class="cta-band gd-cta-band">
@@ -847,7 +848,7 @@ def build(cfg):
   <p class="gd-sticky__read">%s</p>
   %s
 </div>""" % ("Giving CMU Day &middot; %s" % esc(date_text),
-             cta("sticky", "Give %s" % money(ask), ask)), 2))
+             cta("sticky", "Give", ask)), 2))
     else:
         page = put(page, "GD:STICKY", "\n  ")
 
@@ -888,7 +889,7 @@ def donor_wall(cfg, closed):
     people = withamt + without
     ranked = bool(withamt)
 
-    kicker = "Who gave" if people else "Who gives"
+    kicker = "Our donors"
     if people:
         items = "\n".join(
             '        <li class="gd-wall__name%s">%s%s</li>' % (
