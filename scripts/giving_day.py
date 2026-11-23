@@ -454,10 +454,12 @@ def build(cfg):
             % esc(date_text))
     elif on:
         lede = (
-            "Practice runs without dues, and it always will. A gift buys loaner "
-            "weapons and training equipment, silks and costumes, the socials that "
-            "keep the club together, and the cost of getting us to a stage. Any "
-            "amount helps.")
+            "CMU Wushu practices taolu, the performance side of wushu: learning "
+            "routines rather than sparring, and performing them at cultural events "
+            "around campus. Practice runs without dues, and it always will. A gift "
+            "buys loaner weapons and training equipment, silks and costumes, the "
+            "socials that keep the club together, and the cost of getting us to a "
+            "stage. Any amount helps.")
     else:
         lede = (
             "Anyone can walk into our practice without paying a cent, and that is not "
