@@ -539,12 +539,15 @@ def build(cfg):
     # attribute and comes back out through textContent, where "&middot;"
     # would print as those eight characters rather than as a dot.
     quiet_label = "Press to play" + (" \u00b7 %s" % vlen if vlen else "")
+    # Starting with the sound on is a REQUEST, not a promise. Chrome allows
+    # it only on a site the viewer has used before, Safari only when they
+    # have allowed it for this site, and everywhere else it is refused. The
+    # script asks, and falls back to a silent start rather than to no film.
+    sound = bool(video.get("sound")) and autoplay
     if autoplay:
-        # It can only autoplay muted — every browser requires that — so the
-        # caption has to tell people there is sound to turn on.
-        play_label = "Playing silently &middot; press for sound"
-        if vlen:
-            play_label += " &middot; %s" % esc(vlen)
+        # No caption over a film that is running: it was explaining a silence
+        # the page is no longer choosing.
+        play_label = esc(vlen) if vlen else ""
 
     if vid:
         page = put(page, "GD:VIDEO", indent("""
@@ -578,7 +581,7 @@ def build(cfg):
         page = put(page, "GD:VIDEO", indent("""
 <div class="gd-film">
   <div class="gd-film__frame">
-    <video class="gd-film__video" controls playsinline preload="none"%s%s%s
+    <video class="gd-film__video" controls playsinline preload="none"%s%s%s%s
            poster="%s" title="%s" width="1920" height="1080">
       <source src="%s" type="video/mp4">
       <p class="gd-cta-note"><a href="%s">Download the film</a></p>
@@ -586,9 +589,10 @@ def build(cfg):
   </div>
 </div>
 <p class="gd-film__caption"%s>%s</p>""" % (
-            " muted" if autoplay else "",
+            "" if sound else (" muted" if autoplay else ""),
             " loop" if loop else "",
             " data-gd-autoplay" if autoplay else "",
+            " data-gd-sound" if sound else "",
             poster, vtitle, attr(vfile), attr(vfile),
             FILM_BUTTONS if autoplay else "",
             (' data-gd-caption-quiet="%s"' % attr(quiet_label)) if autoplay else "",
@@ -706,26 +710,7 @@ def build(cfg):
     # ---- after the day, the people who gave get a page of their own
     legacy = cfg.get("legacy") or {}
     if legacy.get("on"):
-        title = esc(legacy.get("pageName") or "%s %d" % (name, opens.year))
-        if closed:
-            body = ("Everyone who gave is named on <b>%s</b>. Thank you &mdash; that page "
-                    "stays up." % title)
-        else:
-            body = ("Everyone who gives goes on <b>%s</b>, a page that stays up here after "
-                    "the day is over." % title)
-        page = put(page, "GD:LEGACY", indent("""
-<section class="section gd-challenge-section">
-  <div class="container">
-    <div class="gd-challenge">
-      <p class="gd-challenge__kicker">After the day</p>
-      <p class="gd-challenge__body">%s</p>
-      <p class="gd-challenge__fine">
-        Names only, nothing else, and nobody goes on it who would rather not &mdash;
-        tell us and we will leave you off.
-      </p>
-    </div>
-  </div>
-</section>""" % body, 4))
+        page = put(page, "GD:LEGACY", indent(donor_wall(cfg, closed), 4))
     else:
         page = put(page, "GD:LEGACY", "\n    ")
 
@@ -761,10 +746,27 @@ def build(cfg):
             # these before the image arrives, and a wrong pair makes the
             # page jump when it lands.
             pw, ph = jpeg_size(photo) or (720, 900)
+            # "shift" moves the picture DOWN inside its frame, as a percentage
+            # of its own height, for a card whose ribbon would otherwise land
+            # on somebody's face. The file and the frame are both 4:5, so
+            # there is no slack to slide into: the picture is scaled up by
+            # twice the shift first, which keeps both edges covered.
+            shift = float(tier.get("shift") or 0)
+            style = ""
+            if shift:
+                style = ' style="transform:scale(%.3f) translateY(%.2f%%)"' % (
+                    1 + abs(shift) / 50.0, shift)
+            # A hairline down the join, so the two halves of a diptych read
+            # as two people rather than as one person with an odd shoulder.
+            # It is drawn over the photograph, inside the frame, and fades
+            # out at both ends rather than stopping dead.
+            seam = ('    <span class="gd-tier__seam" aria-hidden="true"></span>\n'
+                    if tier.get("pair") else "")
             figure = ('  <div class="gd-tier__shot">\n'
-                      '    <img src="%s" alt="%s" width="%d" height="%d"\n'
+                      '    <img src="%s" alt="%s" width="%d" height="%d"%s\n'
                       '         loading="lazy" decoding="async">\n'
-                      '  </div>\n' % (attr(photo), attr(palt), pw, ph))
+                      '%s'
+                      '  </div>\n' % (attr(photo), attr(palt), pw, ph, style, seam))
         elif art:
             figure = pad(art, 2) + "\n"
         else:
@@ -859,6 +861,58 @@ def build(cfg):
 
 STRIP_START = "  <!-- GD:STRIP start -->"
 STRIP_END = "  <!-- GD:STRIP end -->"
+
+
+def donor_wall(cfg, closed):
+    """
+    The people who gave, named on the page itself rather than promised a page
+    later. Names come from CMU's own campaign page, which is where they are
+    already public; anyone who gave anonymously is anonymous here too,
+    because that is the only thing CMU hands out for them.
+
+    GiveCampus does not publish what anybody gave, so a gift amount only
+    exists here if somebody typed it in from the club's own gift report.
+    Donors with an amount are ranked by it, highest first, and the rest keep
+    the order CMU lists them in, which is newest first.
+    """
+    people = [d for d in (cfg.get("donorNames") or []) if (d.get("name") or "").strip()]
+    withamt = [d for d in people if d.get("amount")]
+    without = [d for d in people if not d.get("amount")]
+    withamt.sort(key=lambda d: -int(d["amount"]))
+    people = withamt + without
+    ranked = bool(withamt)
+
+    kicker = "Who gave" if people else "Who gives"
+    if people:
+        items = "\n".join(
+            '      <li class="gd-wall__name%s">%s%s</li>' % (
+                " gd-wall__name--anon" if (d.get("name") or "").strip().lower() == "anonymous" else "",
+                esc(d["name"].strip()),
+                ('<span class="gd-wall__amount">%s</span>' % money(int(d["amount"])))
+                if d.get("amount") else "")
+            for d in people)
+        body = '    <ul class="gd-wall__list%s">\n%s\n    </ul>' % (
+            " gd-wall__list--ranked" if ranked else "", items)
+        fine = ("Everyone who gave, straight from CMU&rsquo;s own page. "
+                "Anonymous there, anonymous here.")
+        if closed:
+            fine = "Everyone who gave. Thank you &mdash; this stays up."
+    else:
+        body = ('    <p class="gd-wall__empty">No gifts yet. The first name on this '
+                'wall could be yours.</p>')
+        fine = ("Everybody who gives is named here, taken from CMU&rsquo;s own page. "
+                "Give anonymously there and you are anonymous here.")
+
+    return """
+<section class="section gd-challenge-section">
+  <div class="container">
+    <div class="gd-challenge gd-wall">
+      <p class="gd-challenge__kicker">%s</p>
+%s
+      <p class="gd-challenge__fine">%s</p>
+    </div>
+  </div>
+</section>""" % (kicker, body, fine)
 
 
 def strip_markup(cfg):

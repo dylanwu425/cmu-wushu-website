@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="styles.css">
   <!-- This page's own styles. Kept out of styles.css so the campaign can be
        added and removed without touching the stylesheet every other page uses. -->
-  <link rel="stylesheet" href="giving-day.css?v=cfb87c66">
+  <link rel="stylesheet" href="giving-day.css?v=51e242bf">
 </head>
 <body>
 
@@ -125,7 +125,8 @@
 
         <!-- ============================================================
              THE FILM. Two ways to play, both of them polite: a file in the
-             repo, which starts itself muted and loops, or a YouTube ID,
+             repo, which starts itself and loops — with the sound on if
+             the browser allows it, silently if not — or a YouTube ID,
              which loads nothing from Google until somebody clicks. Either
              way nothing downloads for a visitor who has asked for reduced
              motion or whose phone is in data-saver mode — see giving-day.js.
@@ -134,7 +135,7 @@
           <!-- GD:VIDEO start -->
           <div class="gd-film">
             <div class="gd-film__frame">
-              <video class="gd-film__video" controls playsinline preload="none" muted loop data-gd-autoplay
+              <video class="gd-film__video" controls playsinline preload="none" loop data-gd-autoplay data-gd-sound
                      poster="images/ds-2026/web/dscf6345.jpg" title="Giving Day film" width="1920" height="1080">
                 <source src="images/giving-day-film.mp4" type="video/mp4">
                 <p class="gd-cta-note"><a href="images/giving-day-film.mp4">Download the film</a></p>
@@ -151,7 +152,7 @@
               </div>
             </div>
           </div>
-          <p class="gd-film__caption" data-gd-caption-quiet="Press to play · 34 sec">Playing silently &middot; press for sound &middot; 34 sec</p>
+          <p class="gd-film__caption" data-gd-caption-quiet="Press to play · 34 sec">34 sec</p>
           <!-- GD:VIDEO end -->
           <!-- GD:CTA-VIDEO start -->
           <div class="gd-film-cta">
@@ -212,8 +213,7 @@
 
         <!-- GD:TIERS start -->
         <ul class="gd-tiers">
-          <li class="gd-tier gd-tier--flagged gd-tier--shot">
-            <span class="gd-tier__flag">Most people give this</span>
+          <li class="gd-tier gd-tier--shot">
             <div class="gd-tier__shot">
               <img src="images/giving-day/tier-10.jpg" alt="A club member in mid-air, legs split wide, a straight sword held out to one side" width="720" height="900"
                    loading="lazy" decoding="async">
@@ -223,9 +223,10 @@
             </div>
             <a class="gd-tier__btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=tier-10&amp;amt=10" target="_blank" rel="noopener">Give $10</a>
           </li>
-          <li class="gd-tier gd-tier--shot">
+          <li class="gd-tier gd-tier--flagged gd-tier--shot">
+            <span class="gd-tier__flag">Most people give this</span>
             <div class="gd-tier__shot">
-              <img src="images/giving-day/tier-25.jpg" alt="A club member on stage in costume, one arm raised overhead at the end of a move" width="720" height="900"
+              <img src="images/giving-day/tier-25.jpg" alt="A club member on stage in costume, one arm raised overhead at the end of a move" width="720" height="900" style="transform:scale(1.140) translateY(7.00%)"
                    loading="lazy" decoding="async">
             </div>
             <span class="gd-tier__amount">$25</span>
@@ -233,10 +234,11 @@
             </div>
             <a class="gd-tier__btn" href="https://givenow.cmu.edu/campaigns/82953/donations/new?tc=107572&amp;utm_source=cmuwushu.org&amp;utm_medium=website&amp;utm_campaign=giving-day-2026&amp;utm_content=tier-25&amp;amt=25" target="_blank" rel="noopener">Give $25</a>
           </li>
-          <li class="gd-tier gd-tier--shot">
+          <li class="gd-tier gd-tier--shot gd-tier--pair">
             <div class="gd-tier__shot">
               <img src="images/giving-day/tier-50.jpg" alt="One figure made of two club members, a sister and a brother, joined down the middle: her left side, his right" width="720" height="900"
                    loading="lazy" decoding="async">
+              <span class="gd-tier__seam" aria-hidden="true"></span>
             </div>
             <span class="gd-tier__amount">$50</span>
             <div class="gd-tier__body">
@@ -261,13 +263,10 @@
     <!-- GD:LEGACY start -->
     <section class="section gd-challenge-section">
       <div class="container">
-        <div class="gd-challenge">
-          <p class="gd-challenge__kicker">After the day</p>
-          <p class="gd-challenge__body">Everyone who gives goes on <b>Giving Day 2026</b>, a page that stays up here after the day is over.</p>
-          <p class="gd-challenge__fine">
-            Names only, nothing else, and nobody goes on it who would rather not &mdash;
-            tell us and we will leave you off.
-          </p>
+        <div class="gd-challenge gd-wall">
+          <p class="gd-challenge__kicker">Who gives</p>
+        <p class="gd-wall__empty">No gifts yet. The first name on this wall could be yours.</p>
+          <p class="gd-challenge__fine">Everybody who gives is named here, taken from CMU&rsquo;s own page. Give anonymously there and you are anonymous here.</p>
         </div>
       </div>
     </section>
@@ -401,6 +400,6 @@
   <!-- ===== END SHARED FOOTER ===== -->
 
   <script src="script.js"></script>
-  <script src="giving-day.js?v=ae0f68e2"></script>
+  <script src="giving-day.js?v=79242371"></script>
 </body>
 </html>

@@ -198,23 +198,42 @@
       return;
     }
 
-    video.muted = true;                            // required, and belt-and-braces
-    video.setAttribute("muted", "");
+    // The page may ask to start with the sound on. Every browser reserves
+    // the right to refuse that, and they refuse it differently: Chrome
+    // allows it once the viewer has a history with the site, Safari only
+    // when they have allowed it for this site, and a first-time visitor
+    // almost anywhere gets a no. So it is asked for, not assumed — and a
+    // refusal falls back to a silent start rather than to no film at all.
+    var wantsSound = video.hasAttribute("data-gd-sound");
+    if (!wantsSound) {
+      video.muted = true;                          // required, and belt-and-braces
+      video.setAttribute("muted", "");
+    }
     video.preload = "auto";
 
     var started = false;
     function go() {
       if (started) return;
       started = true;
+
+      function silently() {
+        video.muted = true;
+        video.setAttribute("muted", "");
+        var q = video.play();
+        if (q && q.catch) {
+          q.catch(function () {
+            // Refused even without sound — an iOS low-power screen, say.
+            // Leave the picture bare and let our own play button offer the
+            // film; handing back the control bar here is what put it on
+            // screen for a good share of visitors.
+            quietCaption(video);
+          });
+        }
+      }
+
       var p = video.play();
       if (p && p.catch) {
-        p.catch(function () {
-          // Autoplay refused anyway — an iOS low-power screen, say. Leave
-          // the picture bare and let our own play button offer the film;
-          // handing back the control bar here is what put it on screen
-          // for a good share of visitors.
-          quietCaption(video);
-        });
+        p.catch(wantsSound ? silently : function () { quietCaption(video); });
       }
     }
 

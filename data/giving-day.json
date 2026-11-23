@@ -30,6 +30,8 @@
     "on": true,
     "pageName": "Giving Day 2026"
   },
+  "donorNames": [],
+  "_donorNames": "The wall of people who gave, shown on the page itself. Each entry is {\"name\": \"...\"} and may carry {\"amount\": 50}. Names come from CMU's own campaign page, where they are already public, and somebody who gave anonymously there arrives here as \"Anonymous\" — which is the only thing CMU publishes for them, so the choice they made on CMU's form is the choice that holds here. IMPORTANT: GiveCampus does NOT publish what anybody gave. There is no public amount to scrape, so \"amount\" only ever comes from the club's own gift report from CMU, typed in by hand. Any donor carrying an amount is ranked above those without, highest first, and the wall turns into a ranked list with the figures out to the right; with no amounts at all it is a run of names in the order CMU lists them, newest first. Empty, the panel invites the first gift instead.",
   "_legacy": "A short panel between the tiers and 'where it goes' promising that everyone who gives is named on a page here afterwards, and the same panel in the past tense once the day is closed. 'pageName' is what that page will be called; leave it empty and it falls back to the campaign name and the year. Set on=false and the panel disappears. THIS IS A PROMISE TO PUBLISH PEOPLE'S NAMES: the panel says names only, and that anyone who asks is left off. Keep both of those true, and build the page afterwards \u2014 a promise on a donation page that nobody keeps is worse than never making it.",
   "video": {
     "file": "images/giving-day-film.mp4",
@@ -37,7 +39,9 @@
     "title": "Giving Day film",
     "length": "34 sec",
     "autoplay": true,
+    "sound": true,
     "loop": true,
+    "_sound": "Asks the browser to start the film with the sound ON. It is a request and browsers refuse it freely: Chrome allows it only once the viewer has some history with the site, Safari only when they have allowed it for this site, and a first-time visitor usually gets a no. When it is refused the film starts silently instead of not at all, and the speaker button under it still works. Set false and it always starts muted.",
     "_autoplay": "Starts the film by itself. Browsers only allow that with the sound off, so it starts muted and the caption under the player tells people to press it for sound. Three things switch it off on their own: a visitor who has asked their system for reduced motion, a phone in data-saver mode, and a connection the browser reports as slow — they all get the poster and a play button instead. Set to false and everybody gets the poster.",
     "_loop": "Runs the film again when it reaches the end. Sensible for a 34-second clip; turn it off for anything long.",
     "poster": "images/ds-2026/web/dscf6345.jpg",
@@ -55,17 +59,19 @@
   "tiers": [
     {
       "amount": 10,
-      "flag": "Most people give this",
       "photo": "images/giving-day/tier-10.jpg",
       "alt": "A club member in mid-air, legs split wide, a straight sword held out to one side"
     },
     {
       "amount": 25,
+      "flag": "Most people give this",
+      "shift": 7,
       "photo": "images/giving-day/tier-25.jpg",
       "alt": "A club member on stage in costume, one arm raised overhead at the end of a move"
     },
     {
       "amount": 50,
+      "pair": true,
       "photo": "images/giving-day/tier-50.jpg",
       "alt": "One figure made of two club members, a sister and a brother, joined down the middle: her left side, his right"
     },

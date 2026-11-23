@@ -737,6 +737,37 @@
   --gd-wash: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='none'><defs><radialGradient id='h0' gradientUnits='userSpaceOnUse' cx='104' cy='125' r='160' gradientTransform='translate(0 125) scale(1 1.45) translate(0 -86.2069)'><stop offset='0%' stop-color='%23000' stop-opacity='1'/><stop offset='44%' stop-color='%23000' stop-opacity='1'/><stop offset='74%' stop-color='%23000' stop-opacity='0.52'/><stop offset='100%' stop-color='%23000' stop-opacity='0.07'/></radialGradient><radialGradient id='h1' gradientUnits='userSpaceOnUse' cx='296' cy='125' r='160' gradientTransform='translate(0 125) scale(1 1.45) translate(0 -86.2069)'><stop offset='0%' stop-color='%23000' stop-opacity='1'/><stop offset='44%' stop-color='%23000' stop-opacity='1'/><stop offset='74%' stop-color='%23000' stop-opacity='0.52'/><stop offset='100%' stop-color='%23000' stop-opacity='0.07'/></radialGradient><mask id='m'><rect width='100%' height='100%' fill='%23fff'/><rect width='100%' height='100%' fill='url(%23h0)'/><rect width='100%' height='100%' fill='url(%23h1)'/></mask><filter id='f' x='-35%' y='-35%' width='170%' height='170%'><feTurbulence type='fractalNoise' baseFrequency='0.007' numOctaves='3' seed='5' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='70' xChannelSelector='R' yChannelSelector='G'/><feGaussianBlur stdDeviation='0.7'/></filter><linearGradient id='ex' x1='0' y1='0' x2='1' y2='0'><stop offset='0%' stop-color='%23F4EEE2' stop-opacity='0.95'/><stop offset='8.5%' stop-color='%23F4EEE2' stop-opacity='0'/><stop offset='91.5%' stop-color='%23F4EEE2' stop-opacity='0'/><stop offset='100%' stop-color='%23F4EEE2' stop-opacity='0.95'/></linearGradient><linearGradient id='ey' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='%23F4EEE2' stop-opacity='0.5'/><stop offset='5.5%' stop-color='%23F4EEE2' stop-opacity='0'/></linearGradient></defs><g filter='url(%23f)'><rect x='-140' y='-175' width='680' height='850' fill='%23F4EEE2' fill-opacity='0.88' mask='url(%23m)'/></g><rect width='100%' height='100%' fill='url(%23ex)'/><rect width='100%' height='100%' fill='url(%23ey)'/></svg>");
 }
 
+/* ---- the seam on a card holding two people ------------------------------
+
+   The $50 photograph is one figure made of two members joined down the
+   middle. Without a mark there, a viewer reads it as one person who came
+   out strangely; with a hard line through it, as two photographs stuck
+   together. So: a hairline the colour of the paper the card is printed on,
+   fading out before it reaches either edge, with a thread of ink either
+   side of it. It separates without cutting.
+   ------------------------------------------------------------------------ */
+
+.gd-tier__seam {
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  left: 50%;
+  z-index: 2;
+  width: 7px;
+  margin-left: -3.5px;
+  pointer-events: none;
+  /* The gutter is the paper the card is printed on, showing through where
+     the two prints meet, and the shadow is what two edges cast into it.
+     A drawn line would cut the picture in half; this lays it side by side
+     with itself. */
+  background: rgba(244, 238, 226, 0.93);
+  box-shadow: 0 0 7px 2px rgba(27, 26, 23, 0.55);
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(to bottom,
+      transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+
 .gd-tier__shot::before {
   content: "";
   position: absolute;
@@ -1098,4 +1129,77 @@
    these only appear here if they changed the setting mid-visit. */
 @media (prefers-reduced-motion: reduce) {
   .gd-film__btn { transition: none; opacity: 1; }
+}
+
+/* ---- the donor wall -----------------------------------------------------
+
+   Names, set as a block of type rather than a list of rows, because forty
+   of them in a column reads as an invoice and forty of them running on
+   reads as a crowd. Anonymous is set quieter than a name: it is honest
+   about being one of us without pretending to be somebody.
+   ------------------------------------------------------------------------ */
+
+.gd-wall__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gd-wall__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.gd-wall__name + .gd-wall__name::before {
+  content: "·";
+  margin: 0 0.6rem;
+  color: var(--seal);
+  opacity: 0.55;
+}
+
+.gd-wall__name--anon {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* Once amounts are known the wall becomes a ranking, and a ranking wants
+   one name per line with its figure held out to the right. */
+.gd-wall__list--ranked {
+  display: block;
+  max-width: 26rem;
+  margin: 0 auto;
+}
+
+.gd-wall__list--ranked .gd-wall__name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(27, 26, 23, 0.09);
+  text-align: left;
+}
+
+.gd-wall__list--ranked .gd-wall__name + .gd-wall__name::before { content: none; }
+.gd-wall__list--ranked .gd-wall__name:last-child { border-bottom: 0; }
+
+.gd-wall__amount {
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--seal);
+}
+
+.gd-wall__empty {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.02rem, 1.6vw, 1.16rem);
+  color: var(--ink-soft);
 }
