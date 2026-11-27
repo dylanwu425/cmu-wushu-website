@@ -267,6 +267,14 @@
   color: var(--seal-dark);
 }
 
+/* Every other button on the site answers a press; these did not. The hover
+   state lifts the button two pixels, so the press has to put it back down
+   and take it a little past, or the click lands on nothing. */
+.gd-btn:active,
+.gd-tier__btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
 /* The state this page ships in: no donation URL yet, so there is nothing to
    click. Rendered as a chit rather than a button so it never looks broken. */
 .gd-btn--pending {
@@ -906,6 +914,8 @@
 }
 .gd-tier__btn:hover,
 .gd-tier__btn:focus-visible { background-color: var(--seal-dark); color: var(--paper); }
+
+.gd-tier__btn { transition: background-color var(--transition), transform var(--transition); }
 
 /* Pending inside a paper slip. .gd-tier__btn paints the live button red, and
    this chip carries that class too, so it has to put the fill back to nothing

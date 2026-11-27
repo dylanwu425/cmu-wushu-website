@@ -49,3 +49,7 @@ ds group photo.jpg
 
 # The member sign-up answers hold email addresses. Local only.
 data/members.csv
+
+# Third-party skill packs (emilkowalski/skills, pbakaus/impeccable).
+# Vendored locally so they work in this repo; not ours to republish.
+.claude/skills/

@@ -2585,6 +2585,7 @@ a.nav__join:hover,
 }
 a.nav__join:active,
 .btn--primary:active,
+.btn--ghost:active,
 .carousel__btn:active:not([disabled]) { transform: translateY(1px) scale(0.96); }
 @keyframes polish-halo {
   from { box-shadow: var(--polish-ring), 0 0 0 4px rgba(179, 38, 30, 0.4); }
