@@ -343,7 +343,9 @@
     if (calm || !("IntersectionObserver" in window)) return;
 
     var selector = [
-      "main .section-header",
+      // Not .section-header: the same fade on every heading of every section
+      // was the page's one move, repeated, which reads as a tic rather than
+      // as an entrance. The content blocks below still arrive.
       "main .split > *",
       "main .grid > *",
       "main .contact-grid > *",
